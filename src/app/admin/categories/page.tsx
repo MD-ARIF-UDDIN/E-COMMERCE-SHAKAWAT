@@ -13,7 +13,9 @@ import {
   CheckCircle2,
   X,
   Layers,
-  Activity
+  Activity,
+  Image as ImageIcon,
+  UploadCloud
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -21,7 +23,8 @@ export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<any | null>(null);
-  const [form, setForm] = useState({ name: '', slug: '' });
+  const [form, setForm] = useState({ name: '', slug: '', image: '' });
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
@@ -36,19 +39,38 @@ export default function AdminCategoriesPage() {
 
   useEffect(() => { fetchCategories(); }, []);
 
-  const openCreate = () => { setEditing(null); setForm({ name: '', slug: '' }); setShowForm(true); };
-  const openEdit = (cat: any) => { setEditing(cat); setForm({ name: cat.name, slug: cat.slug }); setShowForm(true); };
+  const openCreate = () => { 
+    setEditing(null); 
+    setForm({ name: '', slug: '', image: '' }); 
+    setImageFile(null);
+    setShowForm(true); 
+  };
+  const openEdit = (cat: any) => { 
+    setEditing(cat); 
+    setForm({ name: cat.name, slug: cat.slug, image: cat.image || '' }); 
+    setImageFile(null);
+    setShowForm(true); 
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.slug) return toast.error('Category name and slug are required');
     setSubmitting(true);
     try {
+      const formData = new FormData();
+      formData.append('name', form.name);
+      formData.append('slug', form.slug);
+      if (imageFile) formData.append('image', imageFile);
+
       if (editing) {
-        await api.put(`/categories/${editing._id}`, form);
+        await api.put(`/categories/${editing._id}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
         toast.success('Category updated');
       } else {
-        await api.post('/categories', form);
+        await api.post('/categories', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
         toast.success('New category created');
       }
       setShowForm(false);
@@ -121,8 +143,6 @@ export default function AdminCategoriesPage() {
                       className="w-full h-14 px-6 bg-white border border-slate-200 rounded-2xl text-sm font-black text-slate-950 focus:border-indigo-600 focus:shadow-premium focus:outline-none transition-all placeholder:text-slate-300" 
                     />
                   </div>
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-black text-slate-950 uppercase tracking-widest px-1">URL Slug</label>
                     <input 
                       value={form.slug} 
                       onChange={e => setForm(f => ({ ...f, slug: e.target.value }))}
@@ -130,6 +150,32 @@ export default function AdminCategoriesPage() {
                       placeholder="e.g. smartphones"
                       className="w-full h-14 px-6 bg-white border border-slate-200 rounded-2xl text-sm font-bold text-slate-400 focus:border-indigo-600 focus:shadow-premium focus:outline-none transition-all" 
                     />
+                  </div>
+
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-slate-950 uppercase tracking-widest px-1">Category Image</label>
+                    <div className="relative group/upload">
+                       <div className={`w-full aspect-video rounded-2xl border-2 border-dashed transition-all flex flex-col items-center justify-center p-4 overflow-hidden ${imageFile || form.image ? 'border-emerald-200 bg-emerald-50/10' : 'border-slate-200 bg-white hover:border-indigo-300'}`}>
+                          {imageFile || form.image ? (
+                            <img 
+                              src={imageFile ? URL.createObjectURL(imageFile) : form.image} 
+                              alt="Preview" 
+                              className="w-full h-full object-cover rounded-xl"
+                            />
+                          ) : (
+                            <>
+                              <UploadCloud size={24} className="text-slate-300 group-hover/upload:text-indigo-400 transition-colors mb-2" />
+                              <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Click to upload image</p>
+                            </>
+                          )}
+                          <input 
+                            type="file" 
+                            accept="image/*"
+                            onChange={e => setImageFile(e.target.files?.[0] || null)}
+                            className="absolute inset-0 opacity-0 cursor-pointer" 
+                          />
+                       </div>
+                    </div>
                   </div>
                   
                   <div className="flex flex-col gap-4 pt-4">
@@ -183,10 +229,14 @@ export default function AdminCategoriesPage() {
                         key={cat._id} 
                         className="group hover:bg-white transition-all duration-300"
                       >
-                        <td className="px-10 py-6">
+                        <td className="px-6 lg:px-10 py-4 lg:py-6">
                           <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-slate-400 group-hover:text-indigo-600 border border-slate-100 shadow-sm transition-all">
-                              <Tag size={16} />
+                            <div className="w-12 h-12 lg:w-16 lg:h-16 bg-white rounded-xl flex items-center justify-center text-slate-400 group-hover:text-indigo-600 border border-slate-100 shadow-sm transition-all overflow-hidden p-1">
+                              {cat.image ? (
+                                <img src={cat.image} alt={cat.name} className="w-full h-full object-cover rounded-lg" />
+                              ) : (
+                                <ImageIcon size={20} className="text-slate-200" />
+                              )}
                             </div>
                             <span className="text-sm font-black text-slate-950 tracking-tight">{cat.name}</span>
                           </div>

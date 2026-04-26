@@ -323,21 +323,32 @@ export default function Home() {
           </div>
 
           {categories.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {categories.slice(0, 4).map((cat, i) => {
-                const Icon = getCategoryIcon(cat.name);
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {categories.slice(0, 8).map((cat, i) => {
                 return (
                   <Link 
                     href={`/products?category=${cat.slug}`} 
                     key={cat._id}
-                    className="group relative h-40 bg-white rounded-[2rem] p-6 flex flex-col justify-between hover:border-indigo-100 border border-transparent shadow-sm hover:shadow-premium transition-all duration-500 overflow-hidden"
+                    className="group relative h-48 md:h-64 bg-white rounded-[2rem] p-6 flex flex-col justify-end hover:border-indigo-100 border border-transparent shadow-sm hover:shadow-premium transition-all duration-700 overflow-hidden"
                   >
-                    <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500">
-                      <Icon size={18} />
-                    </div>
-                    <div>
-                      <h3 className="text-base font-black text-slate-950 tracking-tight">{cat.name}</h3>
-                      <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-1">Explore →</p>
+                    {cat.image && (
+                      <div className="absolute inset-0 z-0">
+                         <img 
+                           src={cat.image} 
+                           alt={cat.name} 
+                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 opacity-60 group-hover:opacity-100" 
+                         />
+                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
+                      </div>
+                    )}
+                    
+                    <div className="relative z-10">
+                      <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-1 group-hover:text-white transition-colors">Category</p>
+                      <h3 className="text-lg md:text-xl font-black text-white tracking-tight leading-none">{cat.name}</h3>
+                      <div className="flex items-center gap-2 mt-3 overflow-hidden">
+                         <div className="h-[2px] w-0 group-hover:w-8 bg-indigo-500 transition-all duration-500" />
+                         <span className="text-[9px] font-black text-white/0 group-hover:text-white uppercase tracking-widest transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">Shop Now</span>
+                      </div>
                     </div>
                   </Link>
                 );
