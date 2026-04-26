@@ -82,22 +82,30 @@ export default function AdminDashboard() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8 px-4 lg:px-0">
         {statCards.map((card, i) => (
-            <Link href={card.link} className="block bg-slate-50 border border-slate-100 rounded-[2rem] lg:rounded-[2.5rem] p-6 lg:p-8 hover:bg-white hover:shadow-premium transition-all duration-500 overflow-hidden">
-               <div className="flex items-start justify-between mb-6 lg:mb-8">
-                  <div className={`w-12 h-12 lg:w-14 lg:h-14 rounded-2xl flex items-center justify-center ${colorVariants[card.color]} shadow-lg transition-transform duration-500 group-hover:scale-110`}>
-                    <card.icon size={24} />
-                  </div>
-                  <div className="flex items-center gap-1.5 px-3 py-1 bg-white rounded-full border border-slate-100 shadow-sm">
-                    <span className="text-[10px] font-black text-slate-900 tracking-tighter">{card.trend}</span>
-                    <ArrowUpRight size={10} className="text-emerald-500" />
-                  </div>
-               </div>
-               <div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-2">{card.label}</p>
-                  <p className="text-3xl font-black text-slate-950 tracking-tighter">{card.value}</p>
-               </div>
-            </Link>
+          <motion.div
+             key={i}
+             initial={{ opacity: 0, y: 20 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ delay: i * 0.1 }}
+             className="group"
+          >
+             <Link href={card.link} className="block bg-slate-50 border border-slate-100 rounded-[2rem] lg:rounded-[2.5rem] p-6 lg:p-8 hover:bg-white hover:shadow-premium transition-all duration-500 overflow-hidden">
+                <div className="flex items-start justify-between mb-6 lg:mb-8">
+                   <div className={`w-12 h-12 lg:w-14 lg:h-14 rounded-2xl flex items-center justify-center ${colorVariants[card.color]} shadow-lg transition-transform duration-500 group-hover:scale-110`}>
+                     <card.icon size={24} />
+                   </div>
+                   <div className="flex items-center gap-1.5 px-3 py-1 bg-white rounded-full border border-slate-100 shadow-sm">
+                     <span className="text-[10px] font-black text-slate-900 tracking-tighter">{card.trend}</span>
+                     <ArrowUpRight size={10} className="text-emerald-500" />
+                   </div>
+                </div>
+                <div>
+                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-2">{card.label}</p>
+                   <p className="text-3xl font-black text-slate-950 tracking-tighter">{card.value}</p>
+                </div>
+             </Link>
           </motion.div>
+        ))}
       </div>
 
       <div className="grid lg:grid-cols-12 gap-6 lg:gap-12 px-4 lg:px-0">

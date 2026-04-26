@@ -143,6 +143,8 @@ export default function AdminCategoriesPage() {
                       className="w-full h-14 px-6 bg-white border border-slate-200 rounded-2xl text-sm font-black text-slate-950 focus:border-indigo-600 focus:shadow-premium focus:outline-none transition-all placeholder:text-slate-300" 
                     />
                   </div>
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black text-slate-950 uppercase tracking-widest px-1">URL Slug</label>
                     <input 
                       value={form.slug} 
                       onChange={e => setForm(f => ({ ...f, slug: e.target.value }))}

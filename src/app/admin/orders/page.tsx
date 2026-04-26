@@ -189,7 +189,7 @@ export default function AdminOrdersPage() {
                                 <div key={i} className="flex justify-between items-center bg-white border border-slate-100 rounded-2xl lg:rounded-3xl p-4 lg:p-6 shadow-sm group/item hover:border-indigo-200 transition-colors">
                                   <div className="flex items-center gap-3 lg:gap-4">
                                      <div className="w-10 h-10 lg:w-12 lg:h-12 bg-slate-50 rounded-xl flex items-center justify-center text-slate-300 group-hover/item:text-indigo-600 transition-colors">
-                                        <Package size={18} lg:size={20} />
+                                        <Package size={18} className="lg:w-5 lg:h-5" />
                                      </div>
                                      <div>
                                         <p className="text-xs lg:text-sm font-black text-slate-950 tracking-tight line-clamp-1">{item.product?.name || 'Unknown Product'}</p>
