@@ -47,8 +47,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
-    if (hydrated && !token && !pathname.includes('/login')) {
-      router.replace('/login');
+    if (hydrated && !token && !pathname.includes('/admin/login')) {
+      router.replace('/admin/login');
     }
   }, [hydrated, token, pathname, router]);
 
@@ -58,7 +58,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   // ── Login passthrough ─────────────────────────────────────────
   // Uses a fragment — always same shape so React is happy
-  if (pathname.includes('/login')) {
+  if (pathname.includes('/admin/login')) {
     return <>{children}</>;
   }
 
@@ -150,7 +150,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               </div>
             </div>
             <button
-              onClick={() => { logout(); router.push('/login'); }}
+              onClick={() => { logout(); router.push('/admin/login'); }}
               className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-slate-50 text-slate-400 font-black text-[10px] uppercase tracking-widest hover:bg-rose-50 hover:text-rose-600 transition-all"
             >
               <LogOut size={14} />

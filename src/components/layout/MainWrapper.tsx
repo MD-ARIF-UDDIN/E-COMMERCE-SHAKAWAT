@@ -6,7 +6,7 @@ import Footer from "@/components/layout/Footer";
 export default function MainWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAdmin = pathname?.startsWith('/admin');
-  const isLogin = pathname === '/login';
+  const isLogin = pathname === '/admin/login';
   const hideNav = isAdmin || isLogin;
 
   return (
