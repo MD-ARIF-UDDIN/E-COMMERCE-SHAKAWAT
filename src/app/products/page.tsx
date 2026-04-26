@@ -31,7 +31,7 @@ interface Product {
   brand?: { _id: string; name: string };
 }
 
-interface Category { _id: string; name: string; slug: string; }
+interface Category { _id: string; name: string; slug: string; image?: string; }
 interface Brand { _id: string; name: string; slug: string; }
 
 export default function ProductsPage() {
