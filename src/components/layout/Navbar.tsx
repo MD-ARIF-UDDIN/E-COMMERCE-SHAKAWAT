@@ -16,6 +16,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore } from '@/store/cartStore';
 import { useHydrated } from '@/hooks/useHydrated';
 import { useSettingsStore } from '@/store/settingsStore';
+import DynamicLogo from '@/components/ui/DynamicLogo';
 
 export default function Navbar() {
   const businessName = useSettingsStore(s => s.settings.businessName);
@@ -56,9 +57,7 @@ export default function Navbar() {
             <div className="w-8 h-8 bg-slate-950 rounded-lg flex items-center justify-center text-white group-hover:bg-indigo-600 transition-all duration-500 shadow-md">
               <ShoppingBag size={16} />
             </div>
-            <span className="text-sm font-black tracking-tighter block bg-indigo-50/50 px-3 py-1 rounded-lg text-slate-950 border border-indigo-100/50 transition-colors group-hover:bg-indigo-50">
-              {businessName}
-            </span>
+            <DynamicLogo className="text-sm font-black tracking-tighter block bg-indigo-50/50 px-3 py-1 rounded-lg text-slate-950 border border-indigo-100/50 transition-colors group-hover:bg-indigo-50" />
           </Link>
 
           {/* Desktop Navigation */}

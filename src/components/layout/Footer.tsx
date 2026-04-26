@@ -17,6 +17,7 @@ import {
   Headphones
 } from 'lucide-react';
 import { useSettingsStore } from '@/store/settingsStore';
+import DynamicLogo from '@/components/ui/DynamicLogo';
 
 interface Category {
   _id: string;
@@ -76,9 +77,7 @@ export default function Footer() {
               <div className="w-10 h-10 bg-slate-950 rounded-xl flex items-center justify-center text-white group-hover:bg-indigo-600 transition-all duration-500 shadow-lg shadow-slate-200">
                 <ShoppingBag size={22} />
               </div>
-              <span className="text-2xl font-black tracking-tighter text-slate-950">
-                {businessName}
-              </span>
+              <DynamicLogo className="text-2xl font-black tracking-tighter text-slate-950" />
             </Link>
             <p className="text-slate-500 font-medium leading-relaxed max-w-sm">
               We curate the world's most innovative products to elevate your daily lifestyle. 

@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSettingsStore } from '@/store/settingsStore';
+import DynamicLogo from '@/components/ui/DynamicLogo';
 
 const NAV_ITEMS = [
   { label: 'Dashboard',   href: '/admin/dashboard',   icon: LayoutDashboard, roles: ['SuperAdmin','Admin','Employee'] },
@@ -100,7 +101,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <Zap size={22} className="text-indigo-400" fill="currentColor" />
             </div>
             <div>
-              <p className="text-slate-950 font-black text-2xl tracking-tighter leading-none uppercase">{businessName}</p>
+              <DynamicLogo className="text-slate-950 font-black text-2xl tracking-tighter leading-none uppercase" />
               <p className="text-slate-400 text-[9px] font-black uppercase tracking-[0.4em] mt-1.5">Management</p>
             </div>
           </Link>

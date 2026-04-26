@@ -6,10 +6,22 @@ import Providers from "./providers";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
-export const metadata = {
-  title: "NovaCart | Premium Lifestyle Marketplace",
-  description: "Experience the future of commerce with our curated collection of high-performance products.",
-};
+export async function generateMetadata() {
+  try {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://ecs-server-yl30.onrender.com';
+    const res = await fetch(`${apiUrl}/api/settings`, { next: { revalidate: 3600 } });
+    const settings = await res.json();
+    return {
+      title: `${settings.businessName} | Premium Lifestyle Marketplace`,
+      description: `Experience the future of commerce with ${settings.businessName}. Curated collection of high-performance products.`,
+    };
+  } catch (err) {
+    return {
+      title: "NovaCart | Premium Lifestyle Marketplace",
+      description: "Experience the future of commerce with our curated collection of high-performance products.",
+    };
+  }
+}
 
 export default function RootLayout({
   children,
