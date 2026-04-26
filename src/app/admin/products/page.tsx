@@ -50,32 +50,32 @@ export default function AdminProductsPage() {
     <div className="space-y-12 pb-12">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-4">
-        <div>
+        <div className="mb-2 lg:mb-0">
            <div className="flex items-center gap-2 mb-2">
               <ShoppingBag size={14} className="text-indigo-600" />
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Products</p>
            </div>
-           <h1 className="text-4xl lg:text-5xl font-black text-slate-950 tracking-tighter">All Products</h1>
-           <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mt-2">
+           <h1 className="text-3xl lg:text-5xl font-black text-slate-950 tracking-tighter">All Products</h1>
+           <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-2">
              Total Products: <span className="text-slate-950">{products.length}</span>
            </p>
         </div>
         
-        <div className="flex items-center gap-4">
-           <div className="relative group">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+           <div className="relative group flex-1">
               <input
                 type="text"
-                placeholder="Search products..."
+                placeholder="Search..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                className="w-64 pl-12 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest focus:bg-white focus:shadow-premium focus:outline-none transition-all"
+                className="w-full sm:w-64 pl-12 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest focus:bg-white focus:shadow-premium focus:outline-none transition-all"
               />
               <Search size={14} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600" />
            </div>
            
            <Link href="/admin/products/new"
-             className="h-14 flex items-center gap-3 bg-slate-950 text-white font-black text-[10px] uppercase tracking-[0.2em] px-8 rounded-2xl hover:bg-indigo-600 transition-all shadow-premium">
-             <Plus size={16} /> Add Product
+             className="h-14 flex items-center justify-center gap-3 bg-slate-950 text-white font-black text-[10px] uppercase tracking-[0.2em] px-8 rounded-2xl hover:bg-indigo-600 transition-all shadow-premium">
+             <Plus size={16} /> <span className="sm:inline">Add Product</span>
            </Link>
         </div>
       </div>
@@ -98,14 +98,14 @@ export default function AdminProductsPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+            <table className="w-full text-left border-collapse min-w-[700px] lg:min-w-0">
               <thead>
                 <tr className="border-b border-slate-200/60">
-                  <th className="px-10 py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest">Product</th>
-                  <th className="px-10 py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest">Price</th>
-                  <th className="px-10 py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest">Stock</th>
-                  <th className="px-10 py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
-                  <th className="px-10 py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Actions</th>
+                  <th className="px-6 lg:px-10 py-6 lg:py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest">Product</th>
+                  <th className="px-6 lg:px-10 py-6 lg:py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest">Price</th>
+                  <th className="px-6 lg:px-10 py-6 lg:py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest hidden sm:table-cell">Stock</th>
+                  <th className="px-6 lg:px-10 py-6 lg:py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest hidden md:table-cell">Status</th>
+                  <th className="px-6 lg:px-10 py-6 lg:py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -117,24 +117,24 @@ export default function AdminProductsPage() {
                     key={p._id} 
                     className="group hover:bg-white transition-all duration-300"
                   >
-                    <td className="px-10 py-6">
-                      <div className="flex items-center gap-6">
-                        <div className="w-16 h-20 bg-white rounded-2xl flex-shrink-0 p-2 border border-slate-100 shadow-sm overflow-hidden group-hover:scale-105 transition-transform duration-500">
+                    <td className="px-6 lg:px-10 py-4 lg:py-6">
+                      <div className="flex items-center gap-4 lg:gap-6">
+                        <div className="w-12 h-16 lg:w-16 lg:h-20 bg-white rounded-xl lg:rounded-2xl flex-shrink-0 p-1.5 lg:p-2 border border-slate-100 shadow-sm overflow-hidden group-hover:scale-105 transition-transform duration-500">
                           {p.images?.[0] ? (
-                            <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover rounded-xl" />
+                            <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover rounded-lg lg:rounded-xl" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center bg-slate-50 text-slate-300">
-                               <PackageOpen size={20} />
+                               <PackageOpen size={16} />
                             </div>
                           )}
                         </div>
                         <div>
-                          <p className="text-sm font-black text-slate-950 tracking-tight group-hover:text-indigo-600 transition-colors">{p.name}</p>
-                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">{p.category?.name || 'Uncategorized'}</p>
+                          <p className="text-sm font-black text-slate-950 tracking-tight group-hover:text-indigo-600 transition-colors line-clamp-1">{p.name}</p>
+                          <p className="text-[9px] lg:text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">{p.category?.name || 'Uncategorized'}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-10 py-6">
+                    <td className="px-6 lg:px-10 py-4 lg:py-6">
                       <div className="flex flex-col">
                          <span className="text-sm font-black text-slate-950 tracking-tight">৳{p.price?.toLocaleString()}</span>
                          {p.discountPrice && (
@@ -142,13 +142,13 @@ export default function AdminProductsPage() {
                          )}
                       </div>
                     </td>
-                    <td className="px-10 py-6">
+                    <td className="px-6 lg:px-10 py-4 lg:py-6 hidden sm:table-cell">
                       <span className={`inline-flex px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest
                         ${p.stock === 0 ? 'bg-rose-50 text-rose-600' : p.stock <= 5 ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'}`}>
-                        {p.stock === 0 ? 'Out of Stock' : `${p.stock} In Stock`}
+                        {p.stock === 0 ? 'Out' : `${p.stock} Stock`}
                       </span>
                     </td>
-                    <td className="px-10 py-6">
+                    <td className="px-6 lg:px-10 py-4 lg:py-6 hidden md:table-cell">
                       <div className="flex flex-wrap gap-2">
                         {p.isFeatured && (
                           <span className="flex items-center gap-1.5 text-[8px] font-black text-indigo-600 uppercase tracking-widest border border-indigo-100 px-2 py-1 rounded-full">
@@ -165,8 +165,8 @@ export default function AdminProductsPage() {
                         )}
                       </div>
                     </td>
-                    <td className="px-10 py-6 text-right">
-                      <div className="flex items-center justify-end gap-3">
+                    <td className="px-6 lg:px-10 py-4 lg:py-6 text-right">
+                      <div className="flex items-center justify-end gap-2 lg:gap-3">
                         <Link href={`/admin/products/${p._id}`} 
                           className="w-10 h-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-950 hover:shadow-sm transition-all">
                           <Pencil size={14} />

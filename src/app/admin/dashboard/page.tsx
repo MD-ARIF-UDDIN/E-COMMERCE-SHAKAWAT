@@ -80,18 +80,11 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-12 pb-12">
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8 px-4 lg:px-0">
         {statCards.map((card, i) => (
-          <motion.div 
-            key={card.label}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className="group relative"
-          >
-            <Link href={card.link} className="block bg-slate-50 border border-slate-100 rounded-[2.5rem] p-8 hover:bg-white hover:shadow-premium transition-all duration-500 overflow-hidden">
-               <div className="flex items-start justify-between mb-8">
-                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${colorVariants[card.color]} shadow-lg transition-transform duration-500 group-hover:scale-110`}>
+            <Link href={card.link} className="block bg-slate-50 border border-slate-100 rounded-[2rem] lg:rounded-[2.5rem] p-6 lg:p-8 hover:bg-white hover:shadow-premium transition-all duration-500 overflow-hidden">
+               <div className="flex items-start justify-between mb-6 lg:mb-8">
+                  <div className={`w-12 h-12 lg:w-14 lg:h-14 rounded-2xl flex items-center justify-center ${colorVariants[card.color]} shadow-lg transition-transform duration-500 group-hover:scale-110`}>
                     <card.icon size={24} />
                   </div>
                   <div className="flex items-center gap-1.5 px-3 py-1 bg-white rounded-full border border-slate-100 shadow-sm">
@@ -105,50 +98,49 @@ export default function AdminDashboard() {
                </div>
             </Link>
           </motion.div>
-        ))}
       </div>
 
-      <div className="grid lg:grid-cols-12 gap-12">
+      <div className="grid lg:grid-cols-12 gap-6 lg:gap-12 px-4 lg:px-0">
         {/* Recent Activity */}
-        <div className="lg:col-span-8 space-y-8">
-           <div className="flex items-end justify-between px-4">
+        <div className="lg:col-span-8 space-y-6 lg:space-y-8">
+           <div className="flex flex-col sm:flex-row sm:items-end justify-between px-4 gap-4">
               <div>
                 <p className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.3em] mb-2">Recent Activity</p>
-                <h3 className="text-3xl font-black text-slate-950 tracking-tighter">Order Management</h3>
+                <h3 className="text-2xl lg:text-3xl font-black text-slate-950 tracking-tighter">Order Management</h3>
               </div>
               <Link href="/admin/orders" className="text-[10px] font-black text-slate-400 hover:text-slate-950 uppercase tracking-widest transition-colors flex items-center gap-2 mb-1">
                 View All Orders <ChevronRight size={14} />
               </Link>
            </div>
            
-           <div className="bg-slate-50 rounded-[3rem] border border-slate-100 overflow-hidden shadow-inner shadow-slate-200/20">
+           <div className="bg-slate-50 rounded-[2rem] lg:rounded-[3rem] border border-slate-100 overflow-hidden shadow-inner shadow-slate-200/20">
               <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
+                <table className="w-full text-left border-collapse min-w-[600px] lg:min-w-0">
                   <thead>
                     <tr className="border-b border-slate-200/60">
-                      <th className="px-10 py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest">Order Number</th>
-                      <th className="px-10 py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest">Customer Phone</th>
-                      <th className="px-10 py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest">Amount</th>
-                      <th className="px-10 py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Status</th>
+                      <th className="px-6 lg:px-10 py-6 lg:py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest">Order Number</th>
+                      <th className="px-6 lg:px-10 py-6 lg:py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest hidden sm:table-cell">Customer Phone</th>
+                      <th className="px-6 lg:px-10 py-6 lg:py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest">Amount</th>
+                      <th className="px-6 lg:px-10 py-6 lg:py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Status</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {recentOrders.map((order, i) => (
                       <tr key={order._id} className="group hover:bg-white transition-all duration-300">
-                        <td className="px-10 py-6">
+                        <td className="px-6 lg:px-10 py-4 lg:py-6">
                            <div className="flex flex-col">
                              <span className="text-sm font-black text-slate-950 tracking-tight mb-1">{order.orderNumber}</span>
                              <span className="text-[10px] font-bold text-slate-400 uppercase">{new Date(order.createdAt).toLocaleDateString()}</span>
                            </div>
                         </td>
-                        <td className="px-10 py-6">
+                        <td className="px-6 lg:px-10 py-4 lg:py-6 hidden sm:table-cell">
                            <span className="text-sm font-bold text-slate-600 tracking-tight">{order.customerPhone}</span>
                         </td>
-                        <td className="px-10 py-6">
+                        <td className="px-6 lg:px-10 py-4 lg:py-6">
                            <span className="text-sm font-black text-slate-950 tracking-tight">৳{order.totalAmount?.toLocaleString()}</span>
                         </td>
-                        <td className="px-10 py-6 text-right">
-                           <span className={`inline-flex px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest ${statusStyle[order.status] || 'bg-slate-100 text-slate-500'}`}>
+                        <td className="px-6 lg:px-10 py-4 lg:py-6 text-right">
+                           <span className={`inline-flex px-3 lg:px-4 py-1.5 rounded-full text-[8px] lg:text-[9px] font-black uppercase tracking-widest ${statusStyle[order.status] || 'bg-slate-100 text-slate-500'}`}>
                              {order.status}
                            </span>
                         </td>
@@ -164,14 +156,14 @@ export default function AdminDashboard() {
         </div>
 
         {/* System Alerts */}
-        <div className="lg:col-span-4 space-y-8">
-           <div className="px-4">
+        <div className="lg:col-span-4 space-y-6 lg:space-y-8">
+           <div>
               <p className="text-[10px] font-black text-rose-600 uppercase tracking-[0.3em] mb-2">System Alerts</p>
-              <h3 className="text-3xl font-black text-slate-950 tracking-tighter">Alerts</h3>
+              <h3 className="text-2xl lg:text-3xl font-black text-slate-950 tracking-tighter">Alerts</h3>
            </div>
 
            <div className="space-y-4">
-              <div className="bg-slate-950 rounded-[2.5rem] p-8 text-white relative overflow-hidden shadow-premium">
+              <div className="bg-slate-950 rounded-[2rem] lg:rounded-[2.5rem] p-6 lg:p-8 text-white relative overflow-hidden shadow-premium">
                  <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-600/20 blur-[60px] rounded-full" />
                  <div className="relative z-10">
                     <div className="flex items-center justify-between mb-8">
@@ -198,7 +190,7 @@ export default function AdminDashboard() {
                  </div>
               </div>
 
-              <div className="bg-slate-50 border border-slate-100 rounded-[2.5rem] p-8">
+              <div className="bg-slate-50 border border-slate-100 rounded-[2rem] lg:rounded-[2.5rem] p-6 lg:p-8">
                  <div className="flex items-center justify-between mb-6">
                     <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-indigo-600 shadow-sm border border-slate-100">
                       <Users size={18} />

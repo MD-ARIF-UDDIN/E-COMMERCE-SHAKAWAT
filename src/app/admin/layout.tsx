@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuthStore } from '@/store/authStore';
@@ -7,7 +7,7 @@ import { useHydrated } from '@/hooks/useHydrated';
 import {
   LayoutDashboard, Package, ShoppingCart, Warehouse, ShoppingBag,
   Shield, Settings, Tag, Layers, LogOut, ChevronRight, BarChart3, Sun,
-  Bell, Search, Zap
+  Bell, Search, Zap, Menu, X as CloseIcon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -43,13 +43,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const logout   = useAuthStore(s => s.logout);
   const router   = useRouter();
   const pathname = usePathname();
-  const hydrated = useHydrated(); // solves Zustand persist SSR mismatch
+  const hydrated = useHydrated();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (hydrated && !token && !pathname.includes('/login')) {
       router.replace('/login');
     }
   }, [hydrated, token, pathname, router]);
+
+  useEffect(() => {
+    setIsSidebarOpen(false);
+  }, [pathname]);
 
   // ── Login passthrough ─────────────────────────────────────────
   // Uses a fragment — always same shape so React is happy
@@ -67,9 +72,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const visibleNav = NAV_ITEMS.filter(item => item.roles.includes(user.role));
 
   return (
-    <div className="min-h-screen bg-white flex overflow-hidden">
+    <div className="min-h-screen bg-white flex relative">
+      {/* Mobile Sidebar Overlay */}
+      <AnimatePresence>
+        {isSidebarOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsSidebarOpen(false)}
+            className="fixed inset-0 bg-slate-950/40 backdrop-blur-sm z-40 lg:hidden"
+          />
+        )}
+      </AnimatePresence>
+
       {/* Sidebar */}
-      <aside className="w-80 bg-slate-50 border-r border-slate-100 flex flex-col fixed h-full z-40">
+      <aside className={`w-80 bg-slate-50 border-r border-slate-100 flex flex-col fixed h-full z-50 transition-transform duration-500 lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="absolute inset-0 bg-mesh-gradient opacity-10 pointer-events-none" />
 
         {/* Logo */}
@@ -140,19 +158,35 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </button>
           </div>
         </div>
+        
+        {/* Mobile Close Button */}
+        <button 
+          onClick={() => setIsSidebarOpen(false)}
+          className="absolute top-6 right-6 lg:hidden w-10 h-10 bg-white rounded-full border border-slate-100 flex items-center justify-center text-slate-400 shadow-sm"
+        >
+          <CloseIcon size={18} />
+        </button>
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 ml-80 flex flex-col min-h-screen overflow-y-auto">
-        <header className="bg-white/80 backdrop-blur-2xl px-12 py-8 flex items-center justify-between sticky top-0 z-30 border-b border-slate-50">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">System Online</p>
+      <div className="flex-1 lg:ml-80 flex flex-col min-h-screen w-full">
+        <header className="bg-white/80 backdrop-blur-2xl px-6 lg:px-12 py-6 lg:py-8 flex items-center justify-between sticky top-0 z-30 border-b border-slate-50">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setIsSidebarOpen(true)}
+              className="lg:hidden w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-600"
+            >
+              <Menu size={20} />
+            </button>
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] hidden sm:block">System Online</p>
+              </div>
+              <h2 className="text-xl lg:text-3xl font-black text-slate-950 tracking-tighter leading-none">
+                {visibleNav.find(n => pathname.startsWith(n.href))?.label ?? 'System Overview'}
+              </h2>
             </div>
-            <h2 className="text-3xl font-black text-slate-950 tracking-tighter leading-none">
-              {visibleNav.find(n => pathname.startsWith(n.href))?.label ?? 'System Overview'}
-            </h2>
           </div>
 
           <div className="flex items-center gap-4">
@@ -177,7 +211,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
         </header>
 
-        <main className="p-10 bg-white flex-1">
+        <main className="p-4 lg:p-10 bg-white flex-1">
           <AnimatePresence mode="wait">
             <motion.div
               key={pathname}
