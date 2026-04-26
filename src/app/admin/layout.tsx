@@ -7,7 +7,7 @@ import { useHydrated } from '@/hooks/useHydrated';
 import {
   LayoutDashboard, Package, ShoppingCart, Warehouse, ShoppingBag,
   Shield, Settings, Tag, Layers, LogOut, ChevronRight, BarChart3, Sun,
-  Bell, Search, Zap, Menu, X as CloseIcon
+  Bell, Search, Zap, Menu, X as CloseIcon, Users
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSettingsStore } from '@/store/settingsStore';
@@ -23,7 +23,7 @@ const NAV_ITEMS = [
   { label: 'Purchases',   href: '/admin/purchases',   icon: ShoppingBag,     roles: ['SuperAdmin','Admin'] },
   { label: 'Inventory',   href: '/admin/inventory',   icon: Warehouse,       roles: ['SuperAdmin','Admin'] },
   { label: 'Blacklist',   href: '/admin/spam',        icon: Shield,          roles: ['SuperAdmin','Admin'] },
-  { label: 'Users',       href: '/admin/users',       icon: User,            roles: ['SuperAdmin'] },
+  { label: 'Users',       href: '/admin/users',       icon: Users,           roles: ['SuperAdmin'] },
   { label: 'Settings',    href: '/admin/settings',    icon: Settings,        roles: ['SuperAdmin','Admin'] },
 ];
 
