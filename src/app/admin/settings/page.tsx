@@ -4,6 +4,7 @@ import { api } from '@/lib/axios';
 import toast from 'react-hot-toast';
 import { Settings as SettingsIcon, Save, Truck, Building2, Phone, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useSettingsStore } from '@/store/settingsStore';
 
 export default function SettingsPage() {
   const [loading, setLoading] = useState(false);
@@ -31,11 +32,14 @@ export default function SettingsPage() {
     }
   };
 
+  const { updateSettings } = useSettingsStore();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
       await api.put('/settings', settings);
+      updateSettings(settings);
       toast.success('Settings updated successfully');
     } catch (err) {
       toast.error('Failed to update settings');

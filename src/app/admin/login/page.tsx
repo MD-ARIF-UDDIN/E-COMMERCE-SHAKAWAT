@@ -6,8 +6,10 @@ import { useAuthStore } from '@/store/authStore';
 import toast from 'react-hot-toast';
 import { LogIn, Eye, EyeOff, ShieldCheck, ShoppingBag } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useSettingsStore } from '@/store/settingsStore';
 
 export default function AdminLoginPage() {
+  const businessName = useSettingsStore(s => s.settings.businessName);
   const router = useRouter();
   const login = useAuthStore(s => s.login);
   const [email, setEmail] = useState('');
@@ -47,7 +49,7 @@ export default function AdminLoginPage() {
           <div className="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center text-white mx-auto mb-6 shadow-premium">
             <ShoppingBag size={32} />
           </div>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Nova<span className="text-indigo-600">Admin</span></h1>
+          <h1 className="text-3xl font-black text-slate-900 tracking-tight">{businessName}<span className="text-indigo-600">Admin</span></h1>
           <p className="text-slate-500 font-medium mt-2">The ultimate control center for your commerce</p>
         </div>
 

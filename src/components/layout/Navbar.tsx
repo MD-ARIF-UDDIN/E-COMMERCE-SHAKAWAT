@@ -15,8 +15,10 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore } from '@/store/cartStore';
 import { useHydrated } from '@/hooks/useHydrated';
+import { useSettingsStore } from '@/store/settingsStore';
 
 export default function Navbar() {
+  const businessName = useSettingsStore(s => s.settings.businessName);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -55,7 +57,7 @@ export default function Navbar() {
               <ShoppingBag size={16} />
             </div>
             <span className="text-sm font-black tracking-tighter block bg-indigo-50/50 px-3 py-1 rounded-lg text-slate-950 border border-indigo-100/50 transition-colors group-hover:bg-indigo-50">
-              Nova<span className="text-indigo-600">Cart</span>
+              {businessName}
             </span>
           </Link>
 

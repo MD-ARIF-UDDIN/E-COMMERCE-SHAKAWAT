@@ -16,6 +16,7 @@ import {
   RotateCcw,
   Headphones
 } from 'lucide-react';
+import { useSettingsStore } from '@/store/settingsStore';
 
 interface Category {
   _id: string;
@@ -25,6 +26,7 @@ interface Category {
 
 export default function Footer() {
   const [categories, setCategories] = useState<Category[]>([]);
+  const businessName = useSettingsStore(s => s.settings.businessName);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -75,7 +77,7 @@ export default function Footer() {
                 <ShoppingBag size={22} />
               </div>
               <span className="text-2xl font-black tracking-tighter text-slate-950">
-                Nova<span className="text-indigo-600">Cart</span>
+                {businessName}
               </span>
             </Link>
             <p className="text-slate-500 font-medium leading-relaxed max-w-sm">
@@ -147,7 +149,7 @@ export default function Footer() {
 
         <div className="mt-20 pt-8 border-t border-slate-50 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-xs text-slate-400 font-bold tracking-tight uppercase">
-            © 2024 NOVACART GLOBAL.
+            © {new Date().getFullYear()} {businessName.toUpperCase()} GLOBAL.
           </p>
           <div className="flex items-center gap-8">
             <Link href="/privacy" className="text-xs text-slate-400 font-bold hover:text-slate-900 transition-colors">PRIVACY</Link>
