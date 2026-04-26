@@ -1,10 +1,10 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCartStore } from '@/store/cartStore';
 import { api } from '@/lib/axios';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { CheckCircle2, Copy, Package, ShieldCheck, Lock, CreditCard, Box, MapPin, Smartphone, User, ChevronRight, Minus, Plus, Trash2, ArrowLeft } from 'lucide-react';
+import { CheckCircle2, Copy, Package, ShieldCheck, Lock, CreditCard, Box, MapPin, Smartphone, User, ChevronRight, Minus, Plus, Trash2, ArrowLeft, Truck } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -25,12 +25,28 @@ export default function CheckoutPage() {
   const [orderNumber, setOrderNumber] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
 
+  const [deliveryType, setDeliveryType] = useState<'inside' | 'outside'>('inside');
+  const [settings, setSettings] = useState({ insideChittagong: 60, outsideChittagong: 120 });
+
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [paymentPhone, setPaymentPhone] = useState('');
   const [paymentPin, setPaymentPin] = useState('');
 
-  const deliveryCharge = 60;
+  useEffect(() => {
+    fetchSettings();
+  }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const res = await api.get('/settings');
+      if (res.data) setSettings(res.data);
+    } catch (err) {
+      console.error('Failed to load settings');
+    }
+  };
+
+  const deliveryCharge = deliveryType === 'inside' ? settings.insideChittagong : settings.outsideChittagong;
   const subtotal = getTotal();
   const total = subtotal + deliveryCharge;
 
@@ -54,9 +70,10 @@ export default function CheckoutPage() {
       const payload = {
         customerName: name,
         customerPhone: phone,
-        address,
+        address: `${address} (${deliveryType === 'inside' ? 'Inside Chittagong' : 'Outside Chittagong'})`,
         paymentMethod,
         totalAmount: total,
+        deliveryCharge,
         items: items.map(i => ({ 
           product: i.product, 
           quantity: i.quantity, 
@@ -121,7 +138,7 @@ export default function CheckoutPage() {
 
         <div className="grid lg:grid-cols-5 gap-6">
           {/* Left Column — Form */}
-          <form onSubmit={handleSubmit} className="lg:col-span-3 space-y-5">
+          <form id="checkout-form" onSubmit={handleSubmit} className="lg:col-span-3 space-y-5">
             {/* Order Items */}
             <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-100">
               <h2 className="text-sm font-bold text-slate-950 mb-4">Order Items</h2>
@@ -172,6 +189,27 @@ export default function CheckoutPage() {
               </h2>
 
               <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                   <button
+                     type="button"
+                     onClick={() => setDeliveryType('inside')}
+                     className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all text-center
+                       ${deliveryType === 'inside' ? 'border-indigo-600 bg-indigo-50/50' : 'border-slate-100 hover:border-slate-200'}`}
+                   >
+                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Inside CTG</p>
+                     <p className="text-lg font-black text-slate-950">৳{settings.insideChittagong}</p>
+                   </button>
+                   <button
+                     type="button"
+                     onClick={() => setDeliveryType('outside')}
+                     className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all text-center
+                       ${deliveryType === 'outside' ? 'border-indigo-600 bg-indigo-50/50' : 'border-slate-100 hover:border-slate-200'}`}
+                   >
+                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Outside CTG</p>
+                     <p className="text-lg font-black text-slate-950">৳{settings.outsideChittagong}</p>
+                   </button>
+                </div>
+
                 <div>
                   <label className="text-xs font-semibold text-slate-500 mb-1.5 block">Your Name <span className="text-slate-300">(optional)</span></label>
                   <input
@@ -263,7 +301,7 @@ export default function CheckoutPage() {
 
           {/* Right Column — Summary */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl p-5 sm:p-6 sticky top-28 border border-slate-100">
+            <div className="bg-white rounded-2xl p-5 sm:p-6 sticky top-28 border border-slate-100 shadow-sm">
               <h2 className="text-sm font-bold text-slate-950 mb-5">Order Summary</h2>
 
               <div className="space-y-3 text-sm">
@@ -271,8 +309,11 @@ export default function CheckoutPage() {
                   <span className="text-slate-400">Subtotal ({items.length} items)</span>
                   <span className="font-semibold text-slate-700">৳{subtotal.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Delivery</span>
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <Truck size={14} className="text-slate-300" />
+                    <span className="text-slate-400">Delivery ({deliveryType === 'inside' ? 'Inside CTG' : 'Outside CTG'})</span>
+                  </div>
                   <span className="font-semibold text-slate-700">৳{deliveryCharge}</span>
                 </div>
                 <div className="border-t border-slate-100 pt-3 flex justify-between">
@@ -285,7 +326,6 @@ export default function CheckoutPage() {
               <button
                 type="submit"
                 form="checkout-form"
-                onClick={handleSubmit}
                 disabled={loading}
                 className="hidden lg:flex w-full mt-6 h-14 bg-slate-950 hover:bg-indigo-600 disabled:bg-slate-300 text-white font-bold text-sm rounded-xl transition-all items-center justify-center gap-2"
               >

@@ -172,9 +172,19 @@ export default function TrackOrderPage() {
               </div>
             </div>
 
-            <div className="flex justify-between items-center border-t border-gray-100 pt-4 font-bold text-lg">
-              <span className="text-gray-900">Total Amount</span>
-              <span className="text-indigo-600">৳{order.totalAmount?.toLocaleString()}</span>
+            <div className="border-t border-gray-100 pt-4 space-y-2">
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-gray-500">Subtotal</span>
+                <span className="font-semibold text-gray-900">৳{(order.totalAmount - (order.deliveryCharge || 0)).toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-gray-500">Delivery Charge</span>
+                <span className="font-semibold text-gray-900">৳{(order.deliveryCharge || 0).toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between items-center pt-2 font-bold text-lg">
+                <span className="text-gray-900">Total Amount</span>
+                <span className="text-indigo-600">৳{order.totalAmount?.toLocaleString()}</span>
+              </div>
             </div>
           </div>
         </div>

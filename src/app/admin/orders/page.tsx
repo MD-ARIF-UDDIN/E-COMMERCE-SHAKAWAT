@@ -149,7 +149,7 @@ export default function AdminOrdersPage() {
                       <p className="text-[8px] lg:text-[9px] font-black text-slate-400 uppercase tracking-widest">Amount</p>
                       <div className="flex flex-col">
                         <p className="text-xs lg:text-sm font-black text-slate-950 tracking-tight">৳{order.totalAmount?.toLocaleString()}</p>
-                        <p className="text-[9px] lg:text-[10px] font-bold text-slate-400 uppercase tracking-tight">{order.paymentMethod}</p>
+                        <p className="text-[9px] lg:text-[10px] font-bold text-emerald-600 uppercase tracking-tight">Delivery: ৳{order.deliveryCharge}</p>
                       </div>
                     </div>
                     <div className="space-y-1">
