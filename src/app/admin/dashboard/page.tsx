@@ -5,25 +5,13 @@ import {
   ShoppingCart, 
   Package, 
   AlertTriangle, 
-  TrendingUp, 
-  ArrowUpRight, 
-  ArrowDownRight,
-  Clock,
-  ExternalLink,
-  ChevronRight,
-  Activity,
+  ChevronRight, 
   DollarSign,
-  Users
+  Clock,
+  ArrowUpRight
 } from 'lucide-react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-
-interface Stats {
-  totalOrders: number;
-  totalProducts: number;
-  pendingOrders: number;
-  totalRevenue: number;
-}
 
 export default function AdminDashboard() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -46,179 +34,134 @@ export default function AdminDashboard() {
 
   const pendingOrders = orders.filter(o => o.status === 'Pending').length;
   const lowStockProducts = products.filter(p => p.stock <= 5);
-  const recentOrders = [...orders].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 8);
+  const recentOrders = [...orders].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 5);
 
   const statCards = [
-    { label: 'Total Orders', value: orders.length, icon: Activity, trend: '+12.5%', color: 'indigo', link: '/admin/orders' },
-    { label: 'Total Products', value: products.length, icon: Package, trend: '+2', color: 'slate', link: '/admin/products' },
-    { label: 'Pending Orders', value: pendingOrders, icon: Clock, trend: '-3', color: 'amber', link: '/admin/orders' },
-    { label: 'Total Revenue', value: `৳${totalRevenue.toLocaleString()}`, icon: DollarSign, trend: '+৳15k', color: 'emerald', link: '/admin/orders' },
+    { label: 'Total Orders', value: orders.length, icon: ShoppingCart, iconColor: 'text-indigo-600', link: '/admin/orders' },
+    { label: 'Revenue', value: `৳${totalRevenue.toLocaleString()}`, icon: DollarSign, iconColor: 'text-emerald-600', link: '/admin/orders' },
+    { label: 'Pending', value: pendingOrders, icon: Clock, iconColor: 'text-amber-500', link: '/admin/orders' },
+    { label: 'Inventory', value: products.length, icon: Package, iconColor: 'text-slate-600', link: '/admin/products' },
   ];
 
-  const colorVariants: Record<string, string> = {
-    indigo: 'bg-indigo-600 text-white shadow-indigo-100',
-    slate: 'bg-slate-950 text-white shadow-slate-100',
-    amber: 'bg-amber-500 text-white shadow-amber-100',
-    emerald: 'bg-emerald-600 text-white shadow-emerald-100',
-  };
-
   const statusStyle: Record<string, string> = {
-    Pending: 'bg-amber-50 text-amber-600',
-    Processing: 'bg-blue-50 text-blue-600',
-    Packed: 'bg-purple-50 text-purple-600',
-    Shipped: 'bg-indigo-50 text-indigo-600',
-    Delivered: 'bg-emerald-50 text-emerald-600',
-    Cancelled: 'bg-rose-50 text-rose-600',
+    Pending: 'text-amber-600 bg-amber-50',
+    Processing: 'text-blue-600 bg-blue-50',
+    Delivered: 'text-emerald-600 bg-emerald-50',
+    Cancelled: 'text-rose-600 bg-rose-50',
   };
 
   if (loading) return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-      {[...Array(4)].map((_, i) => <div key={i} className="h-48 bg-slate-50 animate-pulse rounded-[2.5rem] border border-slate-100" />)}
+    <div className="py-20 text-center">
+       <div className="w-8 h-8 border-2 border-slate-100 border-t-indigo-600 rounded-full animate-spin mx-auto mb-4" />
+       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Initialising</p>
     </div>
   );
 
   return (
-    <div className="space-y-12 pb-12">
+    <div className="space-y-12">
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8 px-4 lg:px-0">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((card, i) => (
           <motion.div
              key={i}
-             initial={{ opacity: 0, y: 20 }}
+             initial={{ opacity: 0, y: 10 }}
              animate={{ opacity: 1, y: 0 }}
-             transition={{ delay: i * 0.1 }}
-             className="group"
+             transition={{ delay: i * 0.05 }}
           >
-             <Link href={card.link} className="block bg-slate-50 border border-slate-100 rounded-[2rem] lg:rounded-[2.5rem] p-6 lg:p-8 hover:bg-white hover:shadow-premium transition-all duration-500 overflow-hidden">
-                <div className="flex items-start justify-between mb-6 lg:mb-8">
-                   <div className={`w-12 h-12 lg:w-14 lg:h-14 rounded-2xl flex items-center justify-center ${colorVariants[card.color]} shadow-lg transition-transform duration-500 group-hover:scale-110`}>
-                     <card.icon size={24} />
+             <Link href={card.link} className="block bg-white border border-slate-100 rounded-2xl p-6 hover:border-slate-200 transition-all group">
+                <div className="flex items-center justify-between mb-4">
+                   <div className={`w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center ${card.iconColor}`}>
+                      <card.icon size={20} />
                    </div>
-                   <div className="flex items-center gap-1.5 px-3 py-1 bg-white rounded-full border border-slate-100 shadow-sm">
-                     <span className="text-[10px] font-black text-slate-900 tracking-tighter">{card.trend}</span>
-                     <ArrowUpRight size={10} className="text-emerald-500" />
-                   </div>
+                   <ArrowUpRight size={14} className="text-slate-200 group-hover:text-slate-400 transition-colors" />
                 </div>
-                <div>
-                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-2">{card.label}</p>
-                   <p className="text-3xl font-black text-slate-950 tracking-tighter">{card.value}</p>
-                </div>
+                <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">{card.label}</p>
+                <p className="text-2xl font-bold text-slate-950 tracking-tight">{card.value}</p>
              </Link>
           </motion.div>
         ))}
       </div>
 
-      <div className="grid lg:grid-cols-12 gap-6 lg:gap-12 px-4 lg:px-0">
-        {/* Recent Activity */}
-        <div className="lg:col-span-8 space-y-6 lg:space-y-8">
-           <div className="flex flex-col sm:flex-row sm:items-end justify-between px-4 gap-4">
-              <div>
-                <p className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.3em] mb-2">Recent Activity</p>
-                <h3 className="text-2xl lg:text-3xl font-black text-slate-950 tracking-tighter">Order Management</h3>
-              </div>
-              <Link href="/admin/orders" className="text-[10px] font-black text-slate-400 hover:text-slate-950 uppercase tracking-widest transition-colors flex items-center gap-2 mb-1">
-                View All Orders <ChevronRight size={14} />
-              </Link>
+      <div className="grid lg:grid-cols-12 gap-10">
+        {/* Recent Orders */}
+        <div className="lg:col-span-8 space-y-6">
+           <div className="flex items-center justify-between px-2">
+              <h3 className="text-lg font-bold text-slate-950 tracking-tight">Recent Activity</h3>
+              <Link href="/admin/orders" className="text-[11px] font-bold text-indigo-600 uppercase tracking-widest hover:underline">View All</Link>
            </div>
            
-           <div className="bg-slate-50 rounded-[2rem] lg:rounded-[3rem] border border-slate-100 overflow-hidden shadow-inner shadow-slate-200/20">
+           <div className="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm shadow-slate-200/20">
               <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse min-w-[600px] lg:min-w-0">
+                <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="border-b border-slate-200/60">
-                      <th className="px-6 lg:px-10 py-6 lg:py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest">Order Number</th>
-                      <th className="px-6 lg:px-10 py-6 lg:py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest hidden sm:table-cell">Customer Phone</th>
-                      <th className="px-6 lg:px-10 py-6 lg:py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest">Amount</th>
-                      <th className="px-6 lg:px-10 py-6 lg:py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Status</th>
+                    <tr className="bg-slate-50/50 border-b border-slate-100">
+                      <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Order ID</th>
+                      <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Amount</th>
+                      <th className="px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {recentOrders.map((order, i) => (
-                      <tr key={order._id} className="group hover:bg-white transition-all duration-300">
-                        <td className="px-6 lg:px-10 py-4 lg:py-6">
-                           <div className="flex flex-col">
-                             <span className="text-sm font-black text-slate-950 tracking-tight mb-1">{order.orderNumber}</span>
-                             <span className="text-[10px] font-bold text-slate-400 uppercase">{new Date(order.createdAt).toLocaleDateString()}</span>
-                           </div>
+                  <tbody className="divide-y divide-slate-50">
+                    {recentOrders.map((order) => (
+                      <tr key={order._id} className="group hover:bg-slate-50/30 transition-all">
+                        <td className="px-8 py-5">
+                           <p className="text-[13px] font-bold text-slate-950 mb-0.5">{order.orderNumber}</p>
+                           <p className="text-[10px] font-medium text-slate-400 uppercase tracking-tighter">{new Date(order.createdAt).toLocaleDateString()}</p>
                         </td>
-                        <td className="px-6 lg:px-10 py-4 lg:py-6 hidden sm:table-cell">
-                           <span className="text-sm font-bold text-slate-600 tracking-tight">{order.customerPhone}</span>
-                        </td>
-                        <td className="px-6 lg:px-10 py-4 lg:py-6">
-                           <span className="text-sm font-black text-slate-950 tracking-tight">৳{order.totalAmount?.toLocaleString()}</span>
-                        </td>
-                        <td className="px-6 lg:px-10 py-4 lg:py-6 text-right">
-                           <span className={`inline-flex px-3 lg:px-4 py-1.5 rounded-full text-[8px] lg:text-[9px] font-black uppercase tracking-widest ${statusStyle[order.status] || 'bg-slate-100 text-slate-500'}`}>
+                        <td className="px-8 py-5 text-[13px] font-bold text-slate-950">৳{order.totalAmount?.toLocaleString()}</td>
+                        <td className="px-8 py-5 text-right">
+                           <span className={`inline-flex px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest ${statusStyle[order.status] || 'bg-slate-100 text-slate-500'}`}>
                              {order.status}
                            </span>
                         </td>
                       </tr>
                     ))}
-                    {recentOrders.length === 0 && (
-                      <tr><td colSpan={4} className="px-10 py-20 text-center text-slate-400 font-black uppercase text-[10px] tracking-[0.4em]">No recent orders</td></tr>
-                    )}
                   </tbody>
                 </table>
               </div>
            </div>
         </div>
 
-        {/* System Alerts */}
-        <div className="lg:col-span-4 space-y-6 lg:space-y-8">
-           <div>
-              <p className="text-[10px] font-black text-rose-600 uppercase tracking-[0.3em] mb-2">System Alerts</p>
-              <h3 className="text-2xl lg:text-3xl font-black text-slate-950 tracking-tighter">Alerts</h3>
-           </div>
+        {/* Alerts & Inventory */}
+        <div className="lg:col-span-4 space-y-6">
+           <h3 className="text-lg font-bold text-slate-950 tracking-tight px-2">Notifications</h3>
 
            <div className="space-y-4">
-              <div className="bg-slate-950 rounded-[2rem] lg:rounded-[2.5rem] p-6 lg:p-8 text-white relative overflow-hidden shadow-premium">
-                 <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-600/20 blur-[60px] rounded-full" />
-                 <div className="relative z-10">
-                    <div className="flex items-center justify-between mb-8">
-                       <div className="w-10 h-10 bg-white/10 backdrop-blur-xl rounded-xl flex items-center justify-center">
-                         <AlertTriangle size={18} className="text-rose-400" />
-                       </div>
-                       <span className="bg-rose-500 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest">Urgent</span>
-                    </div>
-                    <h4 className="text-xl font-black tracking-tight mb-2">Low Stock Alert</h4>
-                    <p className="text-slate-400 text-xs font-medium leading-relaxed mb-6">
-                      We detected {lowStockProducts.length} products with low stock. Please restock soon.
-                    </p>
-                    <div className="space-y-2">
-                       {lowStockProducts.slice(0, 5).map(p => (
-                         <div key={p._id} className="flex items-center justify-between py-2 border-b border-white/5 last:border-0">
-                            <span className="text-[10px] font-bold text-slate-300 uppercase tracking-tight truncate mr-4">{p.name}</span>
-                            <span className="text-[10px] font-black text-rose-400 uppercase whitespace-nowrap">{p.stock} Units left</span>
-                         </div>
-                       ))}
-                    </div>
-                    <Link href="/admin/inventory" className="inline-flex items-center gap-2 mt-8 text-[10px] font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors">
-                      Restock Now <ArrowUpRight size={14} />
-                    </Link>
-                 </div>
-              </div>
+              {lowStockProducts.length > 0 ? (
+                <div className="bg-slate-900 rounded-2xl p-6 text-white">
+                   <div className="flex items-center justify-between mb-6">
+                      <div className="w-9 h-9 bg-white/10 rounded-xl flex items-center justify-center text-rose-400">
+                        <AlertTriangle size={18} />
+                      </div>
+                      <span className="text-[9px] font-bold text-rose-400 uppercase tracking-widest">Low Stock</span>
+                   </div>
+                   <div className="space-y-3 mb-6 max-h-32 overflow-y-auto custom-scrollbar pr-2">
+                      {lowStockProducts.slice(0, 4).map(p => (
+                        <div key={p._id} className="flex items-center justify-between py-1.5 border-b border-white/5 last:border-0">
+                           <span className="text-[11px] font-medium text-slate-300 truncate mr-3">{p.name}</span>
+                           <span className="text-[11px] font-bold text-white whitespace-nowrap">{p.stock} Left</span>
+                        </div>
+                      ))}
+                   </div>
+                   <Link href="/admin/inventory" className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 hover:text-indigo-300 flex items-center gap-2">
+                     Manage Inventory <ChevronRight size={12} />
+                   </Link>
+                </div>
+              ) : (
+                <div className="bg-emerald-50/50 border border-emerald-100 rounded-2xl p-8 text-center">
+                   <Package size={24} className="text-emerald-500 mx-auto mb-3" />
+                   <p className="text-[11px] font-bold text-emerald-900 uppercase tracking-widest">All Stock Healthy</p>
+                </div>
+              )}
 
-              <div className="bg-slate-50 border border-slate-100 rounded-[2rem] lg:rounded-[2.5rem] p-6 lg:p-8">
-                 <div className="flex items-center justify-between mb-6">
-                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-indigo-600 shadow-sm border border-slate-100">
-                      <Users size={18} />
-                    </div>
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">System Status</span>
+              <div className="bg-white border border-slate-100 rounded-2xl p-6">
+                 <div className="flex items-center justify-between mb-4">
+                    <p className="text-[11px] font-bold text-slate-950 uppercase tracking-widest">System Health</p>
+                    <span className="text-[10px] font-bold text-emerald-500">Online</span>
                  </div>
-                 <h4 className="text-xl font-black text-slate-950 tracking-tighter mb-1">Website Performance</h4>
-                 <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-6">System Health</p>
-                 <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
-                    <motion.div 
-                      initial={{ width: 0 }}
-                      animate={{ width: '85%' }}
-                      transition={{ duration: 1.5, ease: "easeOut" }}
-                      className="h-full bg-indigo-600"
-                    />
+                 <div className="h-1 w-full bg-slate-100 rounded-full overflow-hidden mb-3">
+                    <div className="h-full bg-indigo-500 w-[94%]" />
                  </div>
-                 <div className="flex justify-between mt-3">
-                    <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Uptime 99.9%</span>
-                    <span className="text-[9px] font-black text-slate-950 uppercase tracking-widest">85% Capacity</span>
-                 </div>
+                 <p className="text-[10px] font-medium text-slate-400 leading-tight">Uptime: 99.99% • No issues detected today.</p>
               </div>
            </div>
         </div>

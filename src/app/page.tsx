@@ -43,10 +43,10 @@ interface Category {
 }
 
 const TRUST_ITEMS = [
-  { icon: Zap, label: 'Lightning Dispatch', desc: '24–48 hours' },
-  { icon: ShieldCheck, label: 'Secure Payments', desc: 'Encrypted & safe' },
-  { icon: Package, label: 'Easy Returns', desc: '14-day policy' },
-  { icon: Star, label: 'Premium Quality', desc: 'Curated catalog' },
+  { icon: Zap, label: 'দ্রুত ডেলিভারি', desc: '২৪–৪৮ ঘণ্টার মধ্যে' },
+  { icon: ShieldCheck, label: 'নিরাপদ পেমেন্ট', desc: '১০০% সুরক্ষিত' },
+  { icon: Package, label: 'সহজ রিটার্ন', desc: '১৪ দিনের পলিসি' },
+  { icon: Star, label: 'সেরা মান', desc: 'বাছাইকৃত পণ্য' },
 ];
 
 function getCategoryIcon(name: string) {
@@ -96,7 +96,7 @@ export default function Home() {
     <div className="min-h-screen bg-white flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">
         <div className="w-12 h-12 border-4 border-slate-100 border-t-indigo-600 rounded-full animate-spin" />
-        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Loading Catalog</p>
+        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest font-hind">ক্যাটালগ লোড হচ্ছে</p>
       </div>
     </div>
   );
@@ -104,11 +104,11 @@ export default function Home() {
   return (
     <div className="bg-white min-h-screen selection:bg-indigo-600 selection:text-white">
       {/* ── SEARCH BAR ─────────────────────────────────────────── */}
-      <div className="pt-16 px-6 container mx-auto relative z-40 max-w-xl">
+      <div className="pt-20 px-6 container mx-auto relative z-40 max-w-xl">
         <div className="relative group">
           <input
             type="text"
-            placeholder="Search for premium products..."
+            placeholder="সেরা পণ্যগুলি খুঁজুন..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setIsSearchFocused(true)}
@@ -128,7 +128,7 @@ export default function Home() {
                 {searchSuggestions.length > 0 ? (
                   <div className="p-2 flex flex-col gap-1">
                     <div className="px-3 py-2 border-b border-slate-50 mb-1">
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Found in Catalog</p>
+                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">ক্যাটালগে পাওয়া গেছে</p>
                     </div>
                     {searchSuggestions.map(product => (
                       <Link 
@@ -161,8 +161,8 @@ export default function Home() {
                     <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-3">
                       <Search size={20} className="text-slate-300" />
                     </div>
-                    <p className="text-xs font-bold text-slate-500">No matches for "{searchQuery}"</p>
-                    <p className="text-[10px] text-slate-400 mt-1">Try searching for categories or tags</p>
+                    <p className="text-xs font-bold text-slate-500">"{searchQuery}" এর জন্য কিছু পাওয়া যায়নি</p>
+                    <p className="text-[10px] text-slate-400 mt-1">ক্যাটাগরি বা ট্যাগ দিয়ে পুনরায় চেষ্টা করুন</p>
                   </div>
                 )}
               </motion.div>
@@ -186,7 +186,7 @@ export default function Home() {
                 className="inline-flex items-center gap-2 px-2.5 py-1 bg-slate-950 text-white rounded-lg shadow-xl shadow-slate-200"
               >
                 <Sparkles size={10} className="text-indigo-400" />
-                <span className="text-[8px] font-black uppercase tracking-[0.3em]">100% Genuine Products</span>
+                <span className="text-[8px] font-black uppercase tracking-[0.3em]">১০০% জেনুইন পণ্য</span>
               </motion.div>
 
               <div className="space-y-3">
@@ -195,8 +195,8 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   className="text-[clamp(2rem,5vw,3.5rem)] font-black text-slate-950 tracking-tighter leading-[0.9]"
                 >
-                  THE BIGGEST<br />
-                  <span className="text-indigo-600">MEGA SALE.</span>
+                  সবচেয়ে বড়<br />
+                  <span className="text-indigo-600">মেগা সেল।</span>
                 </motion.h1>
 
                 <motion.p 
@@ -205,7 +205,7 @@ export default function Home() {
                   transition={{ delay: 0.1 }}
                   className="text-xs text-slate-500 font-medium max-w-sm leading-relaxed"
                 >
-                  Get the best deals on electronics, fashion, and daily essentials with nationwide fastest delivery.
+                  ইলেকট্রনিক্স, ফ্যাশন এবং নিত্যপ্রয়োজনীয় পণ্যের সেরা ডিল পান দেশজুড়ে দ্রুততম ডেলিভারির সাথে।
                 </motion.p>
               </div>
 
@@ -216,11 +216,11 @@ export default function Home() {
                 className="flex items-center gap-5"
               >
                 <Link href="/products" className="group flex items-center gap-3 bg-indigo-600 text-white px-7 py-3.5 rounded-xl font-black text-[10px] transition-all hover:bg-slate-950 shadow-lg shadow-indigo-100">
-                  SHOP NOW
+                  এখনই কিনুন
                   <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <Link href="/#featured" className="text-[9px] font-black text-slate-400 uppercase tracking-widest hover:text-indigo-600 transition-colors">
-                  Top Deals →
+                  সেরা অফার →
                 </Link>
               </motion.div>
             </div>
@@ -238,7 +238,7 @@ export default function Home() {
                   alt="Premium Product"
                 />
                 <div className="absolute bottom-4 left-4 z-20 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-100">
-                  <p className="text-slate-950 font-black text-[8px] uppercase tracking-widest">Mega Deal</p>
+                  <p className="text-slate-950 font-black text-[8px] uppercase tracking-widest">মেগা ডিল</p>
                 </div>
               </motion.div>
 
@@ -251,7 +251,7 @@ export default function Home() {
                 >
                   <Zap size={18} className="text-indigo-400" />
                   <div>
-                    <p className="text-white font-black text-[10px] leading-tight">Fast<br />Delivery</p>
+                    <p className="text-white font-black text-[10px] leading-tight">দ্রুত<br />ডেলিভারি</p>
                   </div>
                 </motion.div>
                 <motion.div 
@@ -262,7 +262,7 @@ export default function Home() {
                 >
                   <ShieldCheck size={18} className="text-indigo-600" />
                   <div>
-                    <p className="text-indigo-900 font-black text-[10px] leading-tight">100%<br />Authentic</p>
+                    <p className="text-indigo-900 font-black text-[10px] leading-tight">১০০%<br />জেনুইন</p>
                   </div>
                 </motion.div>
               </div>
@@ -282,12 +282,12 @@ export default function Home() {
                 <Star size={20} fill="currentColor" />
               </div>
               <div>
-                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Handpicked</p>
-                <h2 className="text-xl font-black text-slate-950 tracking-tight uppercase">Editor's Spotlight</h2>
+                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">বাছাইকৃত</p>
+                <h2 className="text-xl font-black text-slate-950 tracking-tight uppercase">সেরা কালেকশন</h2>
               </div>
             </div>
             <Link href="/products" className="hidden md:flex items-center gap-2 text-[10px] font-black text-slate-400 hover:text-indigo-600 transition-colors uppercase tracking-widest">
-              View All <ChevronRight size={14} />
+              সব দেখুন <ChevronRight size={14} />
             </Link>
           </div>
           
@@ -312,11 +312,11 @@ export default function Home() {
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row items-end justify-between mb-10 gap-6">
             <div className="space-y-2">
-              <p className="text-[9px] font-black text-indigo-600 uppercase tracking-widest">Shop by Intent</p>
-              <h2 className="text-3xl font-black text-slate-950 tracking-tighter uppercase">OUR DEPARTMENTS.</h2>
+              <p className="text-[9px] font-black text-indigo-600 uppercase tracking-widest">পছন্দমতো কিনুন</p>
+              <h2 className="text-3xl font-black text-slate-950 tracking-tighter uppercase">আমাদের ক্যাটাগরি।</h2>
             </div>
             <Link href="/products" className="group flex items-center gap-3 text-[10px] font-black text-slate-500 uppercase tracking-widest hover:text-indigo-600 transition-colors whitespace-nowrap">
-              VIEW ALL
+              সব দেখুন
               <div className="w-8 h-8 border border-slate-200 rounded-full flex items-center justify-center group-hover:border-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all">
                 <ArrowRight size={14} />
               </div>
@@ -344,11 +344,11 @@ export default function Home() {
                     )}
                     
                     <div className="relative z-10">
-                      <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-1 group-hover:text-white transition-colors">Category</p>
+                      <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-1 group-hover:text-white transition-colors">ক্যাটাগরি</p>
                       <h3 className="text-lg md:text-xl font-black text-white tracking-tight leading-none">{cat.name}</h3>
                       <div className="flex items-center gap-2 mt-3 overflow-hidden">
                          <div className="h-[2px] w-0 group-hover:w-8 bg-indigo-500 transition-all duration-500" />
-                         <span className="text-[9px] font-black text-white/0 group-hover:text-white uppercase tracking-widest transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">Shop Now</span>
+                         <span className="text-[9px] font-black text-white/0 group-hover:text-white uppercase tracking-widest transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">এখনই কিনুন</span>
                       </div>
                     </div>
                   </Link>
@@ -364,7 +364,7 @@ export default function Home() {
                   </div>
                   <div>
                     <h3 className="text-base font-black text-slate-950">{name}</h3>
-                    <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Explore →</p>
+                    <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">এক্সপ্লোর করুন →</p>
                   </div>
                 </Link>
               ))}
@@ -389,16 +389,16 @@ export default function Home() {
                     <div className="flex items-center gap-3">
                       <div className="flex items-center gap-2 px-4 py-2 bg-rose-500/20 border border-rose-500/30 rounded-full">
                         <Flame size={14} className="text-rose-400 animate-pulse" />
-                        <span className="text-[10px] font-black text-rose-400 uppercase tracking-widest">Active Sale</span>
+                        <span className="text-[10px] font-black text-rose-400 uppercase tracking-widest">চলমান সেল</span>
                       </div>
                     </div>
                     <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter leading-none">
-                      FLASH<br />
-                      <span className="text-rose-400">DEALS.</span>
+                      ফ্ল্যাশ<br />
+                      <span className="text-rose-400">ডিল।</span>
                     </h2>
                   </div>
                   <Link href="/products" className="flex items-center gap-3 text-white/60 font-black text-xs uppercase tracking-widest hover:text-white transition-colors shrink-0">
-                    Browse All <ArrowRight size={16} />
+                    সব দেখুন <ArrowRight size={16} />
                   </Link>
                 </div>
 
@@ -443,11 +443,11 @@ export default function Home() {
           <div className="container mx-auto px-6">
             <div className="flex items-center justify-between mb-14">
               <div>
-                <p className="text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-2">Just Dropped</p>
-                <h2 className="text-4xl font-black text-slate-950 tracking-tighter">NEW ARRIVALS.</h2>
+                <p className="text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-2">নতুন কালেকশন</p>
+                <h2 className="text-4xl font-black text-slate-950 tracking-tighter">নতুন পণ্য।</h2>
               </div>
               <Link href="/products" className="hidden md:flex items-center gap-2 text-xs font-black text-slate-400 hover:text-indigo-600 transition-colors uppercase tracking-widest">
-                Browse All <ChevronRight size={14} />
+                সব দেখুন <ChevronRight size={14} />
               </Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -467,26 +467,26 @@ export default function Home() {
             <div className="relative z-10">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 border border-indigo-100 rounded-full mb-8">
                 <Sparkles size={13} className="text-indigo-600" />
-                <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest">Early Access Program</span>
+                <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest">আর্লি এক্সেস প্রোগ্রাম</span>
               </div>
               <h2 className="text-4xl md:text-6xl font-black text-slate-950 tracking-tighter mb-6 leading-none">
-                JOIN THE<br />
-                <span className="text-indigo-600">INNER CIRCLE.</span>
+                আমাদের সাথে<br />
+                <span className="text-indigo-600">যুক্ত হোন।</span>
               </h2>
               <p className="text-slate-500 font-medium max-w-md mx-auto mb-10 leading-relaxed">
-                Get exclusive early access to limited drops, member-only discounts, and first look at new arrivals. No spam. Ever.
+                লিমিটেড ড্রপ, মেম্বার-অনলি ডিসকাউন্ট এবং নতুন পণ্য সবার আগে দেখতে আমাদের নিউজলেটারে যোগ দিন।
               </p>
               <div className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
                 <input 
                   type="email" 
-                  placeholder="your@email.com" 
+                  placeholder="আপনার ইমেইল" 
                   className="flex-1 bg-slate-50 border border-slate-200 rounded-[2rem] px-8 py-5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all"
                 />
                 <button className="bg-slate-950 text-white px-10 py-5 rounded-[2rem] font-black text-sm hover:bg-indigo-600 transition-all shadow-xl shadow-slate-200 whitespace-nowrap">
-                  JOIN NOW
+                  যুক্ত হোন
                 </button>
               </div>
-              <p className="text-[10px] font-bold text-slate-300 uppercase tracking-widest mt-6">15% off your first order after joining</p>
+              <p className="text-[10px] font-bold text-slate-300 uppercase tracking-widest mt-6">যোগদানের পর প্রথম অর্ডারে ১৫% ছাড়</p>
             </div>
           </div>
         </div>

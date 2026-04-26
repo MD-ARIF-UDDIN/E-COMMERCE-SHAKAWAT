@@ -103,65 +103,72 @@ function ProductsContent() {
   return (
     <div className="bg-white min-h-screen">
       <div className="container mx-auto px-6 pt-24 pb-0">
-        <div className="flex flex-wrap items-center gap-3 mb-4 relative z-40 border-b border-slate-100 pb-4">
+        <div className="flex flex-wrap items-center gap-5 mb-12 relative z-40 bg-white/70 backdrop-blur-2xl p-5 rounded-[2rem] border border-white/50 shadow-sm">
           {/* Category Dropdown */}
-          <div className="relative">
+          <div className="relative group">
+            <label className="absolute -top-2 left-4 px-2 bg-white text-[8px] font-black text-slate-400 uppercase tracking-widest z-10">ক্যাটাগরি</label>
             <select
               value={selectedCategory}
               onChange={e => { setSelectedCategory(e.target.value); setSelectedBrand(''); }}
-              className="appearance-none bg-slate-100 text-slate-700 text-xs font-black uppercase tracking-wider pl-4 pr-8 py-3 rounded-xl cursor-pointer hover:bg-slate-200 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="appearance-none bg-slate-50/50 border border-slate-100 text-slate-950 text-[10px] font-black uppercase tracking-[0.15em] pl-6 pr-12 py-4 rounded-2xl cursor-pointer hover:border-indigo-200 hover:bg-white transition-all focus:outline-none focus:ring-4 focus:ring-indigo-500/5 shadow-sm"
             >
-              <option value="">All Categories</option>
+              <option value="">সব ক্যাটাগরি</option>
               {categories.map(c => (
                 <option key={c._id} value={c._id}>{c.name}</option>
               ))}
             </select>
-            <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+            <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none group-hover:text-indigo-500 transition-colors" />
           </div>
 
-          {/* Brand Dropdown (appears when category selected & has brands) */}
+          {/* Brand Dropdown */}
           {selectedCategory && brands.length > 0 && (
-            <div className="relative">
+            <div className="relative group">
+              <label className="absolute -top-2 left-4 px-2 bg-white text-[8px] font-black text-slate-400 uppercase tracking-widest z-10">ব্র্যান্ড</label>
               <select
                 value={selectedBrand}
                 onChange={e => setSelectedBrand(e.target.value)}
-                className="appearance-none bg-slate-100 text-slate-700 text-xs font-black uppercase tracking-wider pl-4 pr-8 py-3 rounded-xl cursor-pointer hover:bg-slate-200 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                className="appearance-none bg-slate-50/50 border border-slate-100 text-slate-950 text-[10px] font-black uppercase tracking-[0.15em] pl-6 pr-12 py-4 rounded-2xl cursor-pointer hover:border-indigo-200 hover:bg-white transition-all focus:outline-none focus:ring-4 focus:ring-indigo-500/5 shadow-sm"
               >
-                <option value="">All Brands</option>
+                <option value="">সব ব্র্যান্ড</option>
                 {brands.map(b => (
                   <option key={b._id} value={b._id}>{b.name}</option>
                 ))}
               </select>
-              <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+              <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none group-hover:text-indigo-500 transition-colors" />
             </div>
           )}
 
-          {/* Filter Button (price/sort) */}
+          {/* Filter Button */}
           <button 
             onClick={() => setShowFilters(!showFilters)}
-            className={`shrink-0 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${
-              showFilters ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            className={`shrink-0 flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all border ${
+              showFilters 
+              ? 'bg-slate-950 text-white border-slate-950 shadow-xl shadow-slate-200' 
+              : 'bg-white border-slate-100 text-slate-400 hover:border-indigo-200 hover:text-indigo-600 shadow-sm'
             }`}
           >
-            <Filter size={16} />
-            {showFilters ? 'Close' : 'Filters'}
+            <SlidersHorizontal size={16} />
+            {showFilters ? 'বন্ধ করুন' : 'ফিল্টার'}
           </button>
 
           {/* Search */}
-          <div className="relative flex-1 min-w-[140px]">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <div className="relative flex-1 min-w-[240px] group">
+            <Search size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-600 transition-colors" />
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="পণ্য খুঁজুন..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-bold focus:outline-none focus:ring-2 focus:ring-indigo-400 transition-all shadow-inner"
+              className="w-full pl-14 pr-6 py-4 bg-slate-50/50 border border-slate-100 rounded-2xl text-xs font-bold text-slate-950 focus:outline-none focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-200 focus:bg-white transition-all shadow-sm placeholder:text-slate-200"
             />
           </div>
 
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest hidden md:block shrink-0">
-            {products.length} Results
-          </p>
+          <div className="hidden lg:flex items-center gap-2 px-4 py-2 bg-slate-100/50 rounded-xl border border-slate-200/50">
+            <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse" />
+            <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest shrink-0">
+              {products.length} টি পণ্য পাওয়া গেছে
+            </p>
+          </div>
 
           {/* Desktop Filter Dropdown */}
           <AnimatePresence>
@@ -175,13 +182,13 @@ function ProductsContent() {
                 <div className="space-y-8 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
                   {/* Price */}
                   <div className="space-y-4">
-                    <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Price Range</h3>
+                    <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">মূল্যসীমা</h3>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="relative">
                         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">৳</span>
                         <input
                           type="number"
-                          placeholder="Min"
+                          placeholder="সর্বনিম্ন"
                           value={minPrice}
                           onChange={e => setMinPrice(e.target.value)}
                           className="w-full bg-slate-50 border-none rounded-xl pl-8 pr-4 py-3 text-sm font-bold focus:ring-2 focus:ring-indigo-400"
@@ -191,7 +198,7 @@ function ProductsContent() {
                         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">৳</span>
                         <input
                           type="number"
-                          placeholder="Max"
+                          placeholder="সর্বোচ্চ"
                           value={maxPrice}
                           onChange={e => setMaxPrice(e.target.value)}
                           className="w-full bg-slate-50 border-none rounded-xl pl-8 pr-4 py-3 text-sm font-bold focus:ring-2 focus:ring-indigo-400"
@@ -202,12 +209,12 @@ function ProductsContent() {
 
                   {/* Sorting */}
                   <div className="space-y-4">
-                    <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Sort By</h3>
+                    <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">বাছাই করুন</h3>
                     <div className="grid grid-cols-1 gap-2">
                       {[
-                        { val: '', label: 'Newest Releases' },
-                        { val: 'price_asc', label: 'Price: Lowest First' },
-                        { val: 'price_desc', label: 'Price: Highest First' }
+                        { val: '', label: 'নতুন পণ্য' },
+                        { val: 'price_asc', label: 'মূল্য: কম থেকে বেশি' },
+                        { val: 'price_desc', label: 'মূল্য: বেশি থেকে কম' }
                       ].map(s => (
                         <button 
                           key={s.val}
@@ -226,7 +233,7 @@ function ProductsContent() {
                     onClick={() => { setMinPrice(''); setMaxPrice(''); setSort(''); setShowFilters(false); }}
                     className="w-full flex items-center justify-center gap-2 py-4 border-2 border-dashed border-slate-100 rounded-xl text-rose-500 font-black text-[10px] uppercase tracking-[0.2em] hover:bg-rose-50 hover:border-rose-100 transition-all"
                   >
-                    <X size={14} /> Reset
+                    <X size={14} /> রিসেট করুন
                   </button>
                 </div>
               </motion.div>
@@ -245,7 +252,7 @@ function ProductsContent() {
               className="fixed inset-0 z-50 bg-white flex flex-col md:hidden"
             >
               <div className="flex items-center justify-between p-6 border-b border-slate-50">
-                <h2 className="text-xl font-black text-slate-950 tracking-tighter">Filters & Sort</h2>
+                <h2 className="text-xl font-black text-slate-950 tracking-tighter">ফিল্টার এবং বাছাই</h2>
                 <button 
                   onClick={() => setShowFilters(false)}
                   className="w-10 h-10 bg-slate-50 rounded-full flex items-center justify-center text-slate-600"
@@ -257,13 +264,13 @@ function ProductsContent() {
               <div className="flex-1 overflow-y-auto p-6 space-y-10">
                 {/* Price Filter */}
                 <div className="space-y-4">
-                  <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Price Range</h3>
+                  <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">মূল্যসীমা</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="relative">
                       <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">৳</span>
                       <input
                         type="number"
-                        placeholder="Min"
+                        placeholder="সর্বনিম্ন"
                         value={minPrice}
                         onChange={e => setMinPrice(e.target.value)}
                         className="w-full bg-slate-50 border-none rounded-2xl pl-8 pr-4 py-4 text-sm font-bold focus:ring-2 focus:ring-indigo-400"
@@ -273,7 +280,7 @@ function ProductsContent() {
                       <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">৳</span>
                       <input
                         type="number"
-                        placeholder="Max"
+                        placeholder="সর্বোচ্চ"
                         value={maxPrice}
                         onChange={e => setMaxPrice(e.target.value)}
                         className="w-full bg-slate-50 border-none rounded-2xl pl-8 pr-4 py-4 text-sm font-bold focus:ring-2 focus:ring-indigo-400"
@@ -284,12 +291,12 @@ function ProductsContent() {
 
                 {/* Sorting */}
                 <div className="space-y-4">
-                  <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Sort By</h3>
+                  <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">বাছাই করুন</h3>
                   <div className="grid grid-cols-1 gap-2">
                     {[
-                      { val: '', label: 'Newest Releases' },
-                      { val: 'price_asc', label: 'Price: Lowest First' },
-                      { val: 'price_desc', label: 'Price: Highest First' }
+                      { val: '', label: 'নতুন পণ্য' },
+                      { val: 'price_asc', label: 'মূল্য: কম থেকে বেশি' },
+                      { val: 'price_desc', label: 'মূল্য: বেশি থেকে কম' }
                     ].map(s => (
                       <button 
                         key={s.val}
@@ -310,13 +317,13 @@ function ProductsContent() {
                   onClick={() => { setMinPrice(''); setMaxPrice(''); setSort(''); }}
                   className="py-4 border border-slate-200 rounded-2xl text-slate-600 font-black text-xs uppercase tracking-widest hover:bg-slate-50 transition-all"
                 >
-                  Reset
+                  রিসেট
                 </button>
                 <button 
                   onClick={() => setShowFilters(false)}
                   className="py-4 bg-slate-950 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-600 transition-all shadow-xl"
                 >
-                  Apply Filters
+                  ফিল্টার প্রয়োগ করুন
                 </button>
               </div>
             </motion.div>
@@ -338,8 +345,8 @@ function ProductsContent() {
                  <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-sm">
                    <Search size={32} className="text-slate-200" />
                  </div>
-                 <h3 className="text-2xl font-black text-slate-950 mb-3 tracking-tight">No products match your criteria</h3>
-                 <p className="text-slate-500 font-medium max-w-sm mx-auto">Try broadening your search or adjusting the price boundaries.</p>
+                 <h3 className="text-2xl font-black text-slate-950 mb-3 tracking-tight">আপনার পছন্দের সাথে মিলছে না</h3>
+                 <p className="text-slate-500 font-medium max-w-sm mx-auto">অনুগ্রহ করে অন্য কোনো ক্যাটাগরি বা মূল্যসীমা দিয়ে চেষ্টা করুন।</p>
               </div>
             ) : (
               <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 sm:gap-6 px-1 sm:px-0">

@@ -28,7 +28,7 @@ export default function UsersPage() {
       const res = await api.get('/users');
       setUsers(res.data);
     } catch (err: any) {
-      toast.error(err?.response?.data?.error || 'Only SuperAdmin can manage users');
+      toast.error(err?.response?.data?.error || 'Access denied');
     } finally {
       setLoading(false);
     }
@@ -39,101 +39,87 @@ export default function UsersPage() {
     setSubmitting(true);
     try {
       await api.post('/users', form);
-      toast.success('User created successfully');
+      toast.success('User created');
       setForm({ name: '', email: '', password: '', role: 'Employee' });
       setShowForm(false);
       fetchUsers();
     } catch (err: any) {
-      toast.error(err?.response?.data?.error || 'Failed to create user');
+      toast.error(err?.response?.data?.error || 'Creation failed');
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure? This will permanently delete the user from both Auth and Database.')) return;
+    if (!confirm('Delete this user permanently?')) return;
     try {
       await api.delete(`/users/${id}`);
-      toast.success('User deleted');
+      toast.success('Deleted');
       fetchUsers();
     } catch (err: any) {
-      toast.error(err?.response?.data?.error || 'Failed to delete user');
+      toast.error(err?.response?.data?.error || 'Deletion failed');
     }
   };
 
   return (
-    <div className="space-y-12 pb-32">
+    <div className="space-y-10">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 px-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         <div>
-           <div className="flex items-center gap-2 mb-2">
-              <ShieldAlert size={14} className="text-rose-600" />
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">System Security</p>
-           </div>
-           <h1 className="text-3xl lg:text-5xl font-black text-slate-950 tracking-tighter">Staff Control</h1>
-           <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-2">
-             Managed Profiles: <span className="text-slate-950">{users.length}</span>
-           </p>
+           <h1 className="text-2xl font-bold text-slate-950 tracking-tight">Staff Management</h1>
+           <p className="text-slate-400 text-[13px] font-medium mt-1">Manage personnel and access roles.</p>
         </div>
         
         <button 
           onClick={() => setShowForm(true)}
-          className="h-14 px-8 bg-slate-950 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-indigo-600 hover:shadow-indigo-200 shadow-xl transition-all flex items-center justify-center gap-3 active:scale-95"
+          className="h-11 px-5 bg-slate-950 text-white rounded-xl font-bold text-[13px] hover:bg-indigo-600 transition-all flex items-center justify-center gap-2"
         >
-          <UserPlus size={16} /> Create User
+          <UserPlus size={16} /> New User
         </button>
       </div>
 
-      <div className="grid lg:grid-cols-12 gap-12">
+      <div className="grid lg:grid-cols-12 gap-10">
         {/* Users List */}
-        <div className="lg:col-span-8 space-y-4 px-4 lg:px-0">
+        <div className={showForm ? "lg:col-span-8" : "lg:col-span-12"}>
           {loading ? (
-            <div className="p-24 text-center">
-               <div className="w-12 h-12 border-4 border-slate-100 border-t-indigo-600 rounded-full animate-spin mx-auto mb-4" />
-               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Fetching Personnel...</p>
+            <div className="p-20 text-center">
+               <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto" />
             </div>
           ) : users.length === 0 ? (
-            <div className="p-24 text-center bg-slate-50 rounded-[3rem] border border-slate-100">
-               <p className="text-slate-950 font-black text-xl tracking-tight mb-2">No users found</p>
-               <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Create staff accounts to manage your store</p>
+            <div className="p-20 text-center bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+               <p className="text-slate-950 font-bold text-lg mb-1">No users found</p>
+               <p className="text-slate-400 text-[13px]">Create staff accounts to manage your store.</p>
             </div>
           ) : (
-            <div className="grid gap-4">
-              {users.map((user, i) => {
+            <div className="grid gap-3">
+              {users.map((user) => {
                 const cfg = ROLE_CONFIG[user.role] || ROLE_CONFIG.Employee;
                 return (
                   <motion.div 
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
+                    layout
                     key={user.id} 
-                    className="bg-white rounded-[2.5rem] border border-slate-100 p-6 lg:p-8 flex items-center gap-6 group hover:border-indigo-100 transition-all shadow-sm hover:shadow-premium"
+                    className="bg-white rounded-2xl border border-slate-100 p-5 flex items-center gap-5 hover:border-slate-200 transition-all"
                   >
-                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-black shadow-inner ${cfg.bg} ${cfg.color}`}>
+                    <div className={`w-11 h-11 rounded-xl flex items-center justify-center font-bold shadow-sm ${cfg.bg} ${cfg.color}`}>
                       {user.name.charAt(0).toUpperCase()}
                     </div>
                     
                     <div className="flex-1 min-w-0">
-                       <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-sm lg:text-base font-black text-slate-950 truncate tracking-tight">{user.name}</h3>
-                          <span className={`px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest border border-current ${cfg.bg} ${cfg.color}`}>
+                       <div className="flex items-center gap-2 mb-0.5">
+                          <h3 className="text-[13px] font-bold text-slate-950 truncate tracking-tight">{user.name}</h3>
+                          <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest ${cfg.bg} ${cfg.color}`}>
                             {user.role}
                           </span>
                        </div>
-                       <div className="flex items-center gap-1.5 text-slate-400">
-                          <Mail size={12} />
-                          <p className="text-[10px] lg:text-xs font-medium truncate">{user.email}</p>
-                       </div>
+                       <p className="text-[11px] font-medium text-slate-400 truncate">{user.email}</p>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                       <button 
-                         onClick={() => handleDelete(user.id)}
-                         className="w-10 h-10 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center hover:bg-rose-50 hover:text-rose-600 transition-all"
-                       >
-                         <Trash2 size={16} />
-                       </button>
-                    </div>
+                    <button 
+                      onClick={() => handleDelete(user.id)}
+                      className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-300 hover:text-rose-500 transition-colors"
+                    >
+                      <Trash2 size={14} />
+                    </button>
                   </motion.div>
                 );
               })}
@@ -145,61 +131,58 @@ export default function UsersPage() {
         <AnimatePresence>
           {showForm && (
             <motion.div 
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 0, x: 10 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
+              exit={{ opacity: 0, x: 10 }}
               className="lg:col-span-4"
             >
-              <div className="bg-slate-50 rounded-[3rem] border border-slate-100 p-8 lg:p-10 space-y-10 shadow-inner shadow-slate-200/20 sticky top-28 mx-4 lg:mx-0">
+              <div className="bg-white border border-slate-100 rounded-2xl p-6 lg:p-8 space-y-8 sticky top-28">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="text-sm font-black text-slate-950 uppercase tracking-[0.2em]">New Personnel</h2>
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter mt-1">Role-Based Access Control</p>
-                  </div>
-                  <button onClick={() => setShowForm(false)} className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-rose-600 transition-colors">
+                  <h2 className="text-[11px] font-bold text-slate-950 uppercase tracking-widest">New Personnel</h2>
+                  <button onClick={() => setShowForm(false)} className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-950 transition-colors">
                     <X size={14} />
                   </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
+                    <label className="text-[11px] font-bold text-slate-950 uppercase tracking-widest px-1">Full Name</label>
                     <input 
                       required
                       value={form.name}
                       onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                      className="w-full h-14 px-6 bg-white border border-slate-200 rounded-2xl text-sm font-bold text-slate-950 focus:border-indigo-600 focus:outline-none transition-all"
+                      className="w-full h-11 px-4 bg-slate-50 border border-slate-100 rounded-xl text-[13px] font-semibold text-slate-950 focus:bg-white focus:border-slate-200 outline-none transition-all"
                       placeholder="e.g. John Doe"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
+                    <label className="text-[11px] font-bold text-slate-950 uppercase tracking-widest px-1">Email Address</label>
                     <input 
                       required
                       type="email"
                       value={form.email}
                       onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                      className="w-full h-14 px-6 bg-white border border-slate-200 rounded-2xl text-sm font-bold text-slate-950 focus:border-indigo-600 focus:outline-none transition-all"
+                      className="w-full h-11 px-4 bg-slate-50 border border-slate-100 rounded-xl text-[13px] font-semibold text-slate-950 focus:bg-white focus:border-slate-200 outline-none transition-all"
                       placeholder="john@example.com"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Secret Key</label>
+                    <label className="text-[11px] font-bold text-slate-950 uppercase tracking-widest px-1">Password</label>
                     <input 
                       required
                       type="password"
                       value={form.password}
                       onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
-                      className="w-full h-14 px-6 bg-white border border-slate-200 rounded-2xl text-sm font-bold text-slate-950 focus:border-indigo-600 focus:outline-none transition-all"
+                      className="w-full h-11 px-4 bg-slate-50 border border-slate-100 rounded-xl text-[13px] font-semibold text-slate-950 focus:bg-white focus:border-slate-200 outline-none transition-all"
                       placeholder="••••••••"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">System Role</label>
+                    <label className="text-[11px] font-bold text-slate-950 uppercase tracking-widest px-1">Role</label>
                     <select
                       value={form.role}
                       onChange={e => setForm(f => ({ ...f, role: e.target.value }))}
-                      className="w-full h-14 px-6 bg-white border border-slate-200 rounded-2xl text-sm font-bold text-slate-950 focus:border-indigo-600 focus:outline-none transition-all appearance-none"
+                      className="w-full h-11 px-4 bg-slate-50 border border-slate-100 rounded-xl text-[13px] font-semibold text-slate-950 focus:bg-white focus:border-slate-200 outline-none transition-all"
                     >
                       <option value="Employee">Employee</option>
                       <option value="Admin">Admin</option>
@@ -209,10 +192,10 @@ export default function UsersPage() {
 
                   <button
                     disabled={submitting}
-                    className="w-full h-14 bg-slate-950 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-600 shadow-xl transition-all flex items-center justify-center gap-2"
+                    className="w-full h-12 bg-slate-950 text-white rounded-xl font-bold text-[13px] hover:bg-indigo-600 transition-all flex items-center justify-center gap-2"
                   >
                     {submitting ? (
-                      <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     ) : (
                       <>
                         <Plus size={16} /> Authorize User

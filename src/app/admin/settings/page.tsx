@@ -51,11 +51,11 @@ export default function SettingsPage() {
   if (fetching) return <div className="p-12 text-center text-slate-400 font-black uppercase tracking-widest animate-pulse">Loading Config...</div>;
 
   return (
-    <div className="space-y-12 pb-12 px-4 lg:px-0">
+    <div className="space-y-10">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <p className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.3em] mb-2">Configuration</p>
-          <h1 className="text-3xl lg:text-4xl font-black text-slate-950 tracking-tighter">Admin Settings</h1>
+          <h1 className="text-2xl font-bold text-slate-950 tracking-tight">Settings</h1>
+          <p className="text-slate-400 text-[13px] font-medium mt-1">Configure your business profile and delivery parameters.</p>
         </div>
       </div>
 
@@ -63,45 +63,45 @@ export default function SettingsPage() {
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Business Info */}
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-[2.5rem] border border-slate-100 p-8 lg:p-10 shadow-sm"
+            className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm shadow-slate-200/20"
           >
-            <div className="flex items-center gap-4 mb-8">
-              <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600">
-                <Building2 size={24} />
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600">
+                <Building2 size={20} />
               </div>
-              <h3 className="text-xl font-black text-slate-950 tracking-tight">Business Profile</h3>
+              <h3 className="text-lg font-bold text-slate-950 tracking-tight">Business Profile</h3>
             </div>
 
             <div className="space-y-6">
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Store Name</label>
+                <label className="text-[11px] font-bold text-slate-950 uppercase tracking-widest px-1">Store Name</label>
                 <input 
-                  value={settings.businessName}
+                  value={settings.businessName || ''}
                   onChange={e => setSettings(s => ({ ...s, businessName: e.target.value }))}
-                  className="w-full h-14 px-6 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-950 focus:bg-white focus:border-indigo-600 focus:outline-none transition-all"
+                  className="w-full h-12 px-4 bg-slate-50 border border-slate-100 rounded-xl text-[13px] font-semibold text-slate-950 focus:bg-white focus:border-slate-200 outline-none transition-all"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Contact Phone</label>
+                <label className="text-[11px] font-bold text-slate-950 uppercase tracking-widest px-1">Contact Phone</label>
                 <div className="relative">
-                   <Phone size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" />
+                   <Phone size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                    <input 
-                    value={settings.contactPhone}
+                    value={settings.contactPhone || ''}
                     onChange={e => setSettings(s => ({ ...s, contactPhone: e.target.value }))}
-                    className="w-full h-14 pl-14 pr-6 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-950 focus:bg-white focus:border-indigo-600 focus:outline-none transition-all"
+                    className="w-full h-12 pl-11 pr-4 bg-slate-50 border border-slate-100 rounded-xl text-[13px] font-semibold text-slate-950 focus:bg-white focus:border-slate-200 outline-none transition-all"
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Contact Email</label>
+                <label className="text-[11px] font-bold text-slate-950 uppercase tracking-widest px-1">Contact Email</label>
                 <div className="relative">
-                   <Mail size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" />
+                   <Mail size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
                    <input 
-                    value={settings.contactEmail}
+                    value={settings.contactEmail || ''}
                     onChange={e => setSettings(s => ({ ...s, contactEmail: e.target.value }))}
-                    className="w-full h-14 pl-14 pr-6 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-950 focus:bg-white focus:border-indigo-600 focus:outline-none transition-all"
+                    className="w-full h-12 pl-11 pr-4 bg-slate-50 border border-slate-100 rounded-xl text-[13px] font-semibold text-slate-950 focus:bg-white focus:border-slate-200 outline-none transition-all"
                   />
                 </div>
               </div>
@@ -110,52 +110,52 @@ export default function SettingsPage() {
 
           {/* Delivery Charges */}
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-white rounded-[2.5rem] border border-slate-100 p-8 lg:p-10 shadow-sm"
+            transition={{ delay: 0.05 }}
+            className="bg-white rounded-2xl border border-slate-100 p-8 shadow-sm shadow-slate-200/20"
           >
-            <div className="flex items-center gap-4 mb-8">
-              <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600">
-                <Truck size={24} />
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600">
+                <Truck size={20} />
               </div>
-              <h3 className="text-xl font-black text-slate-950 tracking-tight">Delivery Fees</h3>
+              <h3 className="text-lg font-bold text-slate-950 tracking-tight">Delivery Fees</h3>
             </div>
 
             <div className="space-y-6">
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Inside Chittagong (৳)</label>
+                <label className="text-[11px] font-bold text-slate-950 uppercase tracking-widest px-1">Inside Chittagong (৳)</label>
                 <input 
                   type="number"
-                  value={settings.insideChittagong}
+                  value={settings.insideChittagong ?? ''}
                   onChange={e => setSettings(s => ({ ...s, insideChittagong: Number(e.target.value) }))}
-                  className="w-full h-14 px-6 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-950 focus:bg-white focus:border-indigo-600 focus:outline-none transition-all"
+                  className="w-full h-12 px-4 bg-slate-50 border border-slate-100 rounded-xl text-[13px] font-semibold text-slate-950 focus:bg-white focus:border-slate-200 outline-none transition-all"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Outside Chittagong (৳)</label>
+                <label className="text-[11px] font-bold text-slate-950 uppercase tracking-widest px-1">Outside Chittagong (৳)</label>
                 <input 
                   type="number"
-                  value={settings.outsideChittagong}
+                  value={settings.outsideChittagong ?? ''}
                   onChange={e => setSettings(s => ({ ...s, outsideChittagong: Number(e.target.value) }))}
-                  className="w-full h-14 px-6 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-950 focus:bg-white focus:border-indigo-600 focus:outline-none transition-all"
+                  className="w-full h-12 px-4 bg-slate-50 border border-slate-100 rounded-xl text-[13px] font-semibold text-slate-950 focus:bg-white focus:border-slate-200 outline-none transition-all"
                 />
               </div>
               
-              <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100">
-                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">
-                   Note: These charges will be dynamically applied during the checkout process based on the customer's selection.
+              <div className="p-5 bg-slate-50 rounded-xl border border-slate-100">
+                <p className="text-[10px] font-medium text-slate-400 leading-relaxed uppercase tracking-tight">
+                   Note: These charges are applied dynamically at checkout based on location.
                 </p>
               </div>
             </div>
           </motion.div>
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex justify-end pt-4">
           <button
             type="submit"
             disabled={loading}
-            className="flex items-center gap-3 px-12 py-5 bg-slate-950 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-600 hover:shadow-indigo-200 shadow-xl transition-all active:scale-95 disabled:opacity-50"
+            className="flex items-center gap-2 h-14 px-10 bg-slate-950 text-white rounded-xl font-bold text-[13px] hover:bg-indigo-600 transition-all active:scale-95 disabled:opacity-50 shadow-lg shadow-slate-900/10"
           >
             {loading ? (
               <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />

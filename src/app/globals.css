@@ -1,19 +1,47 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-primary: #4f46e5;
-  --color-primary-hover: #4338ca;
-  --color-secondary: #f43f5e;
-  --color-accent: #8b5cf6;
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-danger: #ef4444;
-  --color-info: #3b82f6;
+  --color-primary: #39648D;
+  --color-primary-hover: #2D4F70;
+  --color-secondary: #71B5E4;
+  --color-accent: #B7C9DC;
+  --color-success: #059669;
+  --color-warning: #D97706;
+  --color-danger: #DC2626;
+  --color-info: #71B5E4;
+  
+  /* Winter Chill Overrides for existing classes */
+  --color-indigo-50: #F0F7FF;
+  --color-indigo-100: #E0EFFF;
+  --color-indigo-200: #B7D9FF;
+  --color-indigo-300: #71B5E4;
+  --color-indigo-400: #4B91C2;
+  --color-indigo-500: #39648D;
+  --color-indigo-600: #2D4F70;
+  --color-indigo-700: #1E3A56;
+  --color-indigo-800: #0E2A4D;
+  --color-indigo-900: #07192E;
+  --color-indigo-950: #040D18;
+
+  --color-slate-950: #0E2A4D; /* Blue Zodiac */
+  --color-slate-900: #1E3A56;
+  --color-slate-800: #2D4F70;
+  --color-slate-50: #F8FAFC;
+
+  /* Winter Chill - Icy Lavender Overrides (Replaces Rose) */
+  --color-rose-50: #F4F5FA;
+  --color-rose-100: #E9EAF5;
+  --color-rose-200: #D3D5EB;
+  --color-rose-300: #B7BCE1;
+  --color-rose-400: #9AA0C7;
+  --color-rose-500: #7D83B0;
+  --color-rose-600: #5F6599;
+  --color-rose-700: #4B5080;
   
   /* Multi-layered shadows for premium feel */
   --shadow-soft: 0 1px 3px rgba(0,0,0,0.02), 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-  --shadow-premium: 0 20px 80px -15px rgba(79, 70, 229, 0.15), 0 10px 30px -10px rgba(0, 0, 0, 0.04);
-  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  --shadow-premium: 0 20px 80px -15px rgba(57, 100, 141, 0.15), 0 10px 30px -10px rgba(0, 0, 0, 0.04);
+  --shadow-glass: 0 8px 32px 0 rgba(14, 42, 77, 0.07);
   
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
@@ -22,11 +50,11 @@
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #020617; /* Slate 950 */
+  --background: #F8FAFC;
+  --foreground: #0E2A4D; /* Blue Zodiac */
   --muted: #64748b;
-  --border: #f1f5f9; /* Slate 100 */
-  --selection: #4f46e5;
+  --border: #e2e8f0; /* Slate 200 */
+  --selection: #71B5E4;
 }
 
 body {
@@ -59,12 +87,12 @@ body {
 }
 
 .bg-mesh-gradient {
-  background-color: #ffffff;
+  background-color: #F8FAFC;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.05) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.05) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.05) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(79, 70, 229, 0.05) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(57, 100, 141, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(113, 181, 228, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(183, 201, 220, 0.05) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(57, 100, 141, 0.05) 0px, transparent 50%);
 }
 
 /* Custom Scrollbar */
@@ -72,14 +100,14 @@ body {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #ffffff;
+  background: #F8FAFC;
 }
 ::-webkit-scrollbar-thumb {
-  background: #e2e8f0;
+  background: #B7C9DC;
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #4f46e5;
+  background: #39648D;
 }
 
 /* Animations */
@@ -99,7 +127,7 @@ body {
 }
 
 .shimmer {
-  background: linear-gradient(90deg, #f1f5f9 25%, #f8fafc 50%, #f1f5f9 75%);
+  background: linear-gradient(90deg, #F1F5F9 25%, #F8FAFC 50%, #F1F5F9 75%);
   background-size: 200% 100%;
   animation: shimmer 2s infinite linear;
 }
@@ -110,7 +138,7 @@ body {
 }
 
 .text-gradient {
-  background: linear-gradient(to right, #0f172a, #4f46e5);
+  background: linear-gradient(to right, #0E2A4D, #39648D);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

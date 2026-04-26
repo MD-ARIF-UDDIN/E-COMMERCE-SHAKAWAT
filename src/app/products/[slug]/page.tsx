@@ -20,7 +20,9 @@ import {
   ShoppingBag,
   Eye,
   Flame,
-  Activity
+  Activity,
+  ArrowRight,
+  MessageCircle
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
@@ -101,7 +103,7 @@ export default function ProductDetailPage() {
     if (!product) return;
     const stockLimit = product.hasColors ? selectedColor?.stock || 0 : product.stock;
     if (stockLimit <= 0) {
-      toast.error('Selected item is out of stock');
+      toast.error('দুঃখিত, এই পণ্যটি বর্তমানে স্টকে নেই');
       return;
     }
     
@@ -115,7 +117,7 @@ export default function ProductDetailPage() {
       colorName: product.hasColors ? selectedColor?.name : undefined,
       colorHex: product.hasColors ? selectedColor?.hexCode : undefined,
     });
-    toast.success(`${product.name} added to cart`);
+    toast.success(`${product.name} কার্টে যোগ করা হয়েছে`);
   };
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
@@ -126,9 +128,9 @@ export default function ProductDetailPage() {
       const res = await api.post(`/products/${(product._id || product.id) as string}/reviews`, reviewForm);
       setReviews([res.data, ...reviews]);
       setReviewForm({ name: '', rating: 5, body: '' });
-      toast.success('Review submitted successfully!');
+      toast.success('রিভিউটি সফলভাবে জমা দেওয়া হয়েছে!');
     } catch (err) {
-      toast.error('Failed to submit review');
+      toast.error('রিভিউ জমা দিতে সমস্যা হয়েছে');
     } finally {
       setSubmittingReview(false);
     }
@@ -138,7 +140,7 @@ export default function ProductDetailPage() {
     <div className="bg-white min-h-screen flex items-center justify-center">
       <div className="flex flex-col items-center gap-6">
         <div className="w-16 h-16 border-4 border-slate-100 border-t-indigo-600 rounded-full animate-spin" />
-        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Loading Product</p>
+        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">পণ্য লোড হচ্ছে</p>
       </div>
     </div>
   );
@@ -150,48 +152,49 @@ export default function ProductDetailPage() {
     : 0;
 
   return (
-    <div className="bg-white min-h-screen pt-20 pb-16">
+    <div className="bg-white min-h-screen pt-20 pb-16 selection:bg-indigo-600 selection:text-white">
       <div className="container mx-auto px-4 md:px-8 max-w-7xl">
         {/* Breadcrumbs */}
-        <nav className="flex items-center gap-3 mb-12 overflow-x-auto whitespace-nowrap pb-2">
-          <Link href="/" className="text-xs font-black text-slate-400 hover:text-slate-900 transition-colors uppercase tracking-widest">Home</Link>
-          <ChevronRight size={12} className="text-slate-300 shrink-0" />
-          <Link href="/products" className="text-xs font-black text-slate-400 hover:text-slate-900 transition-colors uppercase tracking-widest">Products</Link>
-          <ChevronRight size={12} className="text-slate-300 shrink-0" />
-          <Link href={`/products?category=${product.category.slug}`} className="text-xs font-black text-slate-400 hover:text-slate-900 transition-colors uppercase tracking-widest">{product.category.name}</Link>
-          <ChevronRight size={12} className="text-slate-300 shrink-0" />
-          <span className="text-xs font-black text-indigo-600 uppercase tracking-widest truncate">{product.name}</span>
+        <nav className="flex items-center gap-3 mb-12 overflow-x-auto whitespace-nowrap pb-2 scrollbar-hide">
+          <Link href="/" className="text-[10px] font-black text-slate-400 hover:text-indigo-600 transition-colors uppercase tracking-[0.2em]">হোম</Link>
+          <ChevronRight size={10} className="text-slate-300 shrink-0" />
+          <Link href="/products" className="text-[10px] font-black text-slate-400 hover:text-indigo-600 transition-colors uppercase tracking-[0.2em]">পণ্যসমূহ</Link>
+          <ChevronRight size={10} className="text-slate-300 shrink-0" />
+          <Link href={`/products?category=${product.category.slug}`} className="text-[10px] font-black text-slate-400 hover:text-indigo-600 transition-colors uppercase tracking-[0.2em]">{product.category.name}</Link>
+          <ChevronRight size={10} className="text-slate-300 shrink-0" />
+          <span className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.2em] truncate max-w-[200px]">{product.name}</span>
         </nav>
 
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 mb-16">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 mb-24">
           {/* Gallery Section */}
-          <div className="lg:col-span-5 space-y-4">
+          <div className="lg:col-span-5 space-y-6">
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="relative h-64 sm:h-80 lg:h-auto lg:aspect-square bg-slate-50 rounded-3xl overflow-hidden border border-slate-50 group cursor-crosshair flex items-center justify-center p-4"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="relative aspect-square bg-slate-50/50 rounded-[3rem] overflow-hidden border border-slate-100 group cursor-zoom-in flex items-center justify-center p-8 shadow-sm hover:shadow-premium transition-all duration-700"
             >
+              <div className="absolute inset-0 bg-gradient-to-tr from-indigo-50/50 via-white/0 to-transparent pointer-events-none" />
               <motion.img 
                 src={product.images[activeImage] || 'https://via.placeholder.com/800'} 
                 alt={product.name} 
-                className="max-w-full max-h-full object-contain transition-transform duration-700" 
-                whileHover={{ scale: 1.2 }}
+                className="max-w-full max-h-full object-contain drop-shadow-2xl transition-transform duration-700" 
+                whileHover={{ scale: 1.1 }}
               />
               {product.isDiscounted && (
-                <div className="absolute top-8 left-8 bg-rose-500 text-white text-[10px] font-black px-5 py-2.5 rounded-full uppercase tracking-widest shadow-xl shadow-rose-200 flex items-center gap-2">
-                  <Flame size={14} /> SALE {discountPct}% OFF
+                <div className="absolute top-8 left-8 bg-rose-500 text-white text-[10px] font-black px-5 py-2.5 rounded-full uppercase tracking-widest shadow-xl shadow-rose-500/20 flex items-center gap-2">
+                  <Flame size={14} /> সেল -{discountPct}%
                 </div>
               )}
             </motion.div>
             
             {product.images.length > 1 && (
-              <div className="grid grid-cols-4 gap-4">
+              <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
                 {product.images.map((img, i) => (
                   <button 
                     key={i}
                     onClick={() => setActiveImage(i)}
-                    className={`aspect-square rounded-xl overflow-hidden border-2 transition-all flex items-center justify-center p-2 ${
-                      activeImage === i ? 'border-indigo-600 scale-95 shadow-lg' : 'border-slate-50 bg-slate-50 opacity-60 hover:opacity-100 hover:scale-105'
+                    className={`w-24 h-24 shrink-0 rounded-2xl overflow-hidden border-2 transition-all flex items-center justify-center p-2 bg-white ${
+                      activeImage === i ? 'border-indigo-600 scale-95 shadow-md' : 'border-slate-50 opacity-60 hover:opacity-100 hover:scale-105'
                     }`}
                   >
                     <img src={img} className="max-w-full max-h-full object-contain" alt={`${product.name} ${i}`} />
@@ -202,223 +205,280 @@ export default function ProductDetailPage() {
           </div>
 
           {/* Info Section - High Conversion Zone */}
-          <div className="lg:col-span-7 space-y-6">
+          <div className="lg:col-span-7 space-y-8">
             <div className="space-y-4">
-              <div className="flex flex-wrap items-center gap-4">
-                 <span className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.3em]">{product.category.name}</span>
+              <div className="flex flex-wrap items-center gap-3">
+                 <span className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.3em] bg-indigo-50 px-3 py-1.5 rounded-lg">{product.category.name}</span>
                  {product.isFeatured && (
-                   <span className="inline-flex items-center gap-1.5 text-[9px] font-black text-amber-600 bg-amber-50 px-3 py-1.5 rounded-full uppercase tracking-widest">
-                     <Sparkles size={10} fill="currentColor" /> Featured
+                   <span className="inline-flex items-center gap-1.5 text-[9px] font-black text-amber-600 bg-amber-50 px-3 py-1.5 rounded-lg uppercase tracking-widest">
+                     <Sparkles size={12} fill="currentColor" /> সেরা পণ্য
                    </span>
                  )}
-                 <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-rose-50 text-rose-600 rounded-full">
-                   <Activity size={10} className="animate-pulse" />
-                   <span className="text-[9px] font-black uppercase tracking-widest">{viewers} viewing now</span>
+                 <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-lg">
+                   <div className="w-1.5 h-1.5 bg-rose-500 rounded-full animate-ping" />
+                   <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{viewers} জন এই পণ্যটি দেখছেন</span>
                  </div>
               </div>
-              <h1 className="text-3xl md:text-4xl font-black text-slate-950 tracking-tighter leading-tight">
+              <h1 className="text-3xl md:text-5xl font-black text-slate-950 tracking-tighter leading-[1.1]">
                 {product.name}
               </h1>
               
-              {/* Review Snippet */}
               <a href="#reviews" className="flex items-center gap-4 pt-2 group cursor-pointer w-fit">
-                <div className="flex items-center gap-1 text-amber-400">
-                  {[1,2,3,4,5].map(i => <Star key={i} size={16} fill="currentColor" />)}
+                <div className="flex items-center gap-1 text-amber-400 bg-amber-50/50 px-2 py-1 rounded-lg">
+                  {[1,2,3,4,5].map(i => <Star key={i} size={14} fill="currentColor" />)}
                 </div>
-                <span className="text-xs font-black text-slate-400 uppercase tracking-widest group-hover:text-indigo-600 transition-colors">128 Reviews</span>
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover:text-indigo-600 transition-colors">১২৮ ভেরিফাইড রিভিউ</span>
               </a>
             </div>
 
-            <div className="space-y-3 p-6 bg-slate-50 rounded-3xl border border-slate-100">
-              {product.discountPrice ? (
-                <div className="flex items-baseline gap-3">
-                  <span className="text-3xl font-black text-slate-950 tracking-tighter">৳{product.discountPrice.toLocaleString()}</span>
-                  <span className="text-lg text-slate-300 font-bold line-through tracking-tighter">৳{product.price.toLocaleString()}</span>
-                </div>
-              ) : (
-                <span className="text-3xl font-black text-slate-950 tracking-tighter">৳{product.price.toLocaleString()}</span>
-              )}
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Taxes and shipping calculated at checkout</p>
+            <div className="relative p-8 bg-slate-50/50 backdrop-blur-sm rounded-[2.5rem] border border-slate-100 overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none" />
+              
+              <div className="flex items-baseline gap-4 mb-4">
+                {product.discountPrice ? (
+                  <>
+                    <span className="text-4xl sm:text-5xl font-black text-slate-950 tracking-tighter">৳{product.discountPrice.toLocaleString()}</span>
+                    <span className="text-xl text-slate-300 font-bold line-through tracking-tighter">৳{product.price.toLocaleString()}</span>
+                  </>
+                ) : (
+                  <span className="text-4xl sm:text-5xl font-black text-slate-950 tracking-tighter">৳{product.price.toLocaleString()}</span>
+                )}
+              </div>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                <ShieldCheck size={12} className="text-indigo-400" /> ট্যাক্স এবং ডেলিভারি চার্জ চেকআউটে যুক্ত হবে
+              </p>
             </div>
 
-            <div className="space-y-6">
-               <div className="flex flex-col gap-6">
+            <div className="space-y-8">
+               <div className="flex flex-col gap-8">
                   {product.hasColors && product.colorVariants && product.colorVariants.length > 0 && (
-                    <div className="space-y-4 border-b border-slate-100 pb-6">
-                      <p className="text-[10px] font-black text-slate-950 uppercase tracking-widest">Select Variant: <span className="text-indigo-600">{selectedColor?.name}</span></p>
+                    <div className="space-y-4 border-b border-slate-100 pb-8">
+                      <p className="text-[11px] font-black text-slate-950 uppercase tracking-widest">ভ্যারিয়েন্ট: <span className="text-indigo-600">{selectedColor?.name}</span></p>
                       <div className="flex flex-wrap items-center gap-4">
                         {product.colorVariants.map((color, i) => (
                           <button
                             key={color.id || color._id || i}
                             onClick={() => setSelectedColor(color)}
-                            className={`w-12 h-12 rounded-full border-4 transition-all ${selectedColor?.id === color.id || selectedColor?._id === color._id ? 'border-indigo-600 scale-110 shadow-lg' : 'border-transparent hover:scale-105 shadow-sm'}`}
+                            className={`w-14 h-14 rounded-2xl border-4 transition-all shadow-sm ${selectedColor?.id === color.id || selectedColor?._id === color._id ? 'border-indigo-600 scale-110 shadow-xl' : 'border-white hover:border-slate-100'}`}
                             style={{ backgroundColor: color.hexCode }}
                             title={color.name}
-                          />
+                          >
+                             {(selectedColor?.id === color.id || selectedColor?._id === color._id) && (
+                               <div className="w-full h-full flex items-center justify-center">
+                                 <CheckCircle size={20} className="text-white drop-shadow-md" />
+                               </div>
+                             )}
+                          </button>
                         ))}
                       </div>
                     </div>
                   )}
 
                   <div className="flex items-center justify-between">
-                     <p className="text-[10px] font-black text-slate-950 uppercase tracking-widest">Quantity</p>
+                     <p className="text-[11px] font-black text-slate-950 uppercase tracking-widest">পরিমাণ নির্বাচন করুন</p>
                      
-                     {/* Scarcity Injector */}
                      {(() => {
                        const currentStock = product.hasColors ? (selectedColor?.stock || 0) : product.stock;
                        if (currentStock > 0 && currentStock < 10) {
                          return (
-                           <p className="text-[10px] font-black text-rose-600 uppercase tracking-widest flex items-center gap-2">
-                             <Flame size={12} className="animate-pulse" /> Only {currentStock} left
-                           </p>
+                           <div className="flex items-center gap-2 px-3 py-1.5 bg-rose-50 text-rose-600 rounded-lg">
+                             <Flame size={12} className="animate-pulse" />
+                             <span className="text-[9px] font-black uppercase tracking-widest">মাত্র {currentStock} টি স্টকে আছে</span>
+                           </div>
                          );
                        }
                        return (
-                         <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">
-                           {currentStock > 0 ? `In Stock` : 'Out of Stock'}
-                         </p>
+                         <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${currentStock > 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-50 text-slate-400'}`}>
+                           <div className={`w-1.5 h-1.5 rounded-full ${currentStock > 0 ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'}`} />
+                           <span className="text-[9px] font-black uppercase tracking-widest">
+                             {currentStock > 0 ? `ইন স্টক` : 'আউট অফ স্টক'}
+                           </span>
+                         </div>
                        );
                      })()}
                   </div>
                   
-                  <div className="flex items-center gap-6">
-                    <div className="flex items-center bg-slate-50 rounded-[2rem] p-2 h-20 w-48 border border-slate-100 shadow-inner">
+                  <div className="flex flex-col sm:flex-row items-center gap-4">
+                    <div className="flex items-center bg-slate-50 rounded-2xl p-1.5 h-16 w-full sm:w-44 border border-slate-100 shadow-inner">
                       <button 
                         onClick={() => setQty(q => Math.max(1, q - 1))}
-                        className="w-14 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-white rounded-xl transition-all shadow-sm"
+                        className="w-12 h-full flex items-center justify-center text-slate-400 hover:text-slate-950 hover:bg-white rounded-xl transition-all shadow-sm"
                       >
-                        <Minus size={20} strokeWidth={3} />
+                        <Minus size={16} strokeWidth={3} />
                       </button>
-                      <span className="flex-1 text-center font-black text-slate-950 text-2xl tracking-tighter">{qty}</span>
+                      <span className="flex-1 text-center font-black text-slate-950 text-xl tracking-tighter">{qty}</span>
                       <button 
                         onClick={() => {
                           const currentStock = product.hasColors ? (selectedColor?.stock || 0) : product.stock;
                           setQty(q => Math.min(currentStock, q + 1));
                         }}
-                        className="w-14 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-white rounded-xl transition-all shadow-sm"
+                        className="w-12 h-full flex items-center justify-center text-slate-400 hover:text-slate-950 hover:bg-white rounded-xl transition-all shadow-sm"
                       >
-                        <Plus size={20} strokeWidth={3} />
+                        <Plus size={16} strokeWidth={3} />
                       </button>
                     </div>
                     
                     <button 
                       onClick={handleAddToCart}
                       disabled={(product.hasColors ? (selectedColor?.stock || 0) : product.stock) <= 0}
-                      className="flex-1 h-20 bg-slate-950 text-white rounded-[2rem] font-black text-sm uppercase tracking-widest hover:bg-indigo-600 disabled:bg-slate-200 disabled:cursor-not-allowed transition-all shadow-premium group"
+                      className="w-full h-16 bg-slate-950 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-indigo-600 disabled:bg-slate-100 disabled:text-slate-300 disabled:cursor-not-allowed transition-all shadow-xl shadow-slate-200 group flex items-center justify-center gap-4"
                     >
-                      <div className="flex items-center justify-center gap-3">
-                        <ShoppingBag size={20} className="group-hover:scale-110 transition-transform" />
-                        Add to Cart
-                      </div>
+                      <ShoppingBag size={20} className="group-hover:scale-110 transition-transform" />
+                      কার্টে যোগ করুন
                     </button>
                   </div>
                </div>
+            </div>
 
-
+            {/* Features list */}
+            <div className="grid grid-cols-2 gap-4 pt-8 border-t border-slate-100">
+               {[
+                 { icon: Truck, text: 'দ্রুত ডেলিভারি', sub: 'দেশজুড়ে হোম ডেলিভারি' },
+                 { icon: ShieldCheck, text: 'নিরাপদ পেমেন্ট', sub: '১০০% ক্যাশ অন ডেলিভারি' },
+               ].map((f, i) => (
+                 <div key={i} className="flex items-start gap-3 p-4 rounded-2xl bg-slate-50/50 border border-slate-100">
+                   <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-indigo-500 shadow-sm shrink-0">
+                     <f.icon size={20} />
+                   </div>
+                   <div>
+                     <p className="text-[10px] font-black text-slate-950 uppercase tracking-widest">{f.text}</p>
+                     <p className="text-[9px] text-slate-400 font-bold uppercase tracking-tight mt-1">{f.sub}</p>
+                   </div>
+                 </div>
+               ))}
             </div>
 
             {/* Description Tab Style */}
             <div className="pt-8 border-t border-slate-100">
-               <h3 className="text-[10px] font-black text-slate-950 uppercase tracking-[0.3em] mb-4">Description</h3>
-               <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100">
+               <h3 className="text-[11px] font-black text-slate-950 uppercase tracking-[0.3em] mb-4">পণ্যের বিস্তারিত</h3>
+               <div className="prose prose-slate max-w-none">
                  <p className="text-slate-600 font-medium leading-relaxed text-sm whitespace-pre-line">
-                    {product.description || 'No description available.'}
+                    {product.description || 'এই পণ্যটির কোনো বিস্তারিত বর্ণনা পাওয়া যায়নি।'}
                  </p>
                </div>
             </div>
           </div>
         </div>
 
-        {/* Synergistic Assets (Cross-sell mock) */}
-        <div className="mb-16">
-          <div className="flex items-end justify-between mb-8 border-b border-slate-100 pb-6">
-            <div>
-              <p className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.3em] mb-2">You may also like</p>
-              <h2 className="text-2xl md:text-3xl font-black text-slate-950 tracking-tighter">RELATED PRODUCTS.</h2>
+        {/* Cross-sell */}
+        <div className="mb-24">
+          <div className="flex items-end justify-between mb-10 border-b border-slate-100 pb-6">
+            <div className="space-y-2">
+              <p className="text-[11px] font-black text-indigo-600 uppercase tracking-[0.3em]">এক্সক্লুসিভ কালেকশন</p>
+              <h2 className="text-2xl md:text-4xl font-black text-slate-950 tracking-tighter leading-none">সম্পর্কিত পণ্যসমূহ।</h2>
             </div>
+            <Link href="/products" className="text-[10px] font-black text-slate-400 hover:text-indigo-600 transition-colors uppercase tracking-widest flex items-center gap-2">
+              সব দেখুন <ArrowRight size={14} />
+            </Link>
           </div>
           
-          <div className="flex flex-wrap -mx-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
              {relatedProducts.length > 0 ? relatedProducts.map((p) => (
-               <div key={(p._id || p.id) as string} className="w-full sm:w-1/2 lg:w-1/4 px-4 mb-8">
-                 <ProductCard product={p} />
-               </div>
+               <ProductCard key={(p._id || p.id) as string} product={p} />
              )) : (
-               <p className="text-slate-400 px-4 text-sm font-bold">No related products found.</p>
+               [...Array(4)].map((_, i) => <div key={i} className="aspect-[3/4] bg-slate-50 rounded-[2.5rem] animate-pulse" />)
              )}
           </div>
         </div>
 
-        {/* Field Reports (Reviews mock) */}
-        <div id="reviews" className="mb-16">
-          <div className="flex items-end justify-between mb-8 border-b border-slate-100 pb-6">
-            <div>
-              <p className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.3em] mb-2">Verified Reviews</p>
-              <h2 className="text-2xl md:text-3xl font-black text-slate-950 tracking-tighter">CUSTOMER REVIEWS.</h2>
+        {/* Reviews Section */}
+        <div id="reviews" className="mb-24">
+          <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 gap-8 border-b border-slate-100 pb-8">
+            <div className="space-y-2">
+              <p className="text-[11px] font-black text-indigo-600 uppercase tracking-[0.3em]">কাস্টমার ফিডব্যাক</p>
+              <h2 className="text-2xl md:text-4xl font-black text-slate-950 tracking-tighter leading-none">ভেরিফাইড রিভিউ।</h2>
             </div>
-            <div className="hidden sm:flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <span className="text-4xl font-black text-slate-950 tracking-tighter">4.9</span>
-                <div className="flex flex-col">
-                  <div className="flex items-center gap-1 text-amber-400">
-                    {[1,2,3,4,5].map(i => <Star key={i} size={14} fill="currentColor" />)}
+            <div className="flex items-center gap-6 bg-slate-50 p-6 rounded-3xl border border-slate-100">
+               <div className="flex flex-col items-center">
+                 <span className="text-5xl font-black text-slate-950 tracking-tighter">4.9</span>
+                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1">আউট অফ ৫</p>
+               </div>
+               <div className="h-12 w-px bg-slate-200" />
+               <div className="flex flex-col gap-1.5">
+                 <div className="flex items-center gap-1 text-amber-400">
+                   {[1,2,3,4,5].map(i => <Star key={i} size={14} fill="currentColor" />)}
+                 </div>
+                 <span className="text-[11px] font-black text-slate-950 uppercase tracking-widest">১২৮ টি কাস্টমার রিভিউ</span>
+               </div>
+            </div>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-12">
+            {/* Review Form */}
+            <div className="lg:col-span-1">
+              <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-premium-subtle sticky top-28">
+                <h3 className="text-xl font-black text-slate-950 mb-6 tracking-tight">আপনার মতামত দিন</h3>
+                <form onSubmit={handleReviewSubmit} className="space-y-5">
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">আপনার নাম</p>
+                      <input type="text" placeholder="নাম লিখুন" required value={reviewForm.name} onChange={e => setReviewForm({...reviewForm, name: e.target.value})} className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-300 transition-all" />
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">রেটিং</p>
+                      <select value={reviewForm.rating} onChange={e => setReviewForm({...reviewForm, rating: Number(e.target.value)})} className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-300 transition-all appearance-none cursor-pointer">
+                        {[5,4,3,2,1].map(num => <option key={num} value={num}>{num} স্টার</option>)}
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">রিভিউ</p>
+                      <textarea placeholder="আপনার অভিজ্ঞতা শেয়ার করুন..." required value={reviewForm.body} onChange={e => setReviewForm({...reviewForm, body: e.target.value})} className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-sm font-bold min-h-[120px] focus:outline-none focus:ring-4 focus:ring-indigo-500/5 focus:border-indigo-300 transition-all"></textarea>
+                    </div>
                   </div>
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">128 Reviews</span>
-                </div>
+                  <button type="submit" disabled={submittingReview} className="w-full bg-slate-950 text-white py-5 rounded-2xl text-xs font-black uppercase tracking-[0.2em] hover:bg-indigo-600 transition-all shadow-xl shadow-slate-200 disabled:opacity-50">
+                    {submittingReview ? 'জমা দেওয়া হচ্ছে...' : 'রিভিউ পাবলিশ করুন'}
+                  </button>
+                </form>
               </div>
             </div>
-          </div>
 
-          {/* Review Submission Form */}
-          <div className="bg-slate-50 p-6 md:p-8 rounded-3xl border border-slate-100 mb-8">
-            <h3 className="text-xl font-black text-slate-950 mb-6">Write a Review</h3>
-            <form onSubmit={handleReviewSubmit} className="space-y-4">
-              <div className="flex flex-wrap -mx-2">
-                <div className="w-full md:w-1/2 px-2 mb-4 md:mb-0">
-                  <input type="text" placeholder="Your Name" required value={reviewForm.name} onChange={e => setReviewForm({...reviewForm, name: e.target.value})} className="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-colors" />
-                </div>
-                <div className="w-full md:w-1/2 px-2">
-                  <select value={reviewForm.rating} onChange={e => setReviewForm({...reviewForm, rating: Number(e.target.value)})} className="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:border-indigo-600 transition-colors">
-                    {[5,4,3,2,1].map(num => <option key={num} value={num}>{num} Stars</option>)}
-                  </select>
-                </div>
-              </div>
-              <textarea placeholder="Your Review" required value={reviewForm.body} onChange={e => setReviewForm({...reviewForm, body: e.target.value})} className="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 text-sm min-h-[100px] focus:outline-none focus:border-indigo-600 transition-colors"></textarea>
-              <button type="submit" disabled={submittingReview} className="bg-indigo-600 text-white px-8 py-3 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-slate-950 transition-colors disabled:opacity-50">
-                {submittingReview ? 'Submitting...' : 'Submit Review'}
-              </button>
-            </form>
-          </div>
-
-          <div className="flex flex-wrap -mx-4">
-            {reviews.length > 0 ? reviews.map((review) => (
-              <div key={(review.id || review._id) as string} className="w-full md:w-1/2 px-4 mb-6">
-                <div className="bg-slate-50 rounded-3xl p-6 md:p-8 border border-slate-100 relative overflow-hidden h-full">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-[40px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-                  <div className="flex justify-between items-start mb-6">
+            {/* Review List */}
+            <div className="lg:col-span-2 space-y-6">
+              {reviews.length > 0 ? reviews.map((review) => (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  key={(review.id || review._id) as string} 
+                  className="bg-slate-50/50 rounded-[2.5rem] p-8 border border-slate-100 relative overflow-hidden group"
+                >
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none group-hover:bg-indigo-500/10 transition-colors" />
+                  
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-slate-950 font-black shadow-sm border border-slate-100">
-                        {review.name.charAt(0).toUpperCase()}
+                      <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-slate-950 font-black shadow-sm border border-slate-100 uppercase text-lg">
+                        {review.name.charAt(0)}
                       </div>
                       <div>
-                        <p className="text-sm font-black text-slate-950 tracking-tight">{review.name}</p>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{new Date(review.createdAt).toLocaleDateString()}</p>
+                        <p className="text-base font-black text-slate-950 tracking-tight">{review.name}</p>
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-0.5">{new Date(review.createdAt).toLocaleDateString('bn-BD', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1 text-amber-400">
+                    <div className="flex items-center gap-1 text-amber-400 bg-white px-3 py-1.5 rounded-full border border-slate-100 shadow-sm">
                       {[...Array(review.rating)].map((_, idx) => <Star key={idx} size={12} fill="currentColor" />)}
                     </div>
                   </div>
-                  <p className="text-sm font-medium text-slate-600 leading-relaxed">"{review.body}"</p>
-                  <div className="mt-6 flex items-center gap-2 text-emerald-600">
-                    <ShieldCheck size={14} />
-                    <span className="text-[9px] font-black uppercase tracking-widest">Verified Purchase</span>
+                  
+                  <p className="text-slate-600 font-medium leading-relaxed text-sm">"{review.body}"</p>
+                  
+                  <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100/50">
+                      <CheckCircle size={14} />
+                      <span className="text-[9px] font-black uppercase tracking-[0.1em]">ভেরিফাইড পারচেজ</span>
+                    </div>
+                    <button className="text-[9px] font-black text-slate-400 hover:text-indigo-600 uppercase tracking-widest transition-colors">রিপোর্ট করুন</button>
                   </div>
+                </motion.div>
+              )) : (
+                <div className="bg-slate-50 rounded-[2.5rem] p-12 text-center border-2 border-dashed border-slate-100">
+                   <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                     <MessageCircle size={24} className="text-slate-200" />
+                   </div>
+                   <h3 className="text-lg font-black text-slate-950 mb-2">এখনও কোনো রিভিউ নেই</h3>
+                   <p className="text-xs text-slate-400 font-medium">প্রথম কাস্টমার হিসেবে আপনার অভিজ্ঞতা শেয়ার করুন।</p>
                 </div>
-              </div>
-            )) : (
-              <p className="text-slate-400 px-4 text-sm font-bold">No reviews yet. Be the first to review!</p>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -429,33 +489,43 @@ export default function ProductDetailPage() {
         className="fixed bottom-0 left-0 right-0 z-50 p-6 pointer-events-none"
       >
         <div className="container mx-auto max-w-4xl pointer-events-auto">
-          <div className="bg-slate-950/90 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-4 flex items-center justify-between shadow-2xl">
-            <div className="hidden md:flex items-center gap-4 px-4">
-              <div className="w-12 h-12 bg-white/10 rounded-xl overflow-hidden shrink-0">
+          <div className="bg-slate-950/95 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-3 sm:p-4 flex items-center justify-between shadow-2xl">
+            <div className="hidden sm:flex items-center gap-4 px-4 border-r border-white/10 mr-4">
+              <div className="w-12 h-12 bg-white/10 rounded-xl overflow-hidden shrink-0 border border-white/10">
                 <img src={product.images[0] || 'https://via.placeholder.com/100'} alt={product.name} className="w-full h-full object-cover" />
               </div>
-              <div className="truncate max-w-[200px]">
-                <p className="text-xs font-black text-white truncate tracking-tight">{product.name}</p>
-                <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">৳{product.discountPrice?.toLocaleString() ?? product.price.toLocaleString()}</p>
+              <div className="truncate max-w-[180px]">
+                <p className="text-[11px] font-black text-white truncate tracking-tight mb-0.5">{product.name}</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">৳{product.discountPrice?.toLocaleString() ?? product.price.toLocaleString()}</p>
+                  {product.isDiscounted && <span className="text-[9px] font-bold text-white/30 line-through">৳{product.price.toLocaleString()}</span>}
+                </div>
               </div>
             </div>
             
-            <div className="flex items-center gap-4 w-full md:w-auto">
-               <div className="hidden sm:flex items-center bg-white/10 rounded-2xl p-1 h-14 w-32">
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+               <div className="flex items-center bg-white/10 rounded-2xl p-1 h-14 w-32 border border-white/5">
                   <button onClick={() => setQty(q => Math.max(1, q - 1))} className="w-10 h-full flex items-center justify-center text-white/50 hover:text-white transition-colors">
                     <Minus size={14} strokeWidth={3} />
                   </button>
-                  <span className="flex-1 text-center font-black text-white text-sm">{qty}</span>
-                  <button onClick={() => setQty(q => Math.min(product.stock, q + 1))} className="w-10 h-full flex items-center justify-center text-white/50 hover:text-white transition-colors">
+                  <span className="flex-1 text-center font-black text-white text-sm tracking-tighter">{qty}</span>
+                  <button 
+                    onClick={() => {
+                      const currentStock = product.hasColors ? (selectedColor?.stock || 0) : product.stock;
+                      setQty(q => Math.min(currentStock, q + 1));
+                    }} 
+                    className="w-10 h-full flex items-center justify-center text-white/50 hover:text-white transition-colors"
+                  >
                     <Plus size={14} strokeWidth={3} />
                   </button>
                </div>
                <button 
                   onClick={handleAddToCart}
-                  disabled={product.stock <= 0}
-                  className="flex-1 md:flex-none h-14 px-8 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-white hover:text-slate-950 disabled:bg-white/10 disabled:text-white/30 transition-all shadow-premium whitespace-nowrap flex items-center justify-center gap-2"
+                  disabled={(product.hasColors ? (selectedColor?.stock || 0) : product.stock) <= 0}
+                  className="flex-1 sm:flex-none h-14 px-8 bg-indigo-600 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] hover:bg-white hover:text-slate-950 disabled:bg-white/10 disabled:text-white/30 transition-all shadow-xl whitespace-nowrap flex items-center justify-center gap-3 group"
                 >
-                  <ShoppingBag size={16} /> Add to Cart
+                  <ShoppingBag size={18} className="group-hover:scale-110 transition-transform" />
+                  কার্টে যোগ করুন
                </button>
             </div>
           </div>

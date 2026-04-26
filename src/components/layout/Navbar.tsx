@@ -34,15 +34,15 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: 'Collections', href: '/products', icon: LayoutGrid },
-    { name: 'Featured', href: '/#featured', icon: Zap },
-    { name: 'Sale', href: '/#sale', icon: Tag },
+    { name: 'কালেকশন', href: '/products', icon: LayoutGrid },
+    { name: 'সেরা পণ্য', href: '/#featured', icon: Zap },
+    { name: 'অফার', href: '/#sale', icon: Tag },
   ];
 
   return (
-    <div className="fixed top-3 left-0 right-0 z-50 px-4 pointer-events-none">
+    <div className="fixed top-4 left-0 right-0 z-50 px-4 pointer-events-none">
       <nav className={`relative container mx-auto transition-all duration-700 pointer-events-auto ${isScrolled ? 'max-w-4xl' : 'max-w-6xl'}`}>
-        <div className={`backdrop-blur-xl border border-white/40 rounded-full px-5 flex items-center justify-between transition-all duration-500 ${isScrolled ? 'bg-white/90 shadow-premium py-1.5' : 'bg-white/60 shadow-sm py-2.5'}`}>
+        <div className={`backdrop-blur-2xl border border-white/10 rounded-[2rem] px-5 flex items-center justify-between transition-all duration-500 ${isScrolled ? 'bg-slate-950/95 shadow-premium py-2' : 'bg-slate-950/80 shadow-sm py-3'}`}>
           {/* Logo */}
           <Link 
             href="/" 
@@ -54,14 +54,16 @@ export default function Navbar() {
               }
             }}
           >
-            <div className="w-8 h-8 bg-slate-950 rounded-lg flex items-center justify-center text-white group-hover:bg-indigo-600 transition-all duration-500 shadow-md">
-              <ShoppingBag size={16} />
+            <div className="w-9 h-9 bg-white/10 rounded-xl flex items-center justify-center text-white group-hover:bg-indigo-500 transition-all duration-500 shadow-lg shadow-white/5 border border-white/10">
+              <ShoppingBag size={18} />
             </div>
-            <DynamicLogo className="text-sm font-black tracking-tighter block bg-indigo-50/50 px-3 py-1 rounded-lg text-slate-950 border border-indigo-100/50 transition-colors group-hover:bg-indigo-50" />
+            <div className="hidden sm:block">
+              <DynamicLogo className="text-sm font-black tracking-tighter block bg-white/5 px-3 py-1.5 rounded-lg text-white border border-white/10 transition-colors group-hover:bg-white/10" />
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center bg-slate-50/50 rounded-2xl p-1 border border-slate-100">
+          <div className="hidden md:flex items-center bg-white/5 rounded-2xl p-1 border border-white/10 shadow-inner">
             {navLinks.map((link) => {
               const Icon = link.icon;
               const isActive = pathname === link.href;
@@ -69,11 +71,11 @@ export default function Navbar() {
                 <Link 
                   key={link.name} 
                   href={link.href}
-                  className={`flex items-center gap-2 px-5 py-2 rounded-xl text-xs font-bold transition-all duration-300 ${
-                    isActive ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-900'
+                  className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-[0.15em] transition-all duration-300 ${
+                    isActive ? 'bg-white text-slate-950 shadow-xl' : 'text-slate-200 hover:text-white hover:bg-white/5'
                   }`}
                 >
-                  <Icon size={14} />
+                  <Icon size={14} className={isActive ? 'text-indigo-600' : 'text-indigo-400'} />
                   {link.name}
                 </Link>
               );
@@ -84,9 +86,9 @@ export default function Navbar() {
           <div className="flex items-center gap-2">
             <Link 
               href="/cart" 
-              className="p-2 bg-slate-950 text-white hover:bg-indigo-600 rounded-lg transition-all relative group shadow-md"
+              className="w-10 h-10 flex items-center justify-center bg-white/10 text-white hover:bg-indigo-500 rounded-xl transition-all relative group shadow-lg border border-white/10"
             >
-              <ShoppingBag size={16} />
+              <ShoppingBag size={18} className="group-hover:scale-110 transition-transform" />
               <AnimatePresence>
                 {displayCount > 0 && (
                   <motion.span
@@ -94,7 +96,7 @@ export default function Navbar() {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     exit={{ scale: 0 }}
-                    className="absolute -top-1.5 -right-1.5 min-w-[20px] h-5 px-1 bg-indigo-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white"
+                    className="absolute -top-2 -right-2 min-w-[22px] h-[22px] px-1 bg-indigo-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-slate-950 shadow-xl"
                   >
                     {displayCount > 9 ? '9+' : displayCount}
                   </motion.span>
@@ -103,10 +105,10 @@ export default function Navbar() {
             </Link>
 
             <button 
-              className="md:hidden p-3 text-slate-600 hover:bg-white rounded-xl transition-all"
+              className="md:hidden w-10 h-10 flex items-center justify-center text-white bg-white/5 rounded-xl hover:bg-white/10 transition-all border border-white/10"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
@@ -118,7 +120,7 @@ export default function Navbar() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
-              className="md:hidden mt-4 glass rounded-[2.5rem] p-6 shadow-premium overflow-hidden"
+              className="md:hidden mt-4 bg-slate-950/95 backdrop-blur-2xl rounded-[2.5rem] p-6 shadow-premium border border-white/10 overflow-hidden"
             >
               <div className="flex flex-col gap-4">
                 {navLinks.map((link) => {
@@ -127,26 +129,26 @@ export default function Navbar() {
                     <Link 
                       key={link.name} 
                       href={link.href}
-                      className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 hover:bg-indigo-50 text-slate-900 font-bold transition-all group"
+                      className="flex items-center gap-4 p-4 rounded-2xl bg-white/5 hover:bg-white/10 text-white font-black uppercase tracking-widest text-[11px] transition-all group border border-white/5"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-slate-400 group-hover:text-indigo-600 shadow-sm transition-colors">
+                      <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-indigo-400 group-hover:text-white shadow-sm transition-colors">
                         <Icon size={20} />
                       </div>
                       {link.name}
-                      <ChevronDown size={18} className="ml-auto -rotate-90 text-slate-300" />
+                      <ChevronDown size={18} className="ml-auto -rotate-90 text-slate-700" />
                     </Link>
                   );
                 })}
                 <Link
                   href="/cart"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center gap-4 p-4 rounded-2xl bg-slate-950 text-white font-bold"
+                  className="flex items-center gap-4 p-4 rounded-2xl bg-indigo-600 text-white font-bold shadow-lg shadow-indigo-500/20"
                 >
-                  <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
+                  <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
                     <ShoppingBag size={20} />
                   </div>
-                  Cart {displayCount > 0 && <span className="ml-auto bg-indigo-500 text-white text-[10px] font-black px-2 py-1 rounded-full">{displayCount}</span>}
+                  কার্ট {displayCount > 0 && <span className="ml-auto bg-white text-indigo-600 text-[10px] font-black px-2 py-1 rounded-full">{displayCount}</span>}
                 </Link>
               </div>
             </motion.div>

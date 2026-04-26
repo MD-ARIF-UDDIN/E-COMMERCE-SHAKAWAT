@@ -33,7 +33,7 @@ export default function ProductCard({ product }: { product: Product }) {
       quantity: 1,
       image: product.images?.[0],
     });
-    toast.success('Added to cart!');
+    toast.success('কার্টে যোগ করা হয়েছে!');
   };
 
   return (
@@ -45,14 +45,14 @@ export default function ProductCard({ product }: { product: Product }) {
       className="group bg-white rounded-[2rem] sm:rounded-[3rem] p-3 sm:p-5 border border-slate-100 hover:border-indigo-100 hover:shadow-premium transition-all duration-700 relative overflow-hidden"
     >
       {/* Glossy overlay on hover */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/0 via-white/0 to-indigo-500/0 group-hover:from-indigo-500/3 group-hover:to-indigo-500/3 transition-all duration-700 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/0 via-white/0 to-indigo-500/0 group-hover:from-indigo-500/5 group-hover:to-indigo-500/5 transition-all duration-700 pointer-events-none" />
 
       {/* Image Container */}
-      <div className="relative aspect-[4/5] rounded-[1.5rem] sm:rounded-[2.5rem] overflow-hidden bg-slate-50 mb-3 sm:mb-6 shadow-sm">
+      <div className="relative aspect-[4/5] rounded-[1.5rem] sm:rounded-[2.5rem] overflow-hidden bg-slate-50 mb-3 sm:mb-6 shadow-sm border border-slate-100/50">
         <img 
           src={product.images[0] || 'https://via.placeholder.com/400'} 
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
         />
         
         {/* Badges */}
@@ -61,7 +61,7 @@ export default function ProductCard({ product }: { product: Product }) {
             <motion.span 
               initial={{ x: -10, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              className="bg-rose-500 text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg shadow-rose-200"
+              className="bg-rose-500 text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg shadow-rose-500/20"
             >
               -{discountPercentage}%
             </motion.span>
@@ -70,31 +70,31 @@ export default function ProductCard({ product }: { product: Product }) {
             <motion.span 
               initial={{ x: -10, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              className="bg-slate-950 text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest flex items-center gap-1"
+              className="bg-slate-950 text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest flex items-center gap-1 shadow-lg shadow-slate-950/20"
             >
               <Sparkles size={9} className="text-indigo-400" />
-              ELITE
+              সেরা
             </motion.span>
           )}
         </div>
 
         {/* Quick Actions Overlay */}
-        <div className="absolute inset-0 bg-slate-950/15 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end justify-center pb-4 sm:pb-6">
-          <div className="flex gap-2 p-2 bg-white/20 backdrop-blur-xl rounded-[1.5rem] sm:rounded-[2rem] border border-white/20 transform translate-y-10 group-hover:translate-y-0 transition-all duration-500">
+        <div className="absolute inset-0 bg-slate-950/5 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end justify-center pb-4 sm:pb-6">
+          <div className="flex gap-2 p-2 bg-white/40 backdrop-blur-2xl rounded-2xl border border-white/40 transform translate-y-10 group-hover:translate-y-0 transition-all duration-500 shadow-2xl shadow-slate-900/10">
             <button 
               onClick={handleAddToCart}
-              className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-5 sm:py-3 bg-slate-950 text-white rounded-xl sm:rounded-2xl text-[10px] font-black uppercase tracking-wider hover:bg-indigo-600 transition-all shadow-xl"
+              className="flex items-center justify-center w-10 h-10 sm:w-auto sm:h-auto sm:px-5 sm:py-3 bg-slate-950 text-white rounded-xl text-[10px] font-black uppercase tracking-wider hover:bg-indigo-600 transition-all shadow-xl"
             >
               <ShoppingBag size={14} className="sm:mr-2" />
-              <span className="hidden sm:inline">Add</span>
+              <span className="hidden sm:inline">যোগ করুন</span>
             </button>
             <Link 
               href={`/products/${product.slug}`} 
-              className="w-10 h-10 sm:w-11 sm:h-11 bg-white rounded-xl sm:rounded-2xl flex items-center justify-center text-slate-950 hover:bg-indigo-600 hover:text-white transition-all shadow-xl"
+              className="w-10 h-10 sm:w-11 sm:h-11 bg-white rounded-xl flex items-center justify-center text-slate-950 hover:bg-indigo-600 hover:text-white transition-all shadow-xl"
             >
               <Eye size={16} />
             </Link>
-            <button className="w-10 h-10 sm:w-11 sm:h-11 bg-white rounded-xl sm:rounded-2xl flex items-center justify-center text-slate-950 hover:bg-rose-500 hover:text-white transition-all shadow-xl">
+            <button className="w-10 h-10 sm:w-11 sm:h-11 bg-white rounded-xl flex items-center justify-center text-slate-950 hover:bg-rose-500 hover:text-white transition-all shadow-xl">
               <Heart size={16} />
             </button>
           </div>

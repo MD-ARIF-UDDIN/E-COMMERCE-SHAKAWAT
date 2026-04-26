@@ -1,30 +1,26 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/axios';
-import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { 
   Plus, 
   Pencil, 
   Trash2, 
-  Star, 
-  Tag, 
   Search, 
   PackageOpen, 
-  Filter, 
-  Download,
-  MoreVertical,
-  ChevronRight,
-  ExternalLink,
   Zap,
-  ShoppingBag
+  Tag
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
+import Modal from '@/components/ui/Modal';
+import ProductForm from '@/components/admin/ProductForm';
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<any[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -35,155 +31,149 @@ export default function AdminProductsPage() {
 
   useEffect(() => { fetchProducts(); }, [search]);
 
+  const handleCreate = () => {
+    setEditingId(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEdit = (id: string) => {
+    setEditingId(id);
+    setIsModalOpen(true);
+  };
+
   const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+    if (!confirm(`Delete "${name}"?`)) return;
     try {
       await api.delete(`/products/${id}`);
       toast.success('Product deleted');
       fetchProducts();
     } catch {
-      toast.error('Failed to delete product');
+      toast.error('Failed to delete');
     }
   };
 
   return (
-    <div className="space-y-12 pb-12">
+    <div className="space-y-10">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-4">
-        <div className="mb-2 lg:mb-0">
-           <div className="flex items-center gap-2 mb-2">
-              <ShoppingBag size={14} className="text-indigo-600" />
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Products</p>
-           </div>
-           <h1 className="text-3xl lg:text-5xl font-black text-slate-950 tracking-tighter">All Products</h1>
-           <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-2">
-             Total Products: <span className="text-slate-950">{products.length}</span>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+        <div>
+           <h1 className="text-2xl font-bold text-slate-950 tracking-tight">Products</h1>
+           <p className="text-slate-400 text-[13px] font-medium mt-1">
+             Manage your inventory and product listings.
            </p>
         </div>
         
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-           <div className="relative group flex-1">
+        <div className="flex items-center gap-3">
+           <div className="relative flex-1 sm:w-64">
+              <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
-                placeholder="Search..."
+                placeholder="Search products..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                className="w-full sm:w-64 pl-12 pr-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-[10px] font-black uppercase tracking-widest focus:bg-white focus:shadow-premium focus:outline-none transition-all"
+                className="w-full pl-10 pr-4 h-12 bg-slate-50 border border-slate-100 rounded-xl text-[13px] font-medium focus:bg-white focus:border-slate-200 transition-all outline-none"
               />
-              <Search size={14} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600" />
            </div>
            
-           <Link href="/admin/products/new"
-             className="h-14 flex items-center justify-center gap-3 bg-slate-950 text-white font-black text-[10px] uppercase tracking-[0.2em] px-8 rounded-2xl hover:bg-indigo-600 transition-all shadow-premium">
-             <Plus size={16} /> <span className="sm:inline">Add Product</span>
-           </Link>
+           <button 
+             onClick={handleCreate}
+             className="h-12 flex items-center justify-center gap-2 bg-slate-950 text-white font-bold text-[13px] px-6 rounded-xl hover:bg-indigo-600 transition-all"
+           >
+             <Plus size={16} /> New Product
+           </button>
         </div>
       </div>
 
       {/* Catalog Table */}
-      <div className="bg-slate-50 rounded-[3rem] border border-slate-100 overflow-hidden shadow-inner shadow-slate-200/20">
+      <div className="bg-white border border-slate-100 rounded-2xl overflow-hidden">
         {loading ? (
-          <div className="p-24 text-center">
-             <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-6" />
-             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Loading products...</p>
+          <div className="p-20 text-center">
+             <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto" />
           </div>
         ) : products.length === 0 ? (
-          <div className="p-24 text-center">
-            <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-slate-100">
-               <PackageOpen size={32} className="text-slate-300" strokeWidth={1} />
-            </div>
-            <p className="text-slate-950 font-black text-xl tracking-tight mb-2">No Products Found</p>
-            <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-8">Your product list is empty</p>
-            <Link href="/admin/products/new" className="inline-flex h-12 items-center px-8 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-950 hover:text-white transition-all">Add New Product</Link>
+          <div className="p-20 text-center">
+            <PackageOpen size={40} className="text-slate-100 mx-auto mb-4" />
+            <p className="text-slate-950 font-bold text-lg mb-1">No products found</p>
+            <p className="text-slate-400 text-[13px] mb-6">Start by adding your first product.</p>
+            <button onClick={handleCreate} className="h-11 px-6 bg-slate-50 border border-slate-200 rounded-xl text-[13px] font-bold hover:bg-slate-950 hover:text-white transition-all">Add Product</button>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse min-w-[700px] lg:min-w-0">
+            <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-slate-200/60">
-                  <th className="px-6 lg:px-10 py-6 lg:py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest">Product</th>
-                  <th className="px-6 lg:px-10 py-6 lg:py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest">Price</th>
-                  <th className="px-6 lg:px-10 py-6 lg:py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest hidden sm:table-cell">Stock</th>
-                  <th className="px-6 lg:px-10 py-6 lg:py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest hidden md:table-cell">Status</th>
-                  <th className="px-6 lg:px-10 py-6 lg:py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Actions</th>
+                <tr className="bg-slate-50/50 border-b border-slate-100">
+                  <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Product</th>
+                  <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest hidden md:table-cell">Category</th>
+                  <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Price</th>
+                  <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest hidden sm:table-cell">Stock</th>
+                  <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
-                {products.map((p, i) => (
-                  <motion.tr 
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    key={p._id} 
-                    className="group hover:bg-white transition-all duration-300"
-                  >
-                    <td className="px-6 lg:px-10 py-4 lg:py-6">
-                      <div className="flex items-center gap-4 lg:gap-6">
-                        <div className="w-12 h-16 lg:w-16 lg:h-20 bg-white rounded-xl lg:rounded-2xl flex-shrink-0 p-1.5 lg:p-2 border border-slate-100 shadow-sm overflow-hidden group-hover:scale-105 transition-transform duration-500">
+              <tbody className="divide-y divide-slate-50">
+                {products.map((p) => (
+                  <tr key={p._id} className="group hover:bg-slate-50/30 transition-all">
+                    <td className="px-8 py-4">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 bg-slate-50 rounded-lg overflow-hidden border border-slate-100 flex-shrink-0">
                           {p.images?.[0] ? (
-                            <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover rounded-lg lg:rounded-xl" />
+                            <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover" />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-slate-50 text-slate-300">
-                               <PackageOpen size={16} />
+                            <div className="w-full h-full flex items-center justify-center text-slate-200">
+                               <PackageOpen size={14} />
                             </div>
                           )}
                         </div>
-                        <div>
-                          <p className="text-sm font-black text-slate-950 tracking-tight group-hover:text-indigo-600 transition-colors line-clamp-1">{p.name}</p>
-                          <p className="text-[9px] lg:text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">{p.category?.name || 'Uncategorized'}</p>
+                        <div className="min-w-0">
+                          <p className="text-[13px] font-bold text-slate-950 truncate">{p.name}</p>
+                          <div className="flex gap-1.5 mt-0.5">
+                            {p.isFeatured && <Zap size={10} className="text-amber-500" fill="currentColor" />}
+                            {p.isDiscounted && <Tag size={10} className="text-rose-500" fill="currentColor" />}
+                          </div>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 lg:px-10 py-4 lg:py-6">
-                      <div className="flex flex-col">
-                         <span className="text-sm font-black text-slate-950 tracking-tight">৳{p.price?.toLocaleString()}</span>
-                         {p.discountPrice && (
-                           <span className="text-[10px] font-black text-indigo-500 uppercase tracking-tight">৳{p.discountPrice?.toLocaleString()}</span>
-                         )}
-                      </div>
+                    <td className="px-8 py-4 hidden md:table-cell">
+                      <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{p.category?.name || '---'}</span>
                     </td>
-                    <td className="px-6 lg:px-10 py-4 lg:py-6 hidden sm:table-cell">
-                      <span className={`inline-flex px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest
-                        ${p.stock === 0 ? 'bg-rose-50 text-rose-600' : p.stock <= 5 ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'}`}>
+                    <td className="px-8 py-4 text-[13px] font-bold text-slate-950">৳{p.price?.toLocaleString()}</td>
+                    <td className="px-8 py-4 hidden sm:table-cell">
+                      <span className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest
+                        ${p.stock === 0 ? 'text-rose-500' : p.stock <= 5 ? 'text-amber-500' : 'text-emerald-500'}`}>
                         {p.stock === 0 ? 'Out' : `${p.stock} Stock`}
                       </span>
                     </td>
-                    <td className="px-6 lg:px-10 py-4 lg:py-6 hidden md:table-cell">
-                      <div className="flex flex-wrap gap-2">
-                        {p.isFeatured && (
-                          <span className="flex items-center gap-1.5 text-[8px] font-black text-indigo-600 uppercase tracking-widest border border-indigo-100 px-2 py-1 rounded-full">
-                            <Star size={10} fill="currentColor" /> Featured
-                          </span>
-                        )}
-                        {p.isDiscounted && (
-                          <span className="flex items-center gap-1.5 text-[8px] font-black text-rose-600 uppercase tracking-widest border border-rose-100 px-2 py-1 rounded-full">
-                            <Tag size={10} fill="currentColor" /> On Sale
-                          </span>
-                        )}
-                        {!p.isFeatured && !p.isDiscounted && (
-                          <span className="text-[8px] font-black text-slate-300 uppercase tracking-[0.2em]">Standard</span>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 lg:px-10 py-4 lg:py-6 text-right">
-                      <div className="flex items-center justify-end gap-2 lg:gap-3">
-                        <Link href={`/admin/products/${p._id}`} 
-                          className="w-10 h-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-950 hover:shadow-sm transition-all">
+                    <td className="px-8 py-4 text-right">
+                      <div className="flex items-center justify-end gap-1">
+                        <button onClick={() => handleEdit(p._id)} 
+                          className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-950 transition-colors">
                           <Pencil size={14} />
-                        </Link>
+                        </button>
                         <button onClick={() => handleDelete(p._id, p.name)} 
-                          className="w-10 h-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-rose-600 hover:shadow-sm transition-all">
+                          className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-600 transition-colors">
                           <Trash2 size={14} />
                         </button>
                       </div>
                     </td>
-                  </motion.tr>
+                  </tr>
                 ))}
               </tbody>
             </table>
           </div>
         )}
       </div>
+
+      <Modal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        title={editingId ? 'Edit Product' : 'New Product'}
+        maxWidth="max-w-4xl"
+      >
+        <ProductForm 
+          id={editingId} 
+          onSuccess={() => { setIsModalOpen(false); fetchProducts(); }} 
+          onCancel={() => setIsModalOpen(false)} 
+        />
+      </Modal>
     </div>
   );
 }

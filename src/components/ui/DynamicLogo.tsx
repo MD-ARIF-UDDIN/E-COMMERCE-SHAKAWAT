@@ -13,7 +13,7 @@ export default function DynamicLogo({ className = "" }: { className?: string }) 
     const firstPart = words.join(' ');
     return (
       <span className={className}>
-        {firstPart} <span className="text-indigo-600">{lastWord}</span>
+        {firstPart} <span className="text-indigo-400">{lastWord}</span>
       </span>
     );
   }

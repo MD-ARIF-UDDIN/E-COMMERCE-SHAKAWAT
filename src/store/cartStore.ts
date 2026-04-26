@@ -27,7 +27,8 @@ export const useCartStore = create<CartState>()(
     (set, get) => ({
       items: [],
       addItem: (item) => set((state) => {
-        const cartItemId = `${item.product}-${item.color || 'default'}`;
+        const productId = item.product || 'unknown';
+        const cartItemId = `${productId}-${item.color || 'default'}`;
         const existing = state.items.find((i) => i.cartItemId === cartItemId);
         if (existing) {
           return {
@@ -51,6 +52,19 @@ export const useCartStore = create<CartState>()(
     }),
     {
       name: 'ecommerce-cart',
+      version: 1,
+      migrate: (persistedState: any, version: number) => {
+        if (version === 0 && persistedState && persistedState.items) {
+          return {
+            ...persistedState,
+            items: persistedState.items.map((item: any) => ({
+              ...item,
+              cartItemId: item.cartItemId || `${item.product || 'unknown'}-${item.color || 'default'}`
+            }))
+          };
+        }
+        return persistedState;
+      }
     }
   )
 );

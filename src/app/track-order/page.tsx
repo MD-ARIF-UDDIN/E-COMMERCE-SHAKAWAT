@@ -1,18 +1,19 @@
 'use client';
 import { useState } from 'react';
 import { api } from '@/lib/axios';
-import { Search, Package, CheckCircle, Truck, Clock, XCircle, Box } from 'lucide-react';
+import { Search, Package, CheckCircle, Truck, Clock, XCircle, Box, Smartphone } from 'lucide-react';
 
 const STATUS_CONFIG: Record<string, { icon: any; color: string; bg: string; label: string }> = {
-  Pending:    { icon: Clock,        color: 'text-yellow-600', bg: 'bg-yellow-50',  label: 'Pending'    },
-  Processing: { icon: Package,      color: 'text-blue-600',   bg: 'bg-blue-50',    label: 'Processing' },
-  Packed:     { icon: Box,          color: 'text-purple-600', bg: 'bg-purple-50',  label: 'Packed'     },
-  Shipped:    { icon: Truck,        color: 'text-indigo-600', bg: 'bg-indigo-50',  label: 'Shipped'    },
-  Delivered:  { icon: CheckCircle,  color: 'text-green-600',  bg: 'bg-green-50',   label: 'Delivered'  },
-  Cancelled:  { icon: XCircle,      color: 'text-red-600',    bg: 'bg-red-50',     label: 'Cancelled'  },
+  Pending:    { icon: Clock,        color: 'text-yellow-600', bg: 'bg-yellow-50',  label: 'পেন্ডিং'    },
+  Processing: { icon: Package,      color: 'text-blue-600',   bg: 'bg-blue-50',    label: 'প্রসেসিং' },
+  Packed:     { icon: Box,          color: 'text-purple-600', bg: 'bg-purple-50',  label: 'প্যাক করা হয়েছে'     },
+  Shipped:    { icon: Truck,        color: 'text-indigo-600', bg: 'bg-indigo-50',  label: 'শিপ করা হয়েছে'    },
+  Delivered:  { icon: CheckCircle,  color: 'text-green-600',  bg: 'bg-green-50',   label: 'ডেলিভারড'  },
+  Cancelled:  { icon: XCircle,      color: 'text-red-600',    bg: 'bg-red-50',     label: 'বাতিল করা হয়েছে'  },
 };
 
 const STEPS = ['Pending', 'Processing', 'Packed', 'Shipped', 'Delivered'];
+const STEP_LABELS = ['পেন্ডিং', 'প্রসেসিং', 'প্যাক করা', 'শিপ করা', 'ডেলিভারড'];
 
 export default function TrackOrderPage() {
   const [orderNumber, setOrderNumber] = useState('');
@@ -40,155 +41,180 @@ export default function TrackOrderPage() {
   const statusCfg = order ? STATUS_CONFIG[order.status] : null;
 
   return (
-    <div className="container mx-auto px-4 pt-32 pb-12 max-w-2xl">
-      <div className="text-center mb-10">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-100 rounded-full mb-4">
-          <Truck size={32} className="text-indigo-500" />
+    <div className="bg-slate-50/50 min-h-screen pt-32 pb-32">
+      <div className="container mx-auto px-4 max-w-2xl relative">
+        <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-48 -left-48 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="text-center mb-12 relative z-10">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-white rounded-[2rem] mb-6 shadow-premium border border-slate-100">
+            <Truck size={32} className="text-indigo-600" />
+          </div>
+          <h1 className="text-4xl font-black text-slate-950 mb-3 tracking-tighter">অর্ডার ট্র্যাক করুন।</h1>
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">আপনার ডেলিভারি স্ট্যাটাস চেক করুন</p>
         </div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Track Your Order</h1>
-        <p className="text-gray-500">Enter your order number and phone number to check your delivery status.</p>
-      </div>
 
-      {/* Search Form */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
-        <form onSubmit={handleTrack} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Order Number</label>
-            <input
-              type="text"
-              value={orderNumber}
-              onChange={e => setOrderNumber(e.target.value)}
-              placeholder="e.g. ORD-AB12CD34"
-              required
-              className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-            <input
-              type="tel"
-              value={phone}
-              onChange={e => setPhone(e.target.value)}
-              placeholder="e.g. 01XXXXXXXXX"
-              required
-              className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-indigo-500 hover:bg-indigo-600 disabled:bg-indigo-300 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2"
-          >
-            <Search size={18} />
-            {loading ? 'Searching...' : 'Track Order'}
-          </button>
-        </form>
-      </div>
-
-      {/* Error */}
-      {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl p-4 text-sm mb-6">{error}</div>
-      )}
-
-      {/* Result */}
-      {order && statusCfg && (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          {/* Status Header */}
-          <div className={`${statusCfg.bg} p-6 border-b border-gray-100`}>
-            <div className="flex items-center gap-4">
-              <div className={`w-14 h-14 rounded-full bg-white flex items-center justify-center shadow-sm`}>
-                <statusCfg.icon size={28} className={statusCfg.color} />
-              </div>
-              <div>
-                <p className="text-sm text-gray-500 font-medium">Order #{order.orderNumber}</p>
-                <p className={`text-2xl font-bold ${statusCfg.color}`}>{statusCfg.label}</p>
+        {/* Search Form */}
+        <div className="bg-white rounded-[2.5rem] shadow-premium-subtle border border-slate-100 p-8 sm:p-10 mb-10 relative z-10">
+          <form onSubmit={handleTrack} className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">অর্ডার নম্বর</label>
+              <div className="relative">
+                <Box size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" />
+                <input
+                  type="text"
+                  value={orderNumber}
+                  onChange={e => setOrderNumber(e.target.value)}
+                  placeholder="উদা: ORD-AB12CD34"
+                  required
+                  className="w-full h-14 pl-12 pr-5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-950 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-500/5 transition-all placeholder:text-slate-200"
+                />
               </div>
             </div>
-          </div>
-
-          {/* Progress Steps (not shown for Cancelled) */}
-          {order.status !== 'Cancelled' && (
-            <div className="p-6 border-b border-gray-100">
-              <div className="flex items-center justify-between relative">
-                <div className="absolute top-4 left-0 right-0 h-0.5 bg-gray-200 z-0">
-                  <div
-                    className="h-full bg-indigo-500 transition-all"
-                    style={{ width: `${(currentStep / (STEPS.length - 1)) * 100}%` }}
-                  />
-                </div>
-                {STEPS.map((step, i) => {
-                  const done = i <= currentStep;
-                  return (
-                    <div key={step} className="flex flex-col items-center gap-2 z-10">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-all
-                        ${done ? 'bg-indigo-500 border-indigo-500 text-white' : 'bg-white border-gray-300 text-gray-400'}`}>
-                        {i + 1}
-                      </div>
-                      <span className={`text-[10px] font-medium ${done ? 'text-indigo-600' : 'text-gray-400'}`}>{step}</span>
-                    </div>
-                  );
-                })}
+            <div className="space-y-2">
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">ফোন নম্বর</label>
+              <div className="relative">
+                <Smartphone size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" />
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={e => setPhone(e.target.value)}
+                  placeholder="উদা: ০১৭XXXXXXXX"
+                  required
+                  className="w-full h-14 pl-12 pr-5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-950 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-500/5 transition-all placeholder:text-slate-200"
+                />
               </div>
             </div>
-          )}
-
-          {/* Order Details */}
-          <div className="p-6 space-y-4">
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <p className="text-gray-500">Customer Name</p>
-                <p className="font-semibold text-gray-900">{order.customerName || 'N/A'}</p>
-              </div>
-              <div>
-                <p className="text-gray-500">Phone</p>
-                <p className="font-semibold text-gray-900">{order.customerPhone}</p>
-              </div>
-              <div className="col-span-2">
-                <p className="text-gray-500">Delivery Address</p>
-                <p className="font-semibold text-gray-900">{order.address}</p>
-              </div>
-              <div>
-                <p className="text-gray-500">Payment Method</p>
-                <p className="font-semibold text-gray-900">{order.paymentMethod}</p>
-              </div>
-              {order.deliveryCompany && (
-                <div>
-                  <p className="text-gray-500">Delivery By</p>
-                  <p className="font-semibold text-gray-900">{order.deliveryCompany}</p>
-                </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full h-16 bg-slate-950 hover:bg-indigo-600 disabled:bg-slate-200 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl transition-all shadow-xl shadow-slate-200 flex items-center justify-center gap-3 group"
+            >
+              {loading ? (
+                <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin" />
+              ) : (
+                <>
+                  <Search size={18} className="group-hover:scale-110 transition-transform" />
+                  খুঁজুন
+                </>
               )}
+            </button>
+          </form>
+        </div>
+
+        {/* Error */}
+        {error && (
+          <div className="bg-rose-50 border border-rose-100 text-rose-600 rounded-2xl p-4 text-[10px] font-black uppercase tracking-widest text-center mb-10 shadow-sm">{error}</div>
+        )}
+
+        {/* Result */}
+        {order && statusCfg && (
+          <div className="bg-white rounded-[2.5rem] shadow-premium border border-slate-100 overflow-hidden relative z-10">
+            {/* Status Header */}
+            <div className={`${statusCfg.bg} p-8 sm:p-10 border-b border-slate-100 relative overflow-hidden`}>
+              <div className="absolute top-0 right-0 w-32 h-32 opacity-10 pointer-events-none">
+                <statusCfg.icon size={128} />
+              </div>
+              <div className="flex items-center gap-6 relative z-10">
+                <div className="w-16 h-16 rounded-[1.5rem] bg-white flex items-center justify-center shadow-lg border border-white/50">
+                  <statusCfg.icon size={32} className={statusCfg.color} />
+                </div>
+                <div>
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">অর্ডার #{order.orderNumber}</p>
+                  <p className={`text-3xl font-black tracking-tight ${statusCfg.color}`}>{statusCfg.label}</p>
+                </div>
+              </div>
             </div>
 
-            {/* Items */}
-            <div>
-              <h3 className="font-bold text-gray-900 mb-3">Order Items</h3>
-              <div className="space-y-2">
-                {order.items?.map((item: any, i: number) => (
-                  <div key={i} className="flex justify-between items-center text-sm bg-gray-50 rounded-lg px-4 py-2.5">
-                    <span className="text-gray-700">{item.product?.name || 'Product'} × {item.quantity}</span>
-                    <span className="font-semibold text-gray-900">৳{(item.price * item.quantity).toLocaleString()}</span>
+            {/* Progress Steps */}
+            {order.status !== 'Cancelled' && (
+              <div className="p-8 sm:p-10 border-b border-slate-50 bg-slate-50/30">
+                <div className="flex items-center justify-between relative px-2">
+                  <div className="absolute top-5 left-8 right-8 h-1 bg-slate-100 z-0 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-indigo-500 transition-all duration-1000"
+                      style={{ width: `${(currentStep / (STEPS.length - 1)) * 100}%` }}
+                    />
                   </div>
-                ))}
+                  {STEPS.map((step, i) => {
+                    const done = i <= currentStep;
+                    const active = i === currentStep;
+                    return (
+                      <div key={step} className="flex flex-col items-center gap-3 z-10">
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-black border-2 transition-all duration-500
+                          ${done 
+                            ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-100' 
+                            : 'bg-white border-slate-200 text-slate-300 shadow-sm'}`}>
+                          {active ? <div className="w-2 h-2 bg-white rounded-full animate-pulse" /> : i + 1}
+                        </div>
+                        <span className={`text-[9px] font-black uppercase tracking-widest ${done ? 'text-indigo-600' : 'text-slate-300'}`}>{STEP_LABELS[i]}</span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            )}
 
-            <div className="border-t border-gray-100 pt-4 space-y-2">
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-500">Subtotal</span>
-                <span className="font-semibold text-gray-900">৳{(order.totalAmount - (order.deliveryCharge || 0)).toLocaleString()}</span>
+            {/* Order Details */}
+            <div className="p-8 sm:p-10 space-y-10">
+              <div className="grid grid-cols-2 gap-8">
+                <div className="space-y-1">
+                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">কাস্টমার</p>
+                  <p className="text-sm font-bold text-slate-950">{order.customerName || 'N/A'}</p>
+                </div>
+                <div className="space-y-1 text-right">
+                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">ফোন নম্বর</p>
+                  <p className="text-sm font-bold text-slate-950">{order.customerPhone}</p>
+                </div>
+                <div className="col-span-2 space-y-1">
+                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">ঠিকানা</p>
+                  <p className="text-sm font-bold text-slate-950 leading-relaxed">{order.address}</p>
+                </div>
               </div>
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-500">Delivery Charge</span>
-                <span className="font-semibold text-gray-900">৳{(order.deliveryCharge || 0).toLocaleString()}</span>
+
+              {/* Items */}
+              <div className="space-y-4">
+                <h3 className="text-[10px] font-black text-slate-950 uppercase tracking-[0.2em] mb-4">অর্ডার আইটেম</h3>
+                <div className="grid gap-3">
+                  {order.items?.map((item: any, i: number) => (
+                    <div key={i} className="flex justify-between items-center bg-slate-50 border border-slate-100 rounded-2xl px-6 py-4 transition-all hover:bg-white hover:shadow-md group">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-slate-400 group-hover:text-indigo-600 shadow-sm border border-slate-100 transition-colors">
+                          <Package size={18} />
+                        </div>
+                        <span className="text-xs font-bold text-slate-900">{item.product?.name || 'Product'} × {item.quantity}</span>
+                      </div>
+                      <span className="text-sm font-black text-slate-950 tracking-tighter">৳{(item.price * item.quantity).toLocaleString()}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="flex justify-between items-center pt-2 font-bold text-lg">
-                <span className="text-gray-900">Total Amount</span>
-                <span className="text-indigo-600">৳{order.totalAmount?.toLocaleString()}</span>
+
+              <div className="pt-8 border-t border-slate-100 space-y-4">
+                <div className="flex justify-between items-center text-[11px] font-black uppercase tracking-widest text-slate-400">
+                  <span>সাবটোটাল</span>
+                  <span className="text-slate-950">৳{(order.totalAmount - (order.deliveryCharge || 0)).toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between items-center text-[11px] font-black uppercase tracking-widest text-slate-400">
+                  <span>ডেলিভারি চার্জ</span>
+                  <span className="text-slate-950">৳{(order.deliveryCharge || 0).toLocaleString()}</span>
+                </div>
+                <div className="pt-6 flex justify-between items-end">
+                  <div>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">সর্বমোট</p>
+                    <p className="text-4xl font-black text-indigo-600 tracking-tighter">৳{order.totalAmount?.toLocaleString()}</p>
+                  </div>
+                  <div className="flex items-center gap-1.5 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-xl border border-emerald-100/50">
+                    <CheckCircle size={16} />
+                    <span className="text-[9px] font-black uppercase tracking-widest">ভেরিফাইড অর্ডার</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+    </div>
     </div>
   );
 }
