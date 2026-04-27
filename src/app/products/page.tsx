@@ -83,8 +83,15 @@ function ProductsContent() {
   }, [fetchProducts]);
 
   useEffect(() => {
-    api.get('/categories').then(r => setCategories(r.data));
-  }, []);
+    api.get('/categories').then(r => {
+      setCategories(r.data);
+      const initialCat = searchParams.get('category');
+      if (initialCat) {
+        const found = r.data.find((c: Category) => c.slug === initialCat || c._id === initialCat);
+        if (found) setSelectedCategory(found._id);
+      }
+    });
+  }, [searchParams]);
 
   useEffect(() => {
     api.get('/brands', { params: { category: selectedCategory || undefined } }).then(r => {
@@ -97,27 +104,52 @@ function ProductsContent() {
   }, [selectedCategory]);
 
   useEffect(() => {
-    setSearch(searchParams.get('search') || '');
-  }, [searchParams]);
+    const searchVal = searchParams.get('search') || '';
+    setSearch(searchVal);
+    
+    const catVal = searchParams.get('category') || '';
+    if (catVal && categories.length > 0) {
+      const found = categories.find(c => c.slug === catVal || c._id === catVal);
+      if (found) setSelectedCategory(found._id);
+    } else if (!catVal) {
+      setSelectedCategory('');
+    }
+  }, [searchParams, categories]);
 
   return (
     <div className="bg-white min-h-screen">
       <div className="container mx-auto px-6 pt-24 pb-0">
         <div className="flex flex-wrap items-center gap-5 mb-12 relative z-40 bg-white/70 backdrop-blur-2xl p-5 rounded-[2rem] border border-white/50 shadow-sm">
-          {/* Category Dropdown */}
-          <div className="relative group">
-            <label className="absolute -top-2 left-4 px-2 bg-white text-[8px] font-black text-slate-400 uppercase tracking-widest z-10">ক্যাটাগরি</label>
-            <select
-              value={selectedCategory}
-              onChange={e => { setSelectedCategory(e.target.value); setSelectedBrand(''); }}
-              className="appearance-none bg-slate-50/50 border border-slate-100 text-slate-950 text-[10px] font-black uppercase tracking-[0.15em] pl-6 pr-12 py-4 rounded-2xl cursor-pointer hover:border-indigo-200 hover:bg-white transition-all focus:outline-none focus:ring-4 focus:ring-indigo-500/5 shadow-sm"
+          <div className="grid grid-cols-2 gap-3 w-full lg:flex lg:w-auto lg:items-center lg:gap-5">
+            {/* Category Dropdown */}
+            <div className="relative group w-full lg:w-auto">
+              <label className="absolute -top-2 left-4 px-2 bg-white text-[8px] font-black text-slate-400 uppercase tracking-widest z-10">ক্যাটাগরি</label>
+              <select
+                value={selectedCategory}
+                onChange={e => { setSelectedCategory(e.target.value); setSelectedBrand(''); }}
+                className="appearance-none w-full bg-slate-50/50 border border-slate-100 text-slate-950 text-[10px] font-black uppercase tracking-[0.15em] pl-6 pr-10 py-4 rounded-2xl cursor-pointer hover:border-indigo-200 hover:bg-white transition-all focus:outline-none focus:ring-4 focus:ring-indigo-500/5 shadow-sm"
+              >
+                <option value="">সব ক্যাটাগরি</option>
+                {categories.map(c => (
+                  <option key={c._id} value={c._id}>{c.name}</option>
+                ))}
+              </select>
+              <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none group-hover:text-indigo-500 transition-colors" />
+            </div>
+
+            {/* Filter Button */}
+            <button 
+              onClick={() => setShowFilters(!showFilters)}
+              className={`flex items-center justify-center gap-2 px-4 lg:px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all border w-full lg:w-auto ${
+                showFilters 
+                ? 'bg-slate-950 text-white border-slate-950 shadow-xl shadow-slate-200' 
+                : 'bg-white border-slate-100 text-slate-400 hover:border-indigo-200 hover:text-indigo-600 shadow-sm'
+              }`}
             >
-              <option value="">সব ক্যাটাগরি</option>
-              {categories.map(c => (
-                <option key={c._id} value={c._id}>{c.name}</option>
-              ))}
-            </select>
-            <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none group-hover:text-indigo-500 transition-colors" />
+              <SlidersHorizontal size={16} />
+              <span className="hidden sm:inline">{showFilters ? 'বন্ধ করুন' : 'ফিল্টার'}</span>
+              <span className="sm:hidden">{showFilters ? 'বন্ধ' : 'ফিল্টার'}</span>
+            </button>
           </div>
 
           {/* Brand Dropdown */}
@@ -137,19 +169,6 @@ function ProductsContent() {
               <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none group-hover:text-indigo-500 transition-colors" />
             </div>
           )}
-
-          {/* Filter Button */}
-          <button 
-            onClick={() => setShowFilters(!showFilters)}
-            className={`shrink-0 flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all border ${
-              showFilters 
-              ? 'bg-slate-950 text-white border-slate-950 shadow-xl shadow-slate-200' 
-              : 'bg-white border-slate-100 text-slate-400 hover:border-indigo-200 hover:text-indigo-600 shadow-sm'
-            }`}
-          >
-            <SlidersHorizontal size={16} />
-            {showFilters ? 'বন্ধ করুন' : 'ফিল্টার'}
-          </button>
 
           {/* Search */}
           <div className="relative flex-1 min-w-[240px] group">

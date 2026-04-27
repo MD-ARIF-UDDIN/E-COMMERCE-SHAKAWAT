@@ -41,6 +41,7 @@
   /* Multi-layered shadows for premium feel */
   --shadow-soft: 0 1px 3px rgba(0,0,0,0.02), 0 10px 25px -5px rgba(0, 0, 0, 0.05);
   --shadow-premium: 0 20px 80px -15px rgba(57, 100, 141, 0.15), 0 10px 30px -10px rgba(0, 0, 0, 0.04);
+  --shadow-premium-subtle: 0 10px 40px -10px rgba(57, 100, 141, 0.1);
   --shadow-glass: 0 8px 32px 0 rgba(14, 42, 77, 0.07);
   
   --radius-xl: 1rem;
@@ -63,6 +64,15 @@ body {
   scroll-behavior: smooth;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Utilities */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Premium Glassmorphism */
@@ -141,4 +151,18 @@ body {
   background: linear-gradient(to right, #0E2A4D, #39648D);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
 }

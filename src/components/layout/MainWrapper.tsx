@@ -12,7 +12,7 @@ export default function MainWrapper({ children }: { children: React.ReactNode })
   return (
     <div className="relative z-10 flex flex-col min-h-screen">
       {!hideNav && <Navbar />}
-      <main className={`flex-grow ${!hideNav ? 'pt-4 lg:pt-6' : ''}`}>
+      <main className={`flex-grow ${!hideNav ? 'pt-2 lg:pt-4' : ''}`}>
         {children}
       </main>
       {!hideNav && <Footer />}

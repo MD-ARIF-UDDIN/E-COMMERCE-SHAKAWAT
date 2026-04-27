@@ -3,6 +3,8 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import MainWrapper from "@/components/layout/MainWrapper";
 import Providers from "./providers";
+import FloatingWhatsApp from "@/components/ui/FloatingWhatsApp";
+import FloatingCart from "@/components/ui/FloatingCart";
 
 const hindSiliguri = Hind_Siliguri({ 
   weight: ['300', '400', '500', '600', '700'],
@@ -12,8 +14,9 @@ const hindSiliguri = Hind_Siliguri({
 
 export async function generateMetadata() {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://ecs-server-yl30.onrender.com';
-    const res = await fetch(`${apiUrl}/api/settings`, { next: { revalidate: 3600 } });
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+    const fetchUrl = apiUrl.endsWith('/api') ? `${apiUrl}/settings` : `${apiUrl}/api/settings`;
+    const res = await fetch(fetchUrl, { next: { revalidate: 3600 } });
     const settings = await res.json();
     return {
       title: `${settings.businessName} | প্রিমিয়াম লাইফস্টাইল মার্কেটপ্লেস`,
@@ -40,6 +43,8 @@ export default function RootLayout({
           <MainWrapper>
             {children}
           </MainWrapper>
+          <FloatingWhatsApp />
+          <FloatingCart />
         </Providers>
         <Toaster 
           position="bottom-right"

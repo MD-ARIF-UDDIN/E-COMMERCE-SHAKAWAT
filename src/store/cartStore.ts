@@ -15,17 +15,20 @@ export interface CartItem {
 
 interface CartState {
   items: CartItem[];
+  isOpen: boolean;
   addItem: (item: Omit<CartItem, 'cartItemId'>) => void;
   removeItem: (cartItemId: string) => void;
   updateQuantity: (cartItemId: string, quantity: number) => void;
   clearCart: () => void;
   getTotal: () => number;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
+      isOpen: false,
       addItem: (item) => set((state) => {
         const productId = item.product || 'unknown';
         const cartItemId = `${productId}-${item.color || 'default'}`;
@@ -49,6 +52,7 @@ export const useCartStore = create<CartState>()(
       getTotal: () => {
         return get().items.reduce((total, item) => total + (item.price * item.quantity), 0);
       },
+      setIsOpen: (isOpen) => set({ isOpen }),
     }),
     {
       name: 'ecommerce-cart',
