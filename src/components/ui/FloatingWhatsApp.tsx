@@ -18,13 +18,11 @@ export default function FloatingWhatsApp() {
         y: [0, -10, 0],
       }}
       transition={{
-        initial: { duration: 0.5 },
-        animate: {
-          y: {
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }
+        default: { duration: 0.5 },
+        y: {
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeInOut"
         }
       }}
       whileHover={{ scale: 1.1, rotate: 5 }}
