@@ -116,16 +116,16 @@ export default function Home() {
   const topSelling = products.slice(0, 8);
 
   if (loading) return (
-    <div className="min-h-screen bg-white flex items-center justify-center">
+    <div className="min-h-screen bg-black flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">
-        <div className="w-12 h-12 border-4 border-slate-100 border-t-indigo-600 rounded-full animate-spin" />
-        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">ক্যাটালগ লোড হচ্ছে</p>
+        <div className="w-12 h-12 border-4 border-gold-900/10 border-t-primary rounded-full animate-spin" />
+        <p className="text-[10px] font-black text-gold-900/40 uppercase tracking-widest">ক্যাটালগ লোড হচ্ছে</p>
       </div>
     </div>
   );
 
   return (
-    <div className="bg-white min-h-screen pt-14 lg:pt-28 pb-20">
+    <div className="bg-black min-h-screen pt-14 lg:pt-28 pb-20">
       {/* ── HERO SECTION ─────────────────────────────────────────── */}
       <section className="w-full px-[4px] mb-4">
         <HeroSlider banners={banners} />
@@ -134,8 +134,8 @@ export default function Home() {
       {/* ── FEATURED CATEGORIES ───────────────────────────────────── */}
       <section className="w-full px-[4px] mb-12 md:mb-20">
         <div className="text-center mb-4">
-          <p className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.3em] mb-3">আমাদের বিশেষত্ব</p>
-          <h2 className="text-2xl md:text-4xl font-black text-slate-950 tracking-tighter uppercase">সেরা ক্যাটাগরি সমূহ।</h2>
+          <p className="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-3">আমাদের বিশেষত্ব</p>
+          <h2 className="text-2xl md:text-4xl font-black text-gold-100 tracking-tighter uppercase">সেরা ক্যাটাগরি সমূহ।</h2>
         </div>
 
         <CategorySlider categories={categories} />
@@ -145,13 +145,13 @@ export default function Home() {
       <section className="container mx-auto px-4 md:px-6 mb-12 md:mb-20">
         <div className="flex items-end justify-between mb-12">
           <div>
-            <div className="flex items-center gap-2 px-3 py-1 bg-amber-50 text-amber-600 rounded-lg w-fit mb-3 border border-amber-100">
+            <div className="flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-lg w-fit mb-3 border border-primary/20">
               <TrendingUp size={12} />
               <span className="text-[9px] font-black uppercase tracking-widest">টপ ট্রেন্ডিং</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-950 tracking-tighter uppercase">সেরা বিক্রিত পণ্য।</h2>
+            <h2 className="text-3xl md:text-4xl font-black text-gold-100 tracking-tighter uppercase">সেরা বিক্রিত পণ্য।</h2>
           </div>
-          <Link href="/products" className="hidden md:flex items-center gap-2 text-[10px] font-black text-slate-400 hover:text-indigo-600 transition-colors uppercase tracking-widest">
+          <Link href="/products" className="hidden md:flex items-center gap-2 text-[10px] font-black text-gold-900/40 hover:text-primary transition-colors uppercase tracking-widest">
             সব দেখুন <ChevronRight size={14} />
           </Link>
         </div>
@@ -166,24 +166,24 @@ export default function Home() {
       {/* ── FLASH SALE BANNER ───────────────────────────────────── */}
       {saleProducts.length > 0 && (
         <section className="container mx-auto px-4 md:px-6 mb-12 md:mb-20">
-          <div className="bg-slate-950 rounded-[3rem] p-10 md:p-20 relative overflow-hidden flex flex-col items-center text-center">
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-rose-500/10 rounded-full blur-[100px]" />
-            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[100px]" />
+          <div className="bg-black-950 rounded-[3rem] p-10 md:p-20 relative overflow-hidden flex flex-col items-center text-center border border-gold-900/10">
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px]" />
+            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gold-600/5 rounded-full blur-[100px]" />
 
             <div className="relative z-10 space-y-6">
-              <div className="flex items-center justify-center gap-2 px-4 py-2 bg-rose-500/20 text-rose-400 rounded-full border border-rose-500/30 w-fit mx-auto">
+              <div className="flex items-center justify-center gap-2 px-4 py-2 bg-primary/20 text-primary rounded-full border border-primary/30 w-fit mx-auto">
                 <Flame size={14} className="animate-pulse" />
                 <span className="text-[10px] font-black uppercase tracking-[0.2em]">চলমান মেগা সেল</span>
               </div>
-              <h2 className="text-4xl md:text-7xl font-black text-white tracking-tighter leading-none">
+              <h2 className="text-4xl md:text-7xl font-black text-gold-100 tracking-tighter leading-none">
                 সীমিত সময়ের জন্য<br />
-                <span className="text-rose-500">স্পেশাল ডিসকাউন্ট।</span>
+                <span className="text-primary">স্পেশাল ডিসকাউন্ট।</span>
               </h2>
-              <p className="text-white/50 font-medium max-w-xl mx-auto text-sm md:text-base">
+              <p className="text-gold-900/40 font-medium max-w-xl mx-auto text-sm md:text-base">
                 আমাদের সিলেক্টিভ কালেকশনে পান আকর্ষণীয় সব অফার। স্টক শেষ হওয়ার আগেই অর্ডার করুন।
               </p>
               <div className="pt-4">
-                <Link href="/products?filter=sale" className="bg-white text-slate-950 px-10 py-5 rounded-2xl font-black text-sm hover:bg-rose-500 hover:text-white transition-all shadow-2xl">
+                <Link href="/products?filter=sale" className="bg-primary text-black px-10 py-5 rounded-2xl font-black text-sm hover:bg-gold-600 transition-all shadow-2xl shadow-primary/20">
                   অফার দেখুন
                 </Link>
               </div>
@@ -194,20 +194,20 @@ export default function Home() {
 
       {/* ── NEWSLETTER ───────────────────────────────────────────── */}
       <section className="container mx-auto px-4 md:px-6">
-        <div className="bg-indigo-600 rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden">
+        <div className="bg-primary rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden shadow-2xl shadow-primary/10">
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
           <div className="relative z-10">
-            <h2 className="text-3xl md:text-5xl font-black text-white tracking-tighter mb-6 leading-none">আমাদের সাথে যুক্ত হোন।</h2>
-            <p className="text-indigo-100 font-medium max-w-md mx-auto mb-10 text-sm md:text-base">
+            <h2 className="text-3xl md:text-5xl font-black text-black tracking-tighter mb-6 leading-none">আমাদের সাথে যুক্ত হোন।</h2>
+            <p className="text-black/60 font-medium max-w-md mx-auto mb-10 text-sm md:text-base">
               লিমিটেড ড্রপ এবং মেম্বার-অনলি অফার সম্পর্কে জানতে সাবস্ক্রাইব করুন।
             </p>
             <div className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
               <input
                 type="email"
                 placeholder="আপনার ইমেইল এড্রেস"
-                className="flex-1 bg-white/10 border border-white/20 rounded-2xl px-6 py-4 text-white placeholder:text-white/60 focus:outline-none focus:bg-white/20 transition-all text-sm font-bold"
+                className="flex-1 bg-black/10 border border-black/20 rounded-2xl px-6 py-4 text-black placeholder:text-black/40 focus:outline-none focus:bg-black/20 transition-all text-sm font-bold"
               />
-              <button className="bg-white text-indigo-600 px-8 py-4 rounded-2xl font-black text-xs hover:bg-slate-950 hover:text-white transition-all shadow-xl">
+              <button className="bg-black text-primary px-8 py-4 rounded-2xl font-black text-xs hover:bg-black-900 transition-all shadow-xl">
                 সাবস্ক্রাইব করুন
               </button>
             </div>

@@ -6,26 +6,26 @@ export default function DynamicLogo({ className = "" }: { className?: string }) 
 
   if (!businessName) return null;
 
-  // 1. If multiple words: "My Awesome Store" -> "My Awesome" + "Store" (indigo)
+  // 1. If multiple words: "My Awesome Store" -> "My Awesome" + "Store" (primary)
   const words = businessName.split(' ');
   if (words.length > 1) {
     const lastWord = words.pop();
     const firstPart = words.join(' ');
     return (
       <span className={className}>
-        {firstPart} <span className="text-indigo-400">{lastWord}</span>
+        {firstPart} <span className="text-primary">{lastWord}</span>
       </span>
     );
   }
 
-  // 2. If single word and camelCase: "NovaCart" -> "Nova" + "Cart" (indigo)
+  // 2. If single word and camelCase: "NovaCart" -> "Nova" + "Cart" (primary)
   const camelMatch = businessName.match(/([a-z])([A-Z])/);
   if (camelMatch) {
     const index = camelMatch.index! + 1;
     return (
       <span className={className}>
         {businessName.slice(0, index)}
-        <span className="text-indigo-600">{businessName.slice(index)}</span>
+        <span className="text-primary">{businessName.slice(index)}</span>
       </span>
     );
   }

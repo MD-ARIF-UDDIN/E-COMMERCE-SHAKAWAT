@@ -1,48 +1,40 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-primary: #39648D;
-  --color-primary-hover: #2D4F70;
-  --color-secondary: #71B5E4;
-  --color-accent: #B7C9DC;
-  --color-success: #059669;
-  --color-warning: #D97706;
-  --color-danger: #DC2626;
-  --color-info: #71B5E4;
+  --color-primary: #C5A021; /* Royal Gold */
+  --color-primary-hover: #A6861A;
+  --color-secondary: #E6D5B8; /* Champagne / Less Golden */
+  --color-accent: #FFD700; /* Pure Gold */
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+  --color-info: #E6D5B8;
   
-  /* Winter Chill Overrides for existing classes */
-  --color-indigo-50: #F0F7FF;
-  --color-indigo-100: #E0EFFF;
-  --color-indigo-200: #B7D9FF;
-  --color-indigo-300: #71B5E4;
-  --color-indigo-400: #4B91C2;
-  --color-indigo-500: #39648D;
-  --color-indigo-600: #2D4F70;
-  --color-indigo-700: #1E3A56;
-  --color-indigo-800: #0E2A4D;
-  --color-indigo-900: #07192E;
-  --color-indigo-950: #040D18;
+  /* Gold Scale Overrides */
+  --color-gold-50: #FFFDF0;
+  --color-gold-100: #FEF9C3;
+  --color-gold-200: #FEF08A;
+  --color-gold-300: #FDE047;
+  --color-gold-400: #FACC15;
+  --color-gold-500: #EAB308;
+  --color-gold-600: #CA8A04;
+  --color-gold-700: #A16207;
+  --color-gold-800: #854D0E;
+  --color-gold-900: #713F12;
+  --color-gold-950: #422006;
 
-  --color-slate-950: #0E2A4D; /* Blue Zodiac */
-  --color-slate-900: #1E3A56;
-  --color-slate-800: #2D4F70;
-  --color-slate-50: #F8FAFC;
-
-  /* Winter Chill - Icy Lavender Overrides (Replaces Rose) */
-  --color-rose-50: #F4F5FA;
-  --color-rose-100: #E9EAF5;
-  --color-rose-200: #D3D5EB;
-  --color-rose-300: #B7BCE1;
-  --color-rose-400: #9AA0C7;
-  --color-rose-500: #7D83B0;
-  --color-rose-600: #5F6599;
-  --color-rose-700: #4B5080;
+  /* Black Scale Overrides */
+  --color-black-950: #050505;
+  --color-black-900: #0A0A0A;
+  --color-black-800: #121212;
+  --color-black-700: #1F1F1F;
+  --color-black-50: #F8F8F8;
   
   /* Multi-layered shadows for premium feel */
-  --shadow-soft: 0 1px 3px rgba(0,0,0,0.02), 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-  --shadow-premium: 0 20px 80px -15px rgba(57, 100, 141, 0.15), 0 10px 30px -10px rgba(0, 0, 0, 0.04);
-  --shadow-premium-subtle: 0 10px 40px -10px rgba(57, 100, 141, 0.1);
-  --shadow-glass: 0 8px 32px 0 rgba(14, 42, 77, 0.07);
+  --shadow-soft: 0 1px 3px rgba(0,0,0,0.1), 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  --shadow-premium: 0 20px 80px -15px rgba(197, 160, 33, 0.15), 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  --shadow-premium-subtle: 0 10px 40px -10px rgba(197, 160, 33, 0.1);
+  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
   
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
@@ -51,11 +43,11 @@
 }
 
 :root {
-  --background: #F8FAFC;
-  --foreground: #0E2A4D; /* Blue Zodiac */
-  --muted: #64748b;
-  --border: #e2e8f0; /* Slate 200 */
-  --selection: #71B5E4;
+  --background: #0A0A0A;
+  --foreground: #E6D5B8; /* Champagne / Less Golden */
+  --muted: #888888;
+  --border: #1F1F1F;
+  --selection: #C5A021;
 }
 
 body {
@@ -77,32 +69,32 @@ body {
 
 /* Premium Glassmorphism */
 .glass {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(15, 15, 15, 0.7);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(197, 160, 33, 0.1);
 }
 
 .glass-dark {
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(197, 160, 33, 0.2);
 }
 
 /* Texture & Patterns */
 .bg-dot-pattern {
-  background-image: radial-gradient(#e2e8f0 1.5px, transparent 1.5px);
-  background-size: 32px 32px;
+  background-image: radial-gradient(rgba(197, 160, 33, 0.1) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
 .bg-mesh-gradient {
-  background-color: #F8FAFC;
+  background-color: #050505;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(57, 100, 141, 0.05) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(113, 181, 228, 0.05) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(183, 201, 220, 0.05) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(57, 100, 141, 0.05) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(197, 160, 33, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(230, 213, 184, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(197, 160, 33, 0.08) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(230, 213, 184, 0.05) 0px, transparent 50%);
 }
 
 /* Custom Scrollbar */
@@ -110,14 +102,14 @@ body {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #F8FAFC;
+  background: #0A0A0A;
 }
 ::-webkit-scrollbar-thumb {
-  background: #B7C9DC;
+  background: #1F1F1F;
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #39648D;
+  background: #C5A021;
 }
 
 /* Animations */
@@ -137,7 +129,7 @@ body {
 }
 
 .shimmer {
-  background: linear-gradient(90deg, #F1F5F9 25%, #F8FAFC 50%, #F1F5F9 75%);
+  background: linear-gradient(90deg, #121212 25%, #1F1F1F 50%, #121212 75%);
   background-size: 200% 100%;
   animation: shimmer 2s infinite linear;
 }
@@ -148,7 +140,7 @@ body {
 }
 
 .text-gradient {
-  background: linear-gradient(to right, #0E2A4D, #39648D);
+  background: linear-gradient(to right, #C5A021, #E6D5B8);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -160,9 +152,9 @@ body {
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #e2e8f0;
+  background: #1F1F1F;
   border-radius: 10px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #cbd5e1;
+  background: #C5A021;
 }

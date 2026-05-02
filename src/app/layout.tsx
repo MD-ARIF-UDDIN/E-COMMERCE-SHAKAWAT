@@ -24,7 +24,7 @@ export async function generateMetadata() {
     };
   } catch (err) {
     return {
-      title: "NovaCart | প্রিমিয়াম লাইফস্টাইল মার্কেটপ্লেস",
+      title: "Bronze Mart | প্রিমিয়াম লাইফস্টাইল মার্কেটপ্লেস",
       description: "আমাদের কিউরেটেড কালেকশন থেকে বেছে নিন আপনার পছন্দের পণ্য।",
     };
   }
@@ -36,9 +36,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="bn" className="h-full light" style={{ colorScheme: 'light' }} suppressHydrationWarning>
-      <body className={`${hindSiliguri.className} min-h-screen bg-mesh-gradient text-slate-900 antialiased selection:bg-indigo-600 selection:text-white relative`}>
-        <div className="fixed inset-0 bg-dot-pattern opacity-[0.03] pointer-events-none z-0" />
+    <html lang="bn" className="h-full dark" style={{ colorScheme: 'dark' }} suppressHydrationWarning>
+      <body className={`${hindSiliguri.className} min-h-screen bg-mesh-gradient text-[#E6D5B8] antialiased selection:bg-[#C5A021] selection:text-black relative`}>
+        <div className="fixed inset-0 bg-dot-pattern opacity-[0.05] pointer-events-none z-0" />
         <Providers>
           <MainWrapper>
             {children}
@@ -50,11 +50,11 @@ export default function RootLayout({
           position="bottom-right"
           toastOptions={{
             style: {
-              background: '#ffffff',
-              color: '#0f172a',
+              background: '#121212',
+              color: '#E6D5B8',
               borderRadius: '1rem',
-              border: '1px solid #e2e8f0',
-              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.05)',
+              border: '1px solid rgba(197, 160, 33, 0.2)',
+              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.5)',
             },
           }}
         />

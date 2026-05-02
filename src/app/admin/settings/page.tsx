@@ -10,7 +10,7 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [settings, setSettings] = useState({
-    businessName: 'NovaCommerce',
+    businessName: 'Bronze Mart',
     contactPhone: '',
     contactEmail: '',
     insideChittagong: 60,

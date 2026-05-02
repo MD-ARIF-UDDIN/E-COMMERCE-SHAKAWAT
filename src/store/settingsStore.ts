@@ -20,7 +20,7 @@ export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
       settings: {
-        businessName: 'NovaCart',
+        businessName: 'Bronze Mart',
         insideChittagong: 60,
         outsideChittagong: 120,
       },
@@ -39,7 +39,7 @@ export const useSettingsStore = create<SettingsState>()(
       updateSettings: (newSettings) => set({ settings: newSettings }),
     }),
     {
-      name: 'novacart-settings',
+      name: 'bronzemart-settings',
     }
   )
 );

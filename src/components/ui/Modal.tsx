@@ -31,29 +31,29 @@ export default function Modal({ isOpen, onClose, title, children, maxWidth = 'ma
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-slate-900/20 backdrop-blur-[2px] z-[100] flex items-center justify-center p-4 sm:p-6"
+            className="fixed inset-0 bg-black/60 backdrop-blur-xl z-[100] flex items-center justify-center p-4 sm:p-6"
           >
             {/* Modal Container */}
             <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 8 }}
+              initial={{ opacity: 0, y: 8, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 8, scale: 0.98 }}
               onClick={(e) => e.stopPropagation()}
-              className={`bg-white w-full ${maxWidth} rounded-2xl border border-slate-100 shadow-xl shadow-slate-900/5 overflow-hidden flex flex-col max-h-[90vh]`}
+              className={`bg-black-900 w-full ${maxWidth} rounded-[2.5rem] border border-gold-900/10 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]`}
             >
               {/* Header */}
-              <div className="h-16 px-6 border-b border-slate-50 flex items-center justify-between shrink-0">
-                <h2 className="text-sm font-bold text-slate-950 uppercase tracking-widest">{title}</h2>
+              <div className="h-16 px-8 border-b border-gold-900/10 flex items-center justify-between shrink-0 bg-black-950/50">
+                <h2 className="text-[10px] font-black text-gold-100 uppercase tracking-[0.2em]">{title}</h2>
                 <button
                   onClick={onClose}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-950 hover:bg-slate-50 transition-all"
+                  className="w-10 h-10 rounded-xl flex items-center justify-center text-gold-900/40 hover:text-primary hover:bg-gold-900/5 transition-all"
                 >
-                  <X size={18} />
+                  <X size={20} />
                 </button>
               </div>
 
               {/* Content */}
-              <div className="flex-1 overflow-y-auto p-6 lg:p-8 custom-scrollbar bg-white">
+              <div className="flex-1 overflow-y-auto p-8 lg:p-10 custom-scrollbar bg-black-900/50">
                 {children}
               </div>
             </motion.div>
