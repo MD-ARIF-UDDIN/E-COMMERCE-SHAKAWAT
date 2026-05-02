@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { useSettingsStore } from '@/store/settingsStore';
 import DynamicLogo from '@/components/ui/DynamicLogo';
+import BrandLogo from '@/components/ui/BrandLogo';
 
 interface Category {
   _id: string;
@@ -75,15 +76,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
           <div className="lg:col-span-4 space-y-10">
             <Link href="/" className="flex items-center group">
-              <div className="relative w-[220px] h-[70px] group-hover:scale-105 transition-transform duration-500">
-                <Image
-                  src="/logo.png"
-                  alt="Bronze Mart Logo"
-                  fill
-                  className="object-contain filter brightness-110 contrast-125"
-                  style={{ mixBlendMode: 'screen' }}
-                />
-              </div>
+              <BrandLogo size="lg" className="group-hover:scale-105 transition-transform duration-500" />
             </Link>
             <p className="text-gold-200/60 font-medium leading-relaxed max-w-sm text-sm">
               আমরা আপনার দৈনন্দিন জীবনযাত্রাকে আরও উন্নত করতে বিশ্বের সবচেয়ে উদ্ভাবনী পণ্যগুলি সংগ্রহ করি। 

@@ -31,6 +31,7 @@ import { useCartStore } from '@/store/cartStore';
 import { useHydrated } from '@/hooks/useHydrated';
 import { useSettingsStore } from '@/store/settingsStore';
 import DynamicLogo from '@/components/ui/DynamicLogo';
+import BrandLogo from '@/components/ui/BrandLogo';
 import { api } from '@/lib/axios';
 
 interface Category {
@@ -114,16 +115,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between gap-4 md:gap-8">
             {/* Logo & Company Name */}
             <Link href="/" className="flex items-center shrink-0 group">
-              <div className="relative w-[180px] h-[50px] md:w-[240px] md:h-[70px] group-hover:scale-105 transition-transform duration-500">
-                <Image
-                  src="/logo.png"
-                  alt="Bronze Mart Logo"
-                  fill
-                  className="object-contain filter brightness-110 contrast-125"
-                  priority
-                  style={{ mixBlendMode: 'screen' }} // Attempts to remove black background if exists
-                />
-              </div>
+              <BrandLogo size="md" className="group-hover:scale-105 transition-transform duration-500" />
             </Link>
 
             {/* Search Bar - Desktop Only */}
@@ -221,15 +213,7 @@ export default function Navbar() {
           >
             <div className="p-5 flex items-center justify-between border-b border-gold-400/20 bg-gold-900/10 backdrop-blur-xl sticky top-0">
               <div className="flex items-center">
-                 <div className="relative w-[130px] h-[35px]">
-                    <Image
-                      src="/logo.png"
-                      alt="Bronze Mart Logo"
-                      fill
-                      className="object-contain filter brightness-110 contrast-125"
-                      style={{ mixBlendMode: 'screen' }}
-                    />
-                 </div>
+                 <BrandLogo size="sm" />
               </div>
               <button onClick={() => setIsMobileMenuOpen(false)} className="p-2.5 bg-gold-900/20 rounded-xl text-gold-200 hover:bg-gold-900/30 transition-colors border border-gold-400/10">
                 <X size={22} strokeWidth={2.5} />

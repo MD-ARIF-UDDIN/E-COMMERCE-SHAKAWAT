@@ -12,6 +12,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSettingsStore } from '@/store/settingsStore';
 import DynamicLogo from '@/components/ui/DynamicLogo';
+import BrandLogo from '@/components/ui/BrandLogo';
 
 const NAV_ITEMS = [
   { label: 'Dashboard',   href: '/admin/dashboard',   icon: LayoutDashboard, roles: ['SuperAdmin','Admin','Employee'] },
@@ -87,14 +88,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         
         {/* Logo */}
         <div className="h-24 px-8 flex items-center">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
-              <Zap size={18} className="text-black" fill="currentColor" />
-            </div>
-            <div>
-              <p className="text-gold-100 font-black text-lg tracking-tight leading-none uppercase">Admin</p>
-              <p className="text-gold-900/40 text-[9px] font-bold uppercase tracking-widest mt-0.5">Control Panel</p>
-            </div>
+          <Link href="/" className="flex items-center group">
+            <BrandLogo size="sm" />
           </Link>
         </div>
 
