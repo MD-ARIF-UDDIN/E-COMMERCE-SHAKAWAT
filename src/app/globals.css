@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-primary: #C5A021; /* Royal Gold */
-  --color-primary-hover: #A6861A;
-  --color-secondary: #E6D5B8; /* Champagne / Less Golden */
+  --color-primary: #D4AF37; /* Metallic Gold */
+  --color-primary-hover: #FACC15;
+  --color-secondary: #F5F5DC; /* Champagne */
   --color-accent: #FFD700; /* Pure Gold */
   --color-success: #10B981;
   --color-warning: #F59E0B;
   --color-danger: #EF4444;
   --color-info: #E6D5B8;
   
-  /* Gold Scale Overrides */
+  /* Gold Scale Overrides - Brightened for visibility */
   --color-gold-50: #FFFDF0;
   --color-gold-100: #FEF9C3;
   --color-gold-200: #FEF08A;
@@ -20,8 +20,8 @@
   --color-gold-600: #CA8A04;
   --color-gold-700: #A16207;
   --color-gold-800: #854D0E;
-  --color-gold-900: #713F12;
-  --color-gold-950: #422006;
+  --color-gold-900: #F5F5DC; /* Champagne */
+  --color-gold-950: #1A1712; /* Rich Bronze Black */
 
   /* Black Scale Overrides */
   --color-black-950: #050505;
@@ -32,8 +32,8 @@
   
   /* Multi-layered shadows for premium feel */
   --shadow-soft: 0 1px 3px rgba(0,0,0,0.1), 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-  --shadow-premium: 0 20px 80px -15px rgba(197, 160, 33, 0.15), 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-  --shadow-premium-subtle: 0 10px 40px -10px rgba(197, 160, 33, 0.1);
+  --shadow-premium: 0 20px 80px -15px rgba(212, 175, 55, 0.3), 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  --shadow-premium-subtle: 0 10px 40px -10px rgba(212, 175, 55, 0.2);
   --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
   
   --radius-xl: 1rem;
@@ -43,11 +43,11 @@
 }
 
 :root {
-  --background: #0A0A0A;
-  --foreground: #E6D5B8; /* Champagne / Less Golden */
-  --muted: #888888;
-  --border: #1F1F1F;
-  --selection: #C5A021;
+  --background: #1A1712; /* Rich Bronze instead of Black */
+  --foreground: #F5F5DC; /* Champagne for better readability */
+  --muted: #A6861A;
+  --border: #3D3528; /* Bronze Border */
+  --selection: #D4AF37;
 }
 
 body {
@@ -69,32 +69,32 @@ body {
 
 /* Premium Glassmorphism */
 .glass {
-  background: rgba(15, 15, 15, 0.7);
+  background: rgba(45, 39, 30, 0.7);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(197, 160, 33, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.25);
 }
 
 .glass-dark {
-  background: rgba(0, 0, 0, 0.85);
+  background: rgba(26, 23, 18, 0.85);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(197, 160, 33, 0.2);
+  border: 1px solid rgba(212, 175, 55, 0.3);
 }
 
 /* Texture & Patterns */
 .bg-dot-pattern {
-  background-image: radial-gradient(rgba(197, 160, 33, 0.1) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(212, 175, 55, 0.2) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
 .bg-mesh-gradient {
-  background-color: #050505;
+  background-color: #1A1712;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(197, 160, 33, 0.08) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(230, 213, 184, 0.05) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(197, 160, 33, 0.08) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(230, 213, 184, 0.05) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(245, 245, 220, 0.12) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(212, 175, 55, 0.15) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(245, 245, 220, 0.12) 0px, transparent 50%);
 }
 
 /* Custom Scrollbar */
@@ -102,14 +102,14 @@ body {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0A0A0A;
+  background: #1A1712;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1F1F1F;
+  background: #3D3528;
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #C5A021;
+  background: #D4AF37;
 }
 
 /* Animations */
@@ -129,7 +129,7 @@ body {
 }
 
 .shimmer {
-  background: linear-gradient(90deg, #121212 25%, #1F1F1F 50%, #121212 75%);
+  background: linear-gradient(90deg, #1A1712 25%, #3D3528 50%, #1A1712 75%);
   background-size: 200% 100%;
   animation: shimmer 2s infinite linear;
 }
@@ -140,7 +140,7 @@ body {
 }
 
 .text-gradient {
-  background: linear-gradient(to right, #C5A021, #E6D5B8);
+  background: linear-gradient(to right, #D4AF37, #F5F5DC, #D4AF37);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -152,9 +152,9 @@ body {
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #1F1F1F;
+  background: #3D3528;
   border-radius: 10px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #C5A021;
+  background: #D4AF37;
 }

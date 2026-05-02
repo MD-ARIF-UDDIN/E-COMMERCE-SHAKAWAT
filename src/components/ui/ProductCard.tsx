@@ -70,7 +70,7 @@ export default function ProductCard({ product }: { product: Product }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      className="group bg-black-800 rounded-[1.5rem] p-3 sm:p-4 border border-gold-900/10 hover:border-primary/30 hover:shadow-premium transition-all duration-700 relative"
+      className="group bg-gold-950 rounded-[2.5rem] p-3 sm:p-4 border border-gold-400/10 hover:border-primary/40 hover:shadow-premium transition-all duration-700 relative overflow-hidden"
     >
       {/* Thrown to Bucket Animation */}
       <AnimatePresence>
@@ -87,30 +87,30 @@ export default function ProductCard({ product }: { product: Product }) {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="fixed z-[9999] pointer-events-none -translate-x-1/2 -translate-y-1/2"
           >
-            <div className="w-20 h-20 rounded-2xl overflow-hidden shadow-2xl border-2 border-black ring-4 ring-primary/20">
+            <div className="w-20 h-20 rounded-2xl overflow-hidden shadow-2xl border-2 border-gold-950 ring-4 ring-primary/20">
               <img src={product.images[0]} alt="" className="w-full h-full object-cover" />
             </div>
           </motion.div>
         )}
       </AnimatePresence>
       {/* Glossy overlay on hover */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-primary/0 via-gold-100/0 to-primary/0 group-hover:from-primary/5 group-hover:to-primary/5 transition-all duration-700 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-tr from-primary/0 via-gold-100/0 to-primary/0 group-hover:from-primary/10 group-hover:to-primary/10 transition-all duration-700 pointer-events-none" />
 
       {/* Image Container */}
-      <div className="relative aspect-square rounded-[1.2rem] sm:rounded-[1.8rem] overflow-hidden bg-black-900 mb-3 sm:mb-4 shadow-sm border border-gold-900/10">
+      <div className="relative aspect-square rounded-[2rem] overflow-hidden bg-gold-900/5 mb-3 sm:mb-4 shadow-sm border border-gold-400/10 group-hover:border-primary/20 transition-all">
         <img 
           src={product.images[0] || 'https://via.placeholder.com/400'} 
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
         />
         
         {/* Badges */}
-        <div className="absolute top-2 left-2 flex flex-col gap-1.5 z-10">
+        <div className="absolute top-3 left-3 flex flex-col gap-2 z-10">
           {product.isDiscounted && (
             <motion.span 
               initial={{ x: -10, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              className="bg-rose-500 text-white text-[8px] font-black px-2 py-1 rounded-full uppercase tracking-widest shadow-lg shadow-rose-500/20"
+              className="bg-rose-500 text-white text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg shadow-rose-500/20"
             >
               -{discountPercentage}%
             </motion.span>
@@ -119,90 +119,91 @@ export default function ProductCard({ product }: { product: Product }) {
             <motion.span 
               initial={{ x: -10, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              className="bg-primary text-black text-[8px] font-black px-2 py-1 rounded-full uppercase tracking-widest flex items-center gap-1 shadow-lg shadow-primary/20"
+              className="bg-primary text-black text-[9px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest flex items-center gap-1 shadow-lg shadow-primary/20"
             >
-              <Sparkles size={8} className="text-black" />
+              <Sparkles size={10} className="text-black" />
               সেরা
             </motion.span>
           )}
         </div>
 
         {/* Quick Actions Overlay */}
-        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end justify-center pb-3 sm:pb-4">
-          <div className="flex gap-2 p-1.5 bg-black/60 backdrop-blur-2xl rounded-xl border border-gold-900/20 transform translate-y-10 group-hover:translate-y-0 transition-all duration-500 shadow-2xl">
+        <div className="absolute inset-0 bg-gold-950/40 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center">
+          <div className="flex gap-3 p-2 bg-gold-950/60 backdrop-blur-2xl rounded-2xl border border-gold-400/20 transform translate-y-10 group-hover:translate-y-0 transition-all duration-500 shadow-2xl">
             <button 
               onClick={handleAddToCart}
               title="Add to Cart"
-              className="flex items-center justify-center w-9 h-9 bg-primary text-black rounded-lg hover:bg-gold-600 transition-all"
+              className="flex items-center justify-center w-11 h-11 bg-primary text-black rounded-xl hover:bg-gold-600 transition-all"
             >
-              <ShoppingBag size={14} />
+              <ShoppingBag size={18} />
             </button>
             <button 
               onClick={handleBuyNow}
               title="Buy Now"
-              className="flex items-center justify-center w-9 h-9 bg-gold-600 text-black rounded-lg hover:bg-primary transition-all"
+              className="flex items-center justify-center w-11 h-11 bg-gold-600 text-black rounded-xl hover:bg-primary transition-all"
             >
-              <Zap size={14} fill="currentColor" />
+              <Zap size={18} fill="currentColor" />
             </button>
             <Link 
               href={`/products/${product.slug}`} 
               title="View Product"
-              className="w-9 h-9 bg-black-800 rounded-lg flex items-center justify-center text-gold-200 hover:bg-primary hover:text-black transition-all"
+              className="w-11 h-11 bg-gold-900/20 rounded-xl flex items-center justify-center text-gold-100 hover:bg-primary hover:text-black transition-all border border-gold-400/20"
             >
-              <Eye size={16} />
+              <Eye size={18} />
             </Link>
           </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="px-1 space-y-2 sm:space-y-3">
+      <div className="px-1 space-y-2 sm:space-y-4">
         <div className="flex items-center justify-between">
-          <span className="text-[8px] sm:text-[9px] font-black text-gold-900/60 uppercase tracking-widest truncate max-w-[70%]">
+          <span className="text-[9px] sm:text-[10px] font-black text-gold-200/60 uppercase tracking-widest truncate max-w-[70%] bg-gold-900/10 px-2 py-1 rounded-md">
             {product.category?.name || 'Premium Series'}
           </span>
-          <div className="flex items-center gap-0.5 shrink-0">
+          <div className="flex items-center gap-1 shrink-0 bg-gold-900/10 px-2 py-1 rounded-md border border-gold-400/10">
             <Star size={11} className="fill-primary text-primary" />
-            <span className="text-[10px] sm:text-[11px] font-black text-gold-200">4.9</span>
+            <span className="text-[10px] sm:text-[11px] font-black text-primary">4.9</span>
           </div>
         </div>
         
         <Link href={`/products/${product.slug}`}>
-          <h3 className="text-[12px] sm:text-base font-black text-gold-100 leading-tight tracking-tight group-hover:text-primary transition-colors line-clamp-2 min-h-[2.5em]">
+          <h3 className="text-[13px] sm:text-base font-black text-gold-100 leading-tight tracking-tight group-hover:text-primary transition-colors line-clamp-2 min-h-[2.5em]">
             {product.name}
           </h3>
         </Link>
         
-        <div className="flex items-center justify-between pt-1">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2">
           <div className="flex flex-col">
-            <span className="text-sm sm:text-xl font-black text-primary tracking-tighter">
+            <span className="text-base sm:text-2xl font-black text-primary tracking-tighter">
               ৳{product.isDiscounted ? product.discountPrice?.toLocaleString() : product.price.toLocaleString()}
             </span>
             {product.isDiscounted && (
-              <span className="text-[9px] sm:text-[11px] font-bold text-gold-900/40 line-through tracking-widest leading-none">
+              <span className="text-[10px] sm:text-[12px] font-bold text-gold-200/20 line-through tracking-widest leading-none">
                 ৳{product.price.toLocaleString()}
               </span>
             )}
           </div>
           
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 w-full sm:w-auto">
             <button 
               onClick={handleAddToCart}
-              className="w-8 h-8 sm:w-10 sm:h-10 bg-black-900 border border-gold-900/10 rounded-lg flex items-center justify-center text-gold-900/60 hover:bg-primary hover:text-black hover:border-primary transition-all shadow-sm"
+              className="w-10 h-10 bg-gold-900/10 border border-gold-400/10 rounded-xl flex items-center justify-center text-gold-200/60 hover:bg-primary hover:text-black hover:border-primary transition-all shadow-sm shrink-0"
               title="কার্টে যোগ করুন"
             >
-              <ShoppingBag size={14} />
+              <ShoppingBag size={16} />
             </button>
             <button 
               onClick={handleBuyNow}
-              className="bg-primary text-black px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-[10px] sm:text-[12px] font-black uppercase tracking-widest hover:bg-gold-600 transition-all shadow-lg shadow-primary/10 flex items-center gap-2"
+              className="flex-1 bg-primary text-black px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest hover:bg-gold-600 transition-all shadow-xl shadow-primary/10 flex items-center justify-center gap-2 whitespace-nowrap"
             >
-              <Zap size={12} fill="currentColor" />
-              এখন কিনুন
+              <Zap size={14} fill="currentColor" />
+              কিনুন
             </button>
           </div>
         </div>
       </div>
     </motion.div>
+
   );
 }
