@@ -1,40 +1,40 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-primary: #D4AF37; /* Metallic Gold */
-  --color-primary-hover: #FACC15;
-  --color-secondary: #F5F5DC; /* Champagne */
-  --color-accent: #FFD700; /* Pure Gold */
-  --color-success: #10B981;
-  --color-warning: #F59E0B;
-  --color-danger: #EF4444;
-  --color-info: #E6D5B8;
+  --color-primary: #B8860B; /* Darker Metallic Gold for better contrast on white */
+  --color-primary-hover: #D4AF37;
+  --color-secondary: #1A1712; /* Dark Bronze-Black for text */
+  --color-accent: #DAA520; /* Goldenrod */
+  --color-success: #059669;
+  --color-warning: #D97706;
+  --color-danger: #DC2626;
+  --color-info: #3D3528;
   
-  /* Gold Scale Overrides - Brightened for visibility */
+  /* Gold Scale Overrides - Darkened for white background */
   --color-gold-50: #FFFDF0;
   --color-gold-100: #FEF9C3;
-  --color-gold-200: #FEF08A;
-  --color-gold-300: #FDE047;
-  --color-gold-400: #FACC15;
-  --color-gold-500: #EAB308;
-  --color-gold-600: #CA8A04;
-  --color-gold-700: #A16207;
-  --color-gold-800: #854D0E;
-  --color-gold-900: #F5F5DC; /* Champagne */
-  --color-gold-950: #1A1712; /* Rich Bronze Black */
+  --color-gold-200: #FDE047;
+  --color-gold-300: #EAB308;
+  --color-gold-400: #CA8A04;
+  --color-gold-500: #A16207;
+  --color-gold-600: #854D0E;
+  --color-gold-700: #713F12;
+  --color-gold-800: #422006;
+  --color-gold-900: #1A1712;
+  --color-gold-950: #ffffff; /* White background */
 
   /* Black Scale Overrides */
-  --color-black-950: #050505;
-  --color-black-900: #0A0A0A;
-  --color-black-800: #121212;
-  --color-black-700: #1F1F1F;
-  --color-black-50: #F8F8F8;
+  --color-black-950: #ffffff;
+  --color-black-900: #f8f8f8;
+  --color-black-800: #f1f1f1;
+  --color-black-700: #e5e5e5;
+  --color-black-50: #050505;
   
-  /* Multi-layered shadows for premium feel */
-  --shadow-soft: 0 1px 3px rgba(0,0,0,0.1), 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-  --shadow-premium: 0 20px 80px -15px rgba(212, 175, 55, 0.3), 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-  --shadow-premium-subtle: 0 10px 40px -10px rgba(212, 175, 55, 0.2);
-  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  /* Multi-layered shadows for light theme */
+  --shadow-soft: 0 1px 3px rgba(0,0,0,0.05), 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-premium: 0 20px 80px -15px rgba(184, 134, 11, 0.15), 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+  --shadow-premium-subtle: 0 10px 40px -10px rgba(184, 134, 11, 0.1);
+  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
   
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
@@ -43,11 +43,15 @@
 }
 
 :root {
-  --background: #1A1712; /* Rich Bronze instead of Black */
-  --foreground: #F5F5DC; /* Champagne for better readability */
-  --muted: #A6861A;
-  --border: #3D3528; /* Bronze Border */
-  --selection: #D4AF37;
+  --background: #ffffff;
+  --foreground: #1A1712;
+  --muted: #713F12;
+  --border: #e5e5e5;
+  --selection: #B8860B;
+}
+
+.font-jakarta {
+  font-family: var(--font-jakarta), sans-serif;
 }
 
 body {
@@ -56,6 +60,7 @@ body {
   scroll-behavior: smooth;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  font-family: var(--font-jakarta), var(--font-hind), sans-serif;
 }
 
 /* Utilities */
@@ -67,34 +72,34 @@ body {
   scrollbar-width: none;
 }
 
-/* Premium Glassmorphism */
+/* Premium Glassmorphism for Light Theme */
 .glass {
-  background: rgba(45, 39, 30, 0.7);
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(212, 175, 55, 0.25);
+  border: 1px solid rgba(184, 134, 11, 0.2);
 }
 
 .glass-dark {
-  background: rgba(26, 23, 18, 0.85);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  border: 1px solid rgba(184, 134, 11, 0.2);
 }
 
 /* Texture & Patterns */
 .bg-dot-pattern {
-  background-image: radial-gradient(rgba(212, 175, 55, 0.2) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(184, 134, 11, 0.1) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
 .bg-mesh-gradient {
-  background-color: #1A1712;
+  background-color: #ffffff;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.15) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(245, 245, 220, 0.12) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(212, 175, 55, 0.15) 0px, transparent 50%),
-    radial-gradient(at 0% 100%, rgba(245, 245, 220, 0.12) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(184, 134, 11, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(113, 63, 18, 0.03) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(184, 134, 11, 0.05) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(113, 63, 18, 0.03) 0px, transparent 50%);
 }
 
 /* Custom Scrollbar */
@@ -102,14 +107,14 @@ body {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #1A1712;
+  background: #f8f8f8;
 }
 ::-webkit-scrollbar-thumb {
-  background: #3D3528;
+  background: #e5e5e5;
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #D4AF37;
+  background: #B8860B;
 }
 
 /* Animations */
@@ -129,7 +134,7 @@ body {
 }
 
 .shimmer {
-  background: linear-gradient(90deg, #1A1712 25%, #3D3528 50%, #1A1712 75%);
+  background: linear-gradient(90deg, #ffffff 25%, #f1f1f1 50%, #ffffff 75%);
   background-size: 200% 100%;
   animation: shimmer 2s infinite linear;
 }
@@ -140,7 +145,7 @@ body {
 }
 
 .text-gradient {
-  background: linear-gradient(to right, #D4AF37, #F5F5DC, #D4AF37);
+  background: linear-gradient(to right, #B8860B, #854D0E, #B8860B);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -152,9 +157,9 @@ body {
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #3D3528;
+  background: #e5e5e5;
   border-radius: 10px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #D4AF37;
+  background: #B8860B;
 }

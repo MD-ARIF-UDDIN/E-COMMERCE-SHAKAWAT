@@ -18,7 +18,6 @@ import {
   Headphones
 } from 'lucide-react';
 import { useSettingsStore } from '@/store/settingsStore';
-import DynamicLogo from '@/components/ui/DynamicLogo';
 import BrandLogo from '@/components/ui/BrandLogo';
 
 interface Category {
@@ -51,20 +50,20 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="mt-20 border-t border-gold-400/20 bg-gold-950 relative overflow-hidden">
-      <div className="absolute inset-0 bg-mesh-gradient opacity-60 pointer-events-none" />
+    <footer className="mt-20 border-t border-gold-400/20 bg-white relative overflow-hidden">
+      <div className="absolute inset-0 bg-mesh-gradient opacity-40 pointer-events-none" />
 
-      <div className="border-b border-gold-400/10 relative z-10">
+      <div className="border-b border-gold-100 relative z-10">
         <div className="container mx-auto px-6 py-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((f, i) => (
               <div key={i} className="flex items-center gap-5 group">
-                <div className="w-14 h-14 bg-gold-900/10 rounded-[1.25rem] flex items-center justify-center text-gold-200/40 group-hover:bg-primary/10 group-hover:text-primary group-hover:scale-110 transition-all duration-500 shadow-sm border border-gold-400/10">
+                <div className="w-14 h-14 bg-gold-50 rounded-[1.25rem] flex items-center justify-center text-primary group-hover:bg-primary/10 group-hover:scale-110 transition-all duration-500 shadow-sm border border-gold-100">
                   <f.icon size={22} />
                 </div>
                 <div>
-                  <h4 className="font-black text-gold-100 text-[10px] uppercase tracking-widest mb-1">{f.title}</h4>
-                  <p className="text-[11px] text-gold-200/60 font-bold leading-tight">{f.desc}</p>
+                  <h4 className="font-black text-gold-900 text-[10px] uppercase tracking-widest mb-1">{f.title}</h4>
+                  <p className="text-[11px] text-gold-600 font-bold leading-tight">{f.desc}</p>
                 </div>
               </div>
             ))}
@@ -78,13 +77,13 @@ export default function Footer() {
             <Link href="/" className="flex items-center group">
               <BrandLogo size="lg" className="group-hover:scale-105 transition-transform duration-500" />
             </Link>
-            <p className="text-gold-200/60 font-medium leading-relaxed max-w-sm text-sm">
+            <p className="text-gold-900/60 font-medium leading-relaxed max-w-sm text-sm">
               আমরা আপনার দৈনন্দিন জীবনযাত্রাকে আরও উন্নত করতে বিশ্বের সবচেয়ে উদ্ভাবনী পণ্যগুলি সংগ্রহ করি। 
               প্রতিটি প্যাকেজে থাকে গুণমান এবং নান্দনিকতার ছোঁয়া।
             </p>
             <div className="flex items-center gap-3">
               {[Globe, Camera, MessageCircle, Mail, Phone].map((Icon, i) => (
-                <button key={i} className="w-11 h-11 border border-gold-400/10 rounded-2xl flex items-center justify-center text-gold-200/40 hover:border-primary/40 hover:text-primary transition-all shadow-sm bg-gold-900/10 group/icon">
+                <button key={i} className="w-11 h-11 border border-gold-200 rounded-2xl flex items-center justify-center text-gold-600 hover:border-primary/40 hover:text-primary transition-all shadow-sm bg-gold-50 group/icon">
                   <Icon size={18} className="group-hover/icon:scale-110 transition-transform" />
                 </button>
               ))}
@@ -101,8 +100,8 @@ export default function Footer() {
                 { name: 'গিফট কার্ড', href: '/products' }
               ].map((link) => (
                 <li key={link.name}>
-                  <Link href={link.href} className="text-sm font-bold text-gold-200 hover:text-primary transition-all flex items-center gap-2 group">
-                    <span className="w-1.5 h-1.5 rounded-full bg-gold-400/20 group-hover:bg-primary transition-colors" />
+                  <Link href={link.href} className="text-sm font-bold text-gold-900 hover:text-primary transition-all flex items-center gap-2 group">
+                    <span className="w-1.5 h-1.5 rounded-full bg-gold-200 group-hover:bg-primary transition-colors" />
                     {link.name}
                   </Link>
                 </li>
@@ -116,8 +115,8 @@ export default function Footer() {
               {categories.length > 0 ? (
                 categories.map((cat) => (
                   <li key={cat._id}>
-                    <Link href={`/products?category=${cat.slug}`} className="text-sm font-bold text-gold-200 hover:text-primary transition-all flex items-center gap-2 group">
-                      <span className="w-1.5 h-1.5 rounded-full bg-gold-400/20 group-hover:bg-primary transition-colors" />
+                    <Link href={`/products?category=${cat.slug}`} className="text-sm font-bold text-gold-900 hover:text-primary transition-all flex items-center gap-2 group">
+                      <span className="w-1.5 h-1.5 rounded-full bg-gold-200 group-hover:bg-primary transition-colors" />
                       {cat.name}
                     </Link>
                   </li>
@@ -125,8 +124,8 @@ export default function Footer() {
               ) : (
                 ['Smartphones', 'Laptops', 'Audio', 'Wearables'].map((c) => (
                   <li key={c}>
-                    <Link href="/products" className="text-sm font-bold text-gold-200 hover:text-primary transition-all flex items-center gap-2 group">
-                      <span className="w-1.5 h-1.5 rounded-full bg-gold-400/20 group-hover:bg-primary transition-colors" />
+                    <Link href="/products" className="text-sm font-bold text-gold-900 hover:text-primary transition-all flex items-center gap-2 group">
+                      <span className="w-1.5 h-1.5 rounded-full bg-gold-200 group-hover:bg-primary transition-colors" />
                       {c}
                     </Link>
                   </li>
@@ -136,16 +135,16 @@ export default function Footer() {
           </div>
 
           <div className="lg:col-span-3 space-y-8">
-            <h4 className="text-[10px] font-black text-gold-200/60 uppercase tracking-[0.2em]">নিউজলেটার</h4>
+            <h4 className="text-[10px] font-black text-gold-600 uppercase tracking-[0.2em]">নিউজলেটার</h4>
             <div className="space-y-6">
-              <p className="text-sm text-gold-200/60 font-medium leading-relaxed">এক্সক্লুসিভ অফার এবং নতুন পণ্যের আপডেট পেতে আমাদের সাথে যোগ দিন।</p>
+              <p className="text-sm text-gold-900/60 font-medium leading-relaxed">এক্সক্লুসিভ অফার এবং নতুন পণ্যের আপডেট পেতে আমাদের সাথে যোগ দিন।</p>
               <div className="relative group">
                 <input 
                   type="email" 
                   placeholder="আপনার ইমেইল"
-                  className="w-full bg-gold-900/10 border border-gold-400/20 rounded-2xl px-6 py-4 text-xs font-bold focus:outline-none focus:ring-4 focus:ring-primary/5 focus:bg-gold-900/20 focus:border-primary/20 transition-all placeholder:text-gold-200/20 text-gold-100"
+                  className="w-full bg-gold-50 border border-gold-200 rounded-2xl px-6 py-4 text-xs font-bold focus:outline-none focus:ring-4 focus:ring-primary/5 focus:bg-white focus:border-primary/20 transition-all placeholder:text-gold-300 text-black"
                 />
-                <button className="absolute right-2 top-2 bottom-2 bg-primary text-black rounded-[1rem] px-5 flex items-center justify-center hover:bg-gold-600 transition-all shadow-lg shadow-primary/20">
+                <button className="absolute right-2 top-2 bottom-2 bg-primary text-white rounded-[1rem] px-5 flex items-center justify-center hover:bg-gold-600 transition-all shadow-lg shadow-primary/20">
                   <ArrowRight size={18} />
                 </button>
               </div>
@@ -153,22 +152,22 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-24 pt-10 border-t border-gold-400/10 flex flex-col md:flex-row justify-between items-center gap-8">
+        <div className="mt-24 pt-10 border-t border-gold-100 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex flex-col items-center md:items-start gap-2">
-            <p className="text-[10px] text-gold-200/40 font-black tracking-[0.2em] uppercase">
+            <p className="text-[10px] text-gold-400 font-black tracking-[0.2em] uppercase">
               © {new Date().getFullYear()} {businessName.toUpperCase()} গ্লোবাল। সর্বস্বত্ব সংরক্ষিত।
             </p>
-            <p className="text-[9px] text-gold-200/20 font-bold uppercase tracking-widest">মেড উইথ প্যাশন ফর এক্সিলেন্স</p>
+            <p className="text-[9px] text-gold-300 font-bold uppercase tracking-widest">মেড উইথ প্যাশন ফর এক্সিলেন্স</p>
           </div>
           
           <div className="flex items-center gap-10">
-            <Link href="/privacy" className="text-[10px] text-gold-200/40 font-black uppercase tracking-widest hover:text-primary transition-colors">প্রাইভেসি</Link>
-            <Link href="/terms" className="text-[10px] text-gold-200/40 font-black uppercase tracking-widest hover:text-primary transition-colors">শর্তাবলী</Link>
-            <div className="w-10 h-1 bg-gold-400/10 rounded-full" />
+            <Link href="/privacy" className="text-[10px] text-gold-400 font-black uppercase tracking-widest hover:text-primary transition-colors">প্রাইভেসি</Link>
+            <Link href="/terms" className="text-[10px] text-gold-400 font-black uppercase tracking-widest hover:text-primary transition-colors">শর্তাবলী</Link>
+            <div className="w-10 h-1 bg-gold-100 rounded-full" />
             <div className="flex items-center gap-3">
-              <div className="w-8 h-5 bg-gold-400/5 rounded-md border border-gold-400/10" />
-              <div className="w-8 h-5 bg-gold-400/5 rounded-md border border-gold-400/10" />
-              <div className="w-8 h-5 bg-gold-400/5 rounded-md border border-gold-400/10" />
+              <div className="w-8 h-5 bg-gold-50 rounded-md border border-gold-100" />
+              <div className="w-8 h-5 bg-gold-50 rounded-md border border-gold-100" />
+              <div className="w-8 h-5 bg-gold-50 rounded-md border border-gold-100" />
             </div>
           </div>
         </div>

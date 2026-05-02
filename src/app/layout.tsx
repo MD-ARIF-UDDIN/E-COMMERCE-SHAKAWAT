@@ -1,4 +1,4 @@
-import { Hind_Siliguri } from "next/font/google";
+import { Hind_Siliguri, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import MainWrapper from "@/components/layout/MainWrapper";
@@ -10,6 +10,13 @@ const hindSiliguri = Hind_Siliguri({
   weight: ['300', '400', '500', '600', '700'],
   subsets: ["bengali", "latin"],
   display: 'swap',
+  variable: '--font-hind',
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-jakarta',
 });
 
 export async function generateMetadata() {
@@ -37,7 +44,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="bn" className="h-full dark" style={{ colorScheme: 'dark' }} suppressHydrationWarning>
-      <body className={`${hindSiliguri.className} min-h-screen bg-mesh-gradient text-[#E6D5B8] antialiased selection:bg-[#C5A021] selection:text-black relative`}>
+      <body className={`${hindSiliguri.variable} ${jakarta.variable} font-sans min-h-screen bg-mesh-gradient text-[#E6D5B8] antialiased selection:bg-[#C5A021] selection:text-black relative`}>
         <div className="fixed inset-0 bg-dot-pattern opacity-[0.05] pointer-events-none z-0" />
         <Providers>
           <MainWrapper>

@@ -69,7 +69,7 @@ export default function HeroSlider({ banners }: HeroSliderProps) {
   }, [banners.length]);
 
   return (
-    <div className="relative w-full h-[300px] md:h-[450px] overflow-hidden rounded-[2rem] md:rounded-[3rem] shadow-2xl group bg-black">
+    <div className="relative w-full h-[300px] md:h-[450px] overflow-hidden rounded-[2rem] md:rounded-[3rem] shadow-2xl group bg-gold-50">
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
           key={page}
@@ -94,8 +94,8 @@ export default function HeroSlider({ banners }: HeroSliderProps) {
             />
           </div>
           
-          {/* Overlay Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/50 to-transparent flex flex-col justify-center px-6 md:px-20">
+          {/* Overlay Gradient - Updated for better light/dark compatibility */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent flex flex-col justify-center px-6 md:px-20">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -103,8 +103,8 @@ export default function HeroSlider({ banners }: HeroSliderProps) {
               className="max-w-2xl space-y-3 md:space-y-6"
             >
               {banners[current].subtitle && (
-                <div className="inline-flex items-center gap-2 bg-primary text-black px-3 md:px-5 py-1.5 rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-primary/20 w-fit">
-                   <Flame size={12} fill="currentColor" className="text-black" /> {banners[current].subtitle}
+                <div className="inline-flex items-center gap-2 bg-primary text-white px-3 md:px-5 py-1.5 rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-primary/20 w-fit">
+                   <Flame size={12} fill="currentColor" className="text-white" /> {banners[current].subtitle}
                 </div>
               )}
               
@@ -113,7 +113,7 @@ export default function HeroSlider({ banners }: HeroSliderProps) {
               </h1>
               
               {banners[current].description && (
-                <p className="text-white/70 font-medium text-[10px] md:text-lg leading-relaxed max-w-md line-clamp-2 md:line-clamp-none">
+                <p className="text-white font-medium text-[10px] md:text-lg leading-relaxed max-w-md line-clamp-2 md:line-clamp-none drop-shadow-lg">
                   {banners[current].description}
                 </p>
               )}
@@ -121,7 +121,7 @@ export default function HeroSlider({ banners }: HeroSliderProps) {
               <div className="flex flex-wrap gap-3 pt-2 md:pt-4">
                 <Link 
                   href={banners[current].link || '/products'} 
-                  className="bg-primary text-black px-6 md:px-10 py-3 md:py-4 rounded-xl md:rounded-2xl font-black text-[9px] md:text-xs hover:bg-gold-600 transition-all shadow-xl shadow-primary/20 active:scale-95 group/btn flex items-center gap-2"
+                  className="bg-primary text-white px-6 md:px-10 py-3 md:py-4 rounded-xl md:rounded-2xl font-black text-[9px] md:text-xs hover:bg-gold-600 transition-all shadow-xl shadow-primary/20 active:scale-95 group/btn flex items-center gap-2"
                 >
                   এখনই কিনুন <ArrowRight size={16} className="group-hover/btn:translate-x-2 transition-transform" />
                 </Link>
@@ -136,13 +136,13 @@ export default function HeroSlider({ banners }: HeroSliderProps) {
         <>
           <button 
             onClick={() => paginate(-1)}
-            className="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 bg-primary/5 hover:bg-primary/15 backdrop-blur-3xl border border-primary/20 rounded-full flex items-center justify-center text-primary hover:scale-110 transition-all z-20 opacity-0 group-hover:opacity-100 hidden md:flex"
+            className="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 bg-white/10 hover:bg-white/20 backdrop-blur-3xl border border-white/20 rounded-full flex items-center justify-center text-white hover:scale-110 transition-all z-20 opacity-0 group-hover:opacity-100 hidden md:flex"
           >
             <ChevronLeft size={36} strokeWidth={2.5} />
           </button>
           <button 
             onClick={() => paginate(1)}
-            className="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 bg-primary/5 hover:bg-primary/15 backdrop-blur-3xl border border-primary/20 rounded-full flex items-center justify-center text-primary hover:scale-110 transition-all z-20 opacity-0 group-hover:opacity-100 hidden md:flex"
+            className="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 md:w-20 md:h-20 bg-white/10 hover:bg-white/20 backdrop-blur-3xl border border-white/20 rounded-full flex items-center justify-center text-white hover:scale-110 transition-all z-20 opacity-0 group-hover:opacity-100 hidden md:flex"
           >
             <ChevronRight size={36} strokeWidth={2.5} />
           </button>

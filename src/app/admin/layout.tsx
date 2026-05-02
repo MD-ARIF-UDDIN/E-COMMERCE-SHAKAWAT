@@ -11,7 +11,6 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSettingsStore } from '@/store/settingsStore';
-import DynamicLogo from '@/components/ui/DynamicLogo';
 import BrandLogo from '@/components/ui/BrandLogo';
 
 const NAV_ITEMS = [

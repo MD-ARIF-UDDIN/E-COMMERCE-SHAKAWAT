@@ -41,57 +41,57 @@ export default function TrackOrderPage() {
   const statusCfg = order ? STATUS_CONFIG[order.status] : null;
 
   return (
-    <div className="bg-gold-950 min-h-screen pt-32 pb-32">
+    <div className="bg-white min-h-screen pt-32 pb-32">
       <div className="container mx-auto px-4 max-w-2xl relative">
         <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute top-48 -left-48 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="text-center mb-12 relative z-10">
-          <div className="inline-flex items-center justify-center w-24 h-24 bg-gold-900/10 rounded-[2.5rem] mb-6 shadow-premium border border-gold-400/20">
+          <div className="inline-flex items-center justify-center w-24 h-24 bg-gold-50 rounded-[2.5rem] mb-6 shadow-premium border border-gold-100">
             <Truck size={40} className="text-primary" />
           </div>
-          <h1 className="text-5xl font-black text-gold-100 mb-3 tracking-tighter">অর্ডার ট্র্যাক করুন</h1>
-          <p className="text-[11px] font-black text-gold-200/60 uppercase tracking-[0.3em]">আপনার ডেলিভারি স্ট্যাটাস চেক করুন</p>
+          <h1 className="text-5xl font-black text-gold-900 mb-3 tracking-tighter">অর্ডার ট্র্যাক করুন</h1>
+          <p className="text-[11px] font-black text-gold-400 uppercase tracking-[0.3em]">আপনার ডেলিভারি স্ট্যাটাস চেক করুন</p>
         </div>
 
         {/* Search Form */}
-        <div className="bg-gold-900/5 backdrop-blur-xl rounded-[3rem] shadow-premium-subtle border border-gold-400/10 p-10 sm:p-12 mb-10 relative z-10">
+        <div className="bg-white/40 backdrop-blur-xl rounded-[3rem] shadow-premium-subtle border border-gold-100 p-10 sm:p-12 mb-10 relative z-10">
           <form onSubmit={handleTrack} className="space-y-8">
             <div className="space-y-3">
-              <label className="text-[11px] font-black text-gold-200/60 uppercase tracking-[0.2em] ml-2">অর্ডার নম্বর</label>
+              <label className="text-[11px] font-black text-gold-400 uppercase tracking-[0.2em] ml-2">অর্ডার নম্বর</label>
               <div className="relative">
-                <Box size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-gold-200/30" />
+                <Box size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-gold-200" />
                 <input
                   type="text"
                   value={orderNumber}
                   onChange={e => setOrderNumber(e.target.value)}
                   placeholder="উদা: ORD-AB12CD34"
                   required
-                  className="w-full h-16 pl-14 pr-6 bg-gold-900/10 border border-gold-400/10 rounded-2xl text-base font-black text-gold-100 focus:border-primary/50 focus:bg-gold-900/20 focus:outline-none focus:ring-8 focus:ring-primary/5 transition-all placeholder:text-gold-200/20 shadow-inner"
+                  className="w-full h-16 pl-14 pr-6 bg-gold-50 border border-gold-100 rounded-2xl text-base font-black text-black focus:border-primary/50 focus:bg-white focus:outline-none focus:ring-8 focus:ring-primary/5 transition-all placeholder:text-gold-200 shadow-inner"
                 />
               </div>
             </div>
             <div className="space-y-3">
-              <label className="text-[11px] font-black text-gold-200/60 uppercase tracking-[0.2em] ml-2">ফোন নম্বর</label>
+              <label className="text-[11px] font-black text-gold-400 uppercase tracking-[0.2em] ml-2">ফোন নম্বর</label>
               <div className="relative">
-                <Smartphone size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-gold-200/30" />
+                <Smartphone size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-gold-200" />
                 <input
                   type="tel"
                   value={phone}
                   onChange={e => setPhone(e.target.value)}
                   placeholder="উদা: ০১৭XXXXXXXX"
                   required
-                  className="w-full h-16 pl-14 pr-6 bg-gold-900/10 border border-gold-400/10 rounded-2xl text-base font-black text-gold-100 focus:border-primary/50 focus:bg-gold-900/20 focus:outline-none focus:ring-8 focus:ring-primary/5 transition-all placeholder:text-gold-200/20 shadow-inner"
+                  className="w-full h-16 pl-14 pr-6 bg-gold-50 border border-gold-100 rounded-2xl text-base font-black text-black focus:border-primary/50 focus:bg-white focus:outline-none focus:ring-8 focus:ring-primary/5 transition-all placeholder:text-gold-200 shadow-inner"
                 />
               </div>
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-20 bg-primary hover:bg-gold-600 disabled:bg-gold-900/20 text-black font-black text-sm uppercase tracking-[0.3em] rounded-2xl transition-all shadow-2xl shadow-primary/20 flex items-center justify-center gap-4 group active:scale-95"
+              className="w-full h-20 bg-primary hover:bg-gold-600 disabled:bg-gold-50 text-white font-black text-sm uppercase tracking-[0.3em] rounded-2xl transition-all shadow-2xl shadow-primary/20 flex items-center justify-center gap-4 group active:scale-95"
             >
               {loading ? (
-                <div className="w-8 h-8 border-4 border-black/30 border-t-black rounded-full animate-spin" />
+                <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
                 <>
                   <Search size={22} className="group-hover:scale-110 transition-transform" strokeWidth={2.5} />
@@ -109,18 +109,18 @@ export default function TrackOrderPage() {
 
         {/* Result */}
         {order && statusCfg && (
-          <div className="bg-gold-900/5 backdrop-blur-xl rounded-[3rem] shadow-premium border border-gold-400/20 overflow-hidden relative z-10 animate-in fade-in slide-in-from-bottom-10 duration-700">
+          <div className="bg-white/40 backdrop-blur-xl rounded-[3rem] shadow-premium border border-gold-100 overflow-hidden relative z-10 animate-in fade-in slide-in-from-bottom-10 duration-700">
             {/* Status Header */}
-            <div className={`${statusCfg.bg} p-10 sm:p-14 border-b border-gold-400/10 relative overflow-hidden`}>
+            <div className={`${statusCfg.bg} p-10 sm:p-14 border-b border-gold-100 relative overflow-hidden`}>
               <div className="absolute top-0 right-0 w-48 h-48 opacity-10 pointer-events-none -mr-10 -mt-10">
                 <statusCfg.icon size={192} strokeWidth={1} />
               </div>
               <div className="flex items-center gap-8 relative z-10">
-                <div className="w-20 h-20 rounded-[2rem] bg-gold-950 flex items-center justify-center shadow-2xl border border-gold-400/20">
+                <div className="w-20 h-20 rounded-[2rem] bg-white flex items-center justify-center shadow-2xl border border-gold-100">
                   <statusCfg.icon size={40} className={statusCfg.color} strokeWidth={2.5} />
                 </div>
                 <div>
-                  <p className="text-[11px] font-black text-gold-200/40 uppercase tracking-[0.3em] mb-2">অর্ডার #{order.orderNumber}</p>
+                  <p className="text-[11px] font-black text-gold-400 uppercase tracking-[0.3em] mb-2">অর্ডার #{order.orderNumber}</p>
                   <p className={`text-4xl font-black tracking-tighter ${statusCfg.color}`}>{statusCfg.label}</p>
                 </div>
               </div>
@@ -128,11 +128,11 @@ export default function TrackOrderPage() {
 
             {/* Progress Steps */}
             {order.status !== 'Cancelled' && (
-              <div className="p-10 sm:p-14 border-b border-gold-400/10 bg-gold-900/5">
+              <div className="p-10 sm:p-14 border-b border-gold-100 bg-gold-50/30">
                 <div className="flex items-center justify-between relative px-2">
-                  <div className="absolute top-6 left-10 right-10 h-1.5 bg-gold-900/20 z-0 rounded-full overflow-hidden">
+                  <div className="absolute top-6 left-10 right-10 h-1.5 bg-gold-100 z-0 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-primary shadow-[0_0_20px_rgba(212,175,55,0.5)] transition-all duration-1000"
+                      className="h-full bg-primary shadow-[0_0_20px_rgba(184,134,11,0.5)] transition-all duration-1000"
                       style={{ width: `${(currentStep / (STEPS.length - 1)) * 100}%` }}
                     />
                   </div>
@@ -143,11 +143,11 @@ export default function TrackOrderPage() {
                       <div key={step} className="flex flex-col items-center gap-4 z-10">
                         <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xs font-black border-2 transition-all duration-500
                           ${done 
-                            ? 'bg-primary border-primary text-black shadow-2xl shadow-primary/40 scale-110' 
-                            : 'bg-gold-950 border-gold-400/20 text-gold-200/20 shadow-inner'}`}>
-                          {active ? <div className="w-2.5 h-2.5 bg-black rounded-full animate-ping" /> : i + 1}
+                            ? 'bg-primary border-primary text-white shadow-2xl shadow-primary/40 scale-110' 
+                            : 'bg-white border-gold-100 text-gold-200 shadow-inner'}`}>
+                          {active ? <div className="w-2.5 h-2.5 bg-white rounded-full animate-ping" /> : i + 1}
                         </div>
-                        <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${done ? 'text-primary' : 'text-gold-200/20'}`}>{STEP_LABELS[i]}</span>
+                        <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${done ? 'text-primary' : 'text-gold-200'}`}>{STEP_LABELS[i]}</span>
                       </div>
                     );
                   })}
@@ -159,30 +159,30 @@ export default function TrackOrderPage() {
             <div className="p-10 sm:p-14 space-y-12">
               <div className="grid grid-cols-2 gap-10">
                 <div className="space-y-2">
-                  <p className="text-[10px] font-black text-gold-200/40 uppercase tracking-[0.3em]">কাস্টমার</p>
-                  <p className="text-base font-black text-gold-100">{order.customerName || 'N/A'}</p>
+                  <p className="text-[10px] font-black text-gold-400 uppercase tracking-[0.3em]">কাস্টমার</p>
+                  <p className="text-base font-black text-gold-900">{order.customerName || 'N/A'}</p>
                 </div>
                 <div className="space-y-2 text-right">
-                  <p className="text-[10px] font-black text-gold-200/40 uppercase tracking-[0.3em]">ফোন নম্বর</p>
-                  <p className="text-base font-black text-gold-100">{order.customerPhone}</p>
+                  <p className="text-[10px] font-black text-gold-400 uppercase tracking-[0.3em]">ফোন নম্বর</p>
+                  <p className="text-base font-black text-gold-900">{order.customerPhone}</p>
                 </div>
                 <div className="col-span-2 space-y-2">
-                  <p className="text-[10px] font-black text-gold-200/40 uppercase tracking-[0.3em]">ঠিকানা</p>
-                  <p className="text-base font-black text-gold-100 leading-relaxed">{order.address}</p>
+                  <p className="text-[10px] font-black text-gold-400 uppercase tracking-[0.3em]">ঠিকানা</p>
+                  <p className="text-base font-black text-gold-900 leading-relaxed">{order.address}</p>
                 </div>
               </div>
 
               {/* Items */}
               <div className="space-y-6">
-                <h3 className="text-[11px] font-black text-gold-100 uppercase tracking-[0.4em] border-l-4 border-primary pl-4">অর্ডার আইটেম</h3>
+                <h3 className="text-[11px] font-black text-gold-900 uppercase tracking-[0.4em] border-l-4 border-primary pl-4">অর্ডার আইটেম</h3>
                 <div className="grid gap-4">
                   {order.items?.map((item: any, i: number) => (
-                    <div key={i} className="flex justify-between items-center bg-gold-900/10 border border-gold-400/10 rounded-[1.5rem] px-8 py-6 transition-all hover:bg-gold-900/20 hover:border-primary/30 group">
+                    <div key={i} className="flex justify-between items-center bg-gold-50 border border-gold-100 rounded-[1.5rem] px-8 py-6 transition-all hover:bg-white hover:border-primary/30 group shadow-sm">
                       <div className="flex items-center gap-5">
-                        <div className="w-12 h-12 bg-gold-950 rounded-xl flex items-center justify-center text-gold-200/30 group-hover:text-primary shadow-inner border border-gold-400/10 transition-colors">
+                        <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-gold-200 group-hover:text-primary shadow-inner border border-gold-100 transition-colors">
                           <Package size={22} strokeWidth={1.5} />
                         </div>
-                        <span className="text-sm font-black text-gold-100 uppercase tracking-wider">{item.product?.name || 'Product'} × {item.quantity}</span>
+                        <span className="text-sm font-black text-gold-900 uppercase tracking-wider">{item.product?.name || 'Product'} × {item.quantity}</span>
                       </div>
                       <span className="text-lg font-black text-primary tracking-tighter">৳{(item.price * item.quantity).toLocaleString()}</span>
                     </div>
@@ -190,21 +190,21 @@ export default function TrackOrderPage() {
                 </div>
               </div>
 
-              <div className="pt-10 border-t border-gold-400/10 space-y-5">
-                <div className="flex justify-between items-center text-[11px] font-black uppercase tracking-[0.3em] text-gold-200/40">
+              <div className="pt-10 border-t border-gold-100 space-y-5">
+                <div className="flex justify-between items-center text-[11px] font-black uppercase tracking-[0.3em] text-gold-400">
                   <span>সাবটোটাল</span>
-                  <span className="text-gold-100">৳{(order.totalAmount - (order.deliveryCharge || 0)).toLocaleString()}</span>
+                  <span className="text-gold-900">৳{(order.totalAmount - (order.deliveryCharge || 0)).toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between items-center text-[11px] font-black uppercase tracking-[0.3em] text-gold-200/40">
+                <div className="flex justify-between items-center text-[11px] font-black uppercase tracking-[0.3em] text-gold-400">
                   <span>ডেলিভারি চার্জ</span>
-                  <span className="text-gold-100">৳{(order.deliveryCharge || 0).toLocaleString()}</span>
+                  <span className="text-gold-900">৳{(order.deliveryCharge || 0).toLocaleString()}</span>
                 </div>
                 <div className="pt-8 flex justify-between items-end">
                   <div className="space-y-1">
-                    <p className="text-[11px] font-black text-gold-200/40 uppercase tracking-[0.3em]">সর্বমোট</p>
+                    <p className="text-[11px] font-black text-gold-400 uppercase tracking-[0.3em]">সর্বমোট</p>
                     <p className="text-5xl font-black text-primary tracking-tighter drop-shadow-2xl">৳{order.totalAmount?.toLocaleString()}</p>
                   </div>
-                  <div className="flex items-center gap-3 px-6 py-3 bg-primary/10 text-primary rounded-[1.25rem] border border-primary/20 shadow-xl shadow-primary/5">
+                  <div className="flex items-center gap-3 px-6 py-3 bg-primary/5 text-primary rounded-[1.25rem] border border-primary/10 shadow-xl shadow-primary/5">
                     <CheckCircle size={20} strokeWidth={2.5} />
                     <span className="text-[10px] font-black uppercase tracking-[0.2em]">ভেরিফাইড অর্ডার</span>
                   </div>
