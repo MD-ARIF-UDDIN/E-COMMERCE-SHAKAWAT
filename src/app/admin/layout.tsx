@@ -29,10 +29,10 @@ const NAV_ITEMS = [
 
 function AdminSkeleton() {
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center">
+    <div className="min-h-screen bg-white flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">
-        <div className="w-8 h-8 border-2 border-gold-900/10 border-t-primary rounded-full animate-spin" />
-        <p className="text-[10px] font-bold text-gold-900/40 uppercase tracking-widest">Loading</p>
+        <div className="w-8 h-8 border-2 border-gold-100 border-t-primary rounded-full animate-spin" />
+        <p className="text-[10px] font-bold text-gold-400 uppercase tracking-widest">Loading</p>
       </div>
     </div>
   );
@@ -68,7 +68,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const visibleNav = NAV_ITEMS.filter(item => item.roles.includes(user.role));
 
   return (
-    <div className="min-h-screen bg-black flex relative text-gold-100 selection:bg-primary selection:text-black">
+    <div className="min-h-screen bg-gold-50/50 flex relative text-gold-900 selection:bg-primary selection:text-white">
       {/* Mobile Sidebar Overlay */}
       <AnimatePresence>
         {isSidebarOpen && (
@@ -83,7 +83,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </AnimatePresence>
 
       {/* Sidebar */}
-      <aside className={`w-72 bg-black-950 border-r border-gold-900/10 flex flex-col fixed h-full z-50 transition-transform duration-300 lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`w-72 bg-white border-r border-gold-100 flex flex-col fixed h-full z-50 transition-transform duration-300 lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         
         {/* Logo */}
         <div className="h-24 px-8 flex items-center">
@@ -95,7 +95,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Nav */}
         <nav className="flex-1 px-4 space-y-0.5 overflow-y-auto pb-10">
           <div className="px-4 pb-3 pt-2">
-            <p className="text-[10px] font-black text-gold-900/40 uppercase tracking-widest">Main Menu</p>
+            <p className="text-[10px] font-black text-gold-400 uppercase tracking-widest">Main Menu</p>
           </div>
           {visibleNav.map(item => {
             const active = pathname.startsWith(item.href);
@@ -106,12 +106,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl text-[13px] font-bold transition-all group relative ${
                   active
                     ? 'text-primary bg-primary/10'
-                    : 'text-gold-900/40 hover:text-gold-100 hover:bg-black-800'
+                    : 'text-gold-400 hover:text-gold-900 hover:bg-gold-50'
                 }`}
               >
                 <item.icon
                   size={18}
-                  className={`transition-colors ${active ? 'text-primary' : 'text-gold-900/40 group-hover:text-gold-100'}`}
+                  className={`transition-colors ${active ? 'text-primary' : 'text-gold-400 group-hover:text-gold-900'}`}
                 />
                 <span className="flex-1 tracking-tight">{item.label}</span>
                 {active && (
@@ -126,18 +126,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         {/* User Card */}
-        <div className="p-4 border-t border-gold-900/10">
-          <div className="flex items-center gap-3 px-4 py-4 rounded-2xl bg-black-900/50">
-            <div className="w-9 h-9 bg-black-800 border border-gold-900/10 rounded-full flex items-center justify-center text-gold-100 font-bold text-sm shadow-sm">
+        <div className="p-4 border-t border-gold-100">
+          <div className="flex items-center gap-3 px-4 py-4 rounded-2xl bg-gold-50 border border-gold-100/50">
+            <div className="w-9 h-9 bg-white border border-gold-200 rounded-full flex items-center justify-center text-gold-900 font-bold text-sm shadow-sm">
               {user.name.charAt(0).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-gold-100 text-[13px] font-black truncate leading-none mb-1">{user.name}</p>
-              <p className="text-gold-900/40 text-[10px] font-bold uppercase tracking-tighter">{user.role}</p>
+              <p className="text-gold-900 text-[13px] font-black truncate leading-none mb-1">{user.name}</p>
+              <p className="text-gold-400 text-[10px] font-bold uppercase tracking-tighter">{user.role}</p>
             </div>
             <button
               onClick={() => { logout(); router.push('/admin/login'); }}
-              className="w-8 h-8 flex items-center justify-center text-gold-900/40 hover:text-rose-500 transition-colors"
+              className="w-8 h-8 flex items-center justify-center text-gold-400 hover:text-rose-500 transition-colors"
             >
               <LogOut size={16} />
             </button>
@@ -147,40 +147,40 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Main Content */}
       <div className="flex-1 lg:ml-72 flex flex-col min-h-screen w-full">
-        <header className="h-24 px-6 lg:px-12 flex items-center justify-between sticky top-0 z-30 bg-black/80 backdrop-blur-md border-b border-gold-900/10">
+        <header className="h-24 px-6 lg:px-12 flex items-center justify-between sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gold-100">
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setIsSidebarOpen(true)}
-              className="lg:hidden w-10 h-10 bg-black-800 rounded-xl flex items-center justify-center text-gold-900/40"
+              className="lg:hidden w-10 h-10 bg-gold-50 rounded-xl flex items-center justify-center text-gold-400 border border-gold-100"
             >
               <Menu size={20} />
             </button>
-            <h2 className="text-lg lg:text-xl font-black text-gold-100 tracking-tight">
+            <h2 className="text-lg lg:text-xl font-black text-gold-900 tracking-tight">
               {visibleNav.find(n => pathname.startsWith(n.href))?.label ?? 'Overview'}
             </h2>
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2 bg-black-800 px-4 py-2 rounded-xl border border-gold-900/10 focus-within:border-primary/40 transition-all">
-               <Search size={14} className="text-gold-900/40" />
+            <div className="hidden sm:flex items-center gap-2 bg-gold-50 px-4 py-2 rounded-xl border border-gold-100 focus-within:border-primary/40 transition-all">
+               <Search size={14} className="text-gold-400" />
                <input
                  type="text"
                  placeholder="Search anything..."
-                 className="bg-transparent border-none text-[13px] font-medium w-40 focus:outline-none placeholder:text-gold-900/20 text-gold-100"
+                 className="bg-transparent border-none text-[13px] font-medium w-40 focus:outline-none placeholder:text-gold-400/50 text-gold-900"
                />
             </div>
             <div className="flex items-center gap-2">
-              <button className="w-10 h-10 rounded-xl bg-black-800 border border-gold-900/10 flex items-center justify-center text-gold-900/40 hover:text-primary transition-all">
+              <button className="w-10 h-10 rounded-xl bg-gold-50 border border-gold-100 flex items-center justify-center text-gold-400 hover:text-primary transition-all">
                 <Bell size={18} />
               </button>
-              <button className="w-10 h-10 rounded-xl bg-black-800 border border-gold-900/10 flex items-center justify-center text-gold-900/40 hover:text-primary transition-all">
+              <button className="w-10 h-10 rounded-xl bg-gold-50 border border-gold-100 flex items-center justify-center text-gold-400 hover:text-primary transition-all">
                 <Moon size={18} />
               </button>
             </div>
           </div>
         </header>
 
-        <main className="p-6 lg:p-12 bg-black flex-1 max-w-[1600px] mx-auto w-full">
+        <main className="p-6 lg:p-12 bg-gold-50/50 flex-1 max-w-[1600px] mx-auto w-full">
           <AnimatePresence mode="wait">
             <motion.div
               key={pathname}

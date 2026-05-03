@@ -57,27 +57,27 @@ export default function AdminProductsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         <div>
-           <h1 className="text-2xl font-bold text-slate-950 tracking-tight">Products</h1>
-           <p className="text-slate-400 text-[13px] font-medium mt-1">
+           <h1 className="text-2xl font-bold text-gold-900 tracking-tight">Products</h1>
+           <p className="text-gold-400 text-[13px] font-medium mt-1">
              Manage your inventory and product listings.
            </p>
         </div>
         
         <div className="flex items-center gap-3">
            <div className="relative flex-1 sm:w-64">
-              <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-gold-400" />
               <input
                 type="text"
                 placeholder="Search products..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 h-12 bg-slate-50 border border-slate-100 rounded-xl text-[13px] font-medium focus:bg-white focus:border-slate-200 transition-all outline-none"
+                className="w-full pl-10 pr-4 h-12 bg-gold-50 border border-gold-100 rounded-xl text-[13px] font-medium focus:bg-white focus:border-gold-200 transition-all outline-none"
               />
            </div>
            
            <button 
              onClick={handleCreate}
-             className="h-12 flex items-center justify-center gap-2 bg-slate-950 text-white font-bold text-[13px] px-6 rounded-xl hover:bg-indigo-600 transition-all"
+             className="h-12 flex items-center justify-center gap-2 bg-gold-900 text-white font-bold text-[13px] px-6 rounded-xl hover:bg-primary transition-all"
            >
              <Plus size={16} /> New Product
            </button>
@@ -85,46 +85,46 @@ export default function AdminProductsPage() {
       </div>
 
       {/* Catalog Table */}
-      <div className="bg-white border border-slate-100 rounded-2xl overflow-hidden">
+      <div className="bg-white border border-gold-100 rounded-2xl overflow-hidden">
         {loading ? (
           <div className="p-20 text-center">
-             <div className="w-8 h-8 border-2 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto" />
+             <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
           </div>
         ) : products.length === 0 ? (
           <div className="p-20 text-center">
-            <PackageOpen size={40} className="text-slate-100 mx-auto mb-4" />
-            <p className="text-slate-950 font-bold text-lg mb-1">No products found</p>
-            <p className="text-slate-400 text-[13px] mb-6">Start by adding your first product.</p>
-            <button onClick={handleCreate} className="h-11 px-6 bg-slate-50 border border-slate-200 rounded-xl text-[13px] font-bold hover:bg-slate-950 hover:text-white transition-all">Add Product</button>
+            <PackageOpen size={40} className="text-gold-100 mx-auto mb-4" />
+            <p className="text-gold-900 font-bold text-lg mb-1">No products found</p>
+            <p className="text-gold-400 text-[13px] mb-6">Start by adding your first product.</p>
+            <button onClick={handleCreate} className="h-11 px-6 bg-gold-50 border border-gold-200 rounded-xl text-[13px] font-bold hover:bg-gold-900 hover:text-white transition-all">Add Product</button>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-slate-50/50 border-b border-slate-100">
-                  <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Product</th>
-                  <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest hidden md:table-cell">Category</th>
-                  <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Price</th>
-                  <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest hidden sm:table-cell">Stock</th>
-                  <th className="px-8 py-5 text-[11px] font-bold text-slate-400 uppercase tracking-widest text-right">Actions</th>
+                <tr className="bg-gold-50/50 border-b border-gold-100">
+                  <th className="px-8 py-5 text-[11px] font-bold text-gold-400 uppercase tracking-widest">Product</th>
+                  <th className="px-8 py-5 text-[11px] font-bold text-gold-400 uppercase tracking-widest hidden md:table-cell">Category</th>
+                  <th className="px-8 py-5 text-[11px] font-bold text-gold-400 uppercase tracking-widest">Price</th>
+                  <th className="px-8 py-5 text-[11px] font-bold text-gold-400 uppercase tracking-widest hidden sm:table-cell">Stock</th>
+                  <th className="px-8 py-5 text-[11px] font-bold text-gold-400 uppercase tracking-widest text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-gold-50">
                 {products.map((p) => (
-                  <tr key={p._id} className="group hover:bg-slate-50/30 transition-all">
+                  <tr key={p._id} className="group hover:bg-gold-50/30 transition-all">
                     <td className="px-8 py-4">
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-slate-50 rounded-lg overflow-hidden border border-slate-100 flex-shrink-0">
+                        <div className="w-10 h-10 bg-gold-50 rounded-lg overflow-hidden border border-gold-100 flex-shrink-0">
                           {p.images?.[0] ? (
                             <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover" />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-slate-200">
+                            <div className="w-full h-full flex items-center justify-center text-gold-200">
                                <PackageOpen size={14} />
                             </div>
                           )}
                         </div>
                         <div className="min-w-0">
-                          <p className="text-[13px] font-bold text-slate-950 truncate">{p.name}</p>
+                          <p className="text-[13px] font-bold text-gold-900 truncate">{p.name}</p>
                           <div className="flex gap-1.5 mt-0.5">
                             {p.isFeatured && <Zap size={10} className="text-amber-500" fill="currentColor" />}
                             {p.isDiscounted && <Tag size={10} className="text-rose-500" fill="currentColor" />}
@@ -133,9 +133,9 @@ export default function AdminProductsPage() {
                       </div>
                     </td>
                     <td className="px-8 py-4 hidden md:table-cell">
-                      <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">{p.category?.name || '---'}</span>
+                      <span className="text-[11px] font-bold text-gold-400 uppercase tracking-widest">{p.category?.name || '---'}</span>
                     </td>
-                    <td className="px-8 py-4 text-[13px] font-bold text-slate-950">৳{p.price?.toLocaleString()}</td>
+                    <td className="px-8 py-4 text-[13px] font-bold text-gold-900">৳{p.price?.toLocaleString()}</td>
                     <td className="px-8 py-4 hidden sm:table-cell">
                       <span className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest
                         ${p.stock === 0 ? 'text-rose-500' : p.stock <= 5 ? 'text-amber-500' : 'text-emerald-500'}`}>
@@ -145,11 +145,11 @@ export default function AdminProductsPage() {
                     <td className="px-8 py-4 text-right">
                       <div className="flex items-center justify-end gap-1">
                         <button onClick={() => handleEdit(p._id)} 
-                          className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-950 transition-colors">
+                          className="w-9 h-9 rounded-lg flex items-center justify-center text-gold-400 hover:text-gold-900 transition-colors">
                           <Pencil size={14} />
                         </button>
                         <button onClick={() => handleDelete(p._id, p.name)} 
-                          className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-600 transition-colors">
+                          className="w-9 h-9 rounded-lg flex items-center justify-center text-gold-400 hover:text-rose-600 transition-colors">
                           <Trash2 size={14} />
                         </button>
                       </div>

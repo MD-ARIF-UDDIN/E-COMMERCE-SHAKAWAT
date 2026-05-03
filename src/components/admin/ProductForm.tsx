@@ -156,8 +156,8 @@ export default function ProductForm({ id, onSuccess, onCancel }: ProductFormProp
 
   if (loading) return (
     <div className="py-20 text-center">
-      <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Loading Details...</p>
+      <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+      <p className="text-[10px] font-black text-gold-400 uppercase tracking-widest">Loading Details...</p>
     </div>
   );
 
@@ -166,26 +166,26 @@ export default function ProductForm({ id, onSuccess, onCancel }: ProductFormProp
       {/* Basic Info */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <label className="text-[10px] font-black text-slate-950 uppercase tracking-widest px-1">Product Name</label>
-          <input name="name" value={form.name} onChange={handleChange} required placeholder="Product Name" className="w-full h-14 px-5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-950 focus:bg-white focus:border-indigo-600 focus:outline-none transition-all" />
+          <label className="text-[10px] font-black text-gold-900 uppercase tracking-widest px-1">Product Name</label>
+          <input name="name" value={form.name} onChange={handleChange} required placeholder="Product Name" className="w-full h-14 px-5 bg-gold-50 border border-gold-100 rounded-2xl text-sm font-bold text-gold-900 focus:bg-white focus:border-primary focus:outline-none transition-all" />
         </div>
         <div className="space-y-2">
-          <label className="text-[10px] font-black text-slate-950 uppercase tracking-widest px-1">URL Slug</label>
-          <input name="slug" value={form.slug} onChange={handleChange} required placeholder="slug" className="w-full h-14 px-5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-400 focus:bg-white focus:border-indigo-600 focus:outline-none transition-all" />
+          <label className="text-[10px] font-black text-gold-900 uppercase tracking-widest px-1">URL Slug</label>
+          <input name="slug" value={form.slug} onChange={handleChange} required placeholder="slug" className="w-full h-14 px-5 bg-gold-50 border border-gold-100 rounded-2xl text-sm font-bold text-gold-400 focus:bg-white focus:border-primary focus:outline-none transition-all" />
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <label className="text-[10px] font-black text-slate-950 uppercase tracking-widest px-1">Category</label>
-          <select name="category" value={form.category} onChange={handleChange} required className="w-full h-14 px-5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-950 focus:bg-white focus:border-indigo-600 focus:outline-none transition-all">
+          <label className="text-[10px] font-black text-gold-900 uppercase tracking-widest px-1">Category</label>
+          <select name="category" value={form.category} onChange={handleChange} required className="w-full h-14 px-5 bg-gold-50 border border-gold-100 rounded-2xl text-sm font-bold text-gold-900 focus:bg-white focus:border-primary focus:outline-none transition-all">
             <option value="">Select Category</option>
             {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
           </select>
         </div>
         <div className="space-y-2">
-          <label className="text-[10px] font-black text-slate-950 uppercase tracking-widest px-1">Brand</label>
-          <select name="brand" value={form.brand} onChange={handleChange} className="w-full h-14 px-5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold text-slate-950 focus:bg-white focus:border-indigo-600 focus:outline-none transition-all">
+          <label className="text-[10px] font-black text-gold-900 uppercase tracking-widest px-1">Brand</label>
+          <select name="brand" value={form.brand} onChange={handleChange} className="w-full h-14 px-5 bg-gold-50 border border-gold-100 rounded-2xl text-sm font-bold text-gold-900 focus:bg-white focus:border-primary focus:outline-none transition-all">
             <option value="">Select Brand</option>
             {brands.map(b => <option key={b._id} value={b._id}>{b.name}</option>)}
           </select>
@@ -193,54 +193,54 @@ export default function ProductForm({ id, onSuccess, onCancel }: ProductFormProp
       </div>
 
       <div className="space-y-2">
-        <label className="text-[10px] font-black text-slate-950 uppercase tracking-widest px-1">Description</label>
-        <textarea name="description" value={form.description} onChange={handleChange} rows={4} className="w-full p-5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-medium text-slate-600 focus:bg-white focus:border-indigo-600 focus:outline-none transition-all resize-none" />
+        <label className="text-[10px] font-black text-gold-900 uppercase tracking-widest px-1">Description</label>
+        <textarea name="description" value={form.description} onChange={handleChange} rows={4} className="w-full p-5 bg-gold-50 border border-gold-100 rounded-2xl text-sm font-medium text-gold-600 focus:bg-white focus:border-primary focus:outline-none transition-all resize-none" />
       </div>
 
       {/* Pricing */}
-      <div className="bg-slate-50 rounded-[2rem] p-6 lg:p-8 space-y-6">
-        <h3 className="text-sm font-black text-slate-950 uppercase tracking-widest flex items-center gap-2">
-          <DollarSign size={16} className="text-indigo-600" /> Pricing & Inventory
+      <div className="bg-gold-50 rounded-[2rem] p-6 lg:p-8 space-y-6">
+        <h3 className="text-sm font-black text-gold-900 uppercase tracking-widest flex items-center gap-2">
+          <DollarSign size={16} className="text-primary" /> Pricing & Inventory
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Regular Price</label>
-            <input name="price" type="number" value={form.price} onChange={handleChange} required className="w-full h-14 px-5 bg-white border border-slate-200 rounded-2xl text-sm font-bold" />
+            <label className="text-[10px] font-black text-gold-400 uppercase tracking-widest px-1">Regular Price</label>
+            <input name="price" type="number" value={form.price} onChange={handleChange} required className="w-full h-14 px-5 bg-white border border-gold-200 rounded-2xl text-sm font-bold" />
           </div>
           <div className="space-y-2">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Discount Price</label>
-            <input name="discountPrice" type="number" value={form.discountPrice} onChange={handleChange} className="w-full h-14 px-5 bg-white border border-slate-200 rounded-2xl text-sm font-bold text-indigo-600" />
+            <label className="text-[10px] font-black text-gold-400 uppercase tracking-widest px-1">Discount Price</label>
+            <input name="discountPrice" type="number" value={form.discountPrice} onChange={handleChange} className="w-full h-14 px-5 bg-white border border-gold-200 rounded-2xl text-sm font-bold text-primary" />
           </div>
         </div>
 
         <div className="pt-4 space-y-4">
           <label className="flex items-center gap-4 cursor-pointer">
-            <input type="checkbox" name="hasColors" checked={form.hasColors} onChange={handleChange} className="w-5 h-5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-600" />
-            <span className="text-[10px] font-black text-slate-950 uppercase tracking-widest">Enable Color Variants</span>
+            <input type="checkbox" name="hasColors" checked={form.hasColors} onChange={handleChange} className="w-5 h-5 rounded border-gold-300 text-primary focus:ring-primary" />
+            <span className="text-[10px] font-black text-gold-900 uppercase tracking-widest">Enable Color Variants</span>
           </label>
 
           {!form.hasColors ? (
             <div className="max-w-xs space-y-2">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Stock Quantity</label>
-              <input name="stock" type="number" value={form.stock} onChange={handleChange} required className="w-full h-14 px-5 bg-white border border-slate-200 rounded-2xl text-sm font-bold" />
+              <label className="text-[10px] font-black text-gold-400 uppercase tracking-widest px-1">Stock Quantity</label>
+              <input name="stock" type="number" value={form.stock} onChange={handleChange} required className="w-full h-14 px-5 bg-white border border-gold-200 rounded-2xl text-sm font-bold" />
             </div>
           ) : (
             <div className="space-y-3">
               {colorVariants.map((color, idx) => (
-                <div key={idx} className="flex items-center gap-4 p-3 bg-white border border-slate-100 rounded-xl">
+                <div key={idx} className="flex items-center gap-4 p-3 bg-white border border-gold-100 rounded-xl">
                   <input type="text" value={color.name} onChange={e => {
                     const v = [...colorVariants]; v[idx].name = e.target.value; setColorVariants(v);
-                  }} placeholder="Color" className="flex-1 h-10 px-3 bg-slate-50 border-none rounded-lg text-xs font-bold" />
+                  }} placeholder="Color" className="flex-1 h-10 px-3 bg-gold-50 border-none rounded-lg text-xs font-bold" />
                   <input type="color" value={color.hexCode} onChange={e => {
                     const v = [...colorVariants]; v[idx].hexCode = e.target.value; setColorVariants(v);
                   }} className="w-8 h-8 rounded cursor-pointer" />
                   <input type="number" value={color.stock} onChange={e => {
                     const v = [...colorVariants]; v[idx].stock = e.target.value; setColorVariants(v);
-                  }} placeholder="Stock" className="w-20 h-10 px-3 bg-slate-50 border-none rounded-lg text-xs font-bold" />
+                  }} placeholder="Stock" className="w-20 h-10 px-3 bg-gold-50 border-none rounded-lg text-xs font-bold" />
                   <button type="button" onClick={() => setColorVariants(colorVariants.filter((_, i) => i !== idx))} className="text-rose-500 hover:text-rose-700"><X size={16} /></button>
                 </div>
               ))}
-              <button type="button" onClick={() => setColorVariants([...colorVariants, { name: '', hexCode: '#000000', stock: '0' }])} className="text-[10px] font-black text-indigo-600 uppercase tracking-widest flex items-center gap-2 hover:text-indigo-700 transition-colors">
+              <button type="button" onClick={() => setColorVariants([...colorVariants, { name: '', hexCode: '#000000', stock: '0' }])} className="text-[10px] font-black text-primary uppercase tracking-widest flex items-center gap-2 hover:text-primary transition-colors">
                 <Box size={14} /> Add Variant
               </button>
             </div>
@@ -250,24 +250,24 @@ export default function ProductForm({ id, onSuccess, onCancel }: ProductFormProp
 
       {/* Images */}
       <div className="space-y-4">
-        <label className="text-[10px] font-black text-slate-950 uppercase tracking-widest px-1">Product Images (Max 10)</label>
+        <label className="text-[10px] font-black text-gold-900 uppercase tracking-widest px-1">Product Images (Max 10)</label>
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
           <AnimatePresence>
             {existingImages.map((url, i) => (
-              <motion.div key={`ex-${i}`} initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="relative aspect-square rounded-xl overflow-hidden border border-slate-100 shadow-sm">
+              <motion.div key={`ex-${i}`} initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="relative aspect-square rounded-xl overflow-hidden border border-gold-100 shadow-sm">
                 <Image src={url} alt="Product" fill className="object-cover" />
                 <button type="button" onClick={() => removeExistingImage(i)} className="absolute top-1 right-1 w-6 h-6 bg-rose-500 text-white rounded-full flex items-center justify-center shadow-lg"><X size={12} /></button>
               </motion.div>
             ))}
             {previews.map((url, i) => (
-              <motion.div key={`pre-${i}`} initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="relative aspect-square rounded-xl overflow-hidden border-2 border-dashed border-indigo-200">
+              <motion.div key={`pre-${i}`} initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="relative aspect-square rounded-xl overflow-hidden border-2 border-dashed border-primary/40">
                 <Image src={url} alt="Preview" fill className="object-cover" />
                 <button type="button" onClick={() => removeSelectedFile(i)} className="absolute top-1 right-1 w-6 h-6 bg-rose-500 text-white rounded-full flex items-center justify-center shadow-lg"><X size={12} /></button>
               </motion.div>
             ))}
           </AnimatePresence>
           {(existingImages.length + selectedFiles.length) < 10 && (
-            <button type="button" onClick={() => fileInputRef.current?.click()} className="aspect-square rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center gap-1 hover:border-indigo-400 hover:bg-slate-50 transition-all text-slate-400">
+            <button type="button" onClick={() => fileInputRef.current?.click()} className="aspect-square rounded-xl border-2 border-dashed border-gold-200 flex flex-col items-center justify-center gap-1 hover:border-primary/80 hover:bg-gold-50 transition-all text-gold-400">
               <ImagePlus size={20} />
               <span className="text-[8px] font-black uppercase tracking-tighter">Add</span>
             </button>
@@ -277,29 +277,29 @@ export default function ProductForm({ id, onSuccess, onCancel }: ProductFormProp
       </div>
 
       {/* Promotions */}
-      <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100">
-        <label className="flex items-center gap-3 cursor-pointer p-4 bg-slate-50 rounded-2xl hover:bg-white border border-transparent hover:border-indigo-100 transition-all">
-          <input type="checkbox" name="isFeatured" checked={form.isFeatured} onChange={handleChange} className="w-4 h-4 rounded text-indigo-600" />
+      <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gold-100">
+        <label className="flex items-center gap-3 cursor-pointer p-4 bg-gold-50 rounded-2xl hover:bg-white border border-transparent hover:border-primary/20 transition-all">
+          <input type="checkbox" name="isFeatured" checked={form.isFeatured} onChange={handleChange} className="w-4 h-4 rounded text-primary" />
           <div className="flex-1">
-            <p className="text-[10px] font-black text-slate-950 uppercase tracking-widest">Featured</p>
-            <p className="text-[8px] font-bold text-slate-400 uppercase">Show on Home</p>
+            <p className="text-[10px] font-black text-gold-900 uppercase tracking-widest">Featured</p>
+            <p className="text-[8px] font-bold text-gold-400 uppercase">Show on Home</p>
           </div>
-          <Zap size={14} className={form.isFeatured ? 'text-indigo-600' : 'text-slate-200'} />
+          <Zap size={14} className={form.isFeatured ? 'text-primary' : 'text-gold-200'} />
         </label>
-        <label className="flex items-center gap-3 cursor-pointer p-4 bg-slate-50 rounded-2xl hover:bg-white border border-transparent hover:border-rose-100 transition-all">
+        <label className="flex items-center gap-3 cursor-pointer p-4 bg-gold-50 rounded-2xl hover:bg-white border border-transparent hover:border-rose-100 transition-all">
           <input type="checkbox" name="isDiscounted" checked={form.isDiscounted} onChange={handleChange} className="w-4 h-4 rounded text-rose-500" />
           <div className="flex-1">
-            <p className="text-[10px] font-black text-slate-950 uppercase tracking-widest">On Sale</p>
-            <p className="text-[8px] font-bold text-slate-400 uppercase">Apply Discount</p>
+            <p className="text-[10px] font-black text-gold-900 uppercase tracking-widest">On Sale</p>
+            <p className="text-[8px] font-bold text-gold-400 uppercase">Apply Discount</p>
           </div>
-          <TagIcon size={14} className={form.isDiscounted ? 'text-rose-500' : 'text-slate-200'} />
+          <TagIcon size={14} className={form.isDiscounted ? 'text-rose-500' : 'text-gold-200'} />
         </label>
       </div>
 
       {/* Footer */}
-      <div className="sticky bottom-0 pt-6 pb-2 bg-white border-t border-slate-50 flex items-center gap-4">
-        <button type="button" onClick={onCancel} className="flex-1 h-14 rounded-2xl border border-slate-100 text-slate-400 font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 hover:text-rose-600 transition-all">Cancel</button>
-        <button type="submit" disabled={saving} className="flex-[2] h-14 bg-slate-950 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-indigo-600 shadow-premium flex items-center justify-center gap-2">
+      <div className="sticky bottom-0 pt-6 pb-2 bg-white border-t border-gold-50 flex items-center gap-4">
+        <button type="button" onClick={onCancel} className="flex-1 h-14 rounded-2xl border border-gold-100 text-gold-400 font-black text-[10px] uppercase tracking-widest hover:bg-gold-50 hover:text-rose-600 transition-all">Cancel</button>
+        <button type="submit" disabled={saving} className="flex-[2] h-14 bg-gold-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-primary shadow-premium flex items-center justify-center gap-2">
           {saving ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <CheckCircle2 size={16} />}
           {isNew ? 'Create Product' : 'Save Changes'}
         </button>

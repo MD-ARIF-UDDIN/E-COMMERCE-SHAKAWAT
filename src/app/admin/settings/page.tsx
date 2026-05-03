@@ -54,7 +54,7 @@ export default function SettingsPage() {
     <div className="space-y-10 selection:bg-primary selection:text-black">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gold-100 tracking-tight">Settings</h1>
+          <h1 className="text-2xl font-bold text-gold-900 tracking-tight">Settings</h1>
           <p className="text-gold-200/40 text-[13px] font-medium mt-1">Configure your business profile and delivery parameters.</p>
         </div>
       </div>
@@ -71,7 +71,7 @@ export default function SettingsPage() {
               <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
                 <Building2 size={20} />
               </div>
-              <h3 className="text-lg font-bold text-gold-100 tracking-tight">Business Profile</h3>
+              <h3 className="text-lg font-bold text-gold-900 tracking-tight">Business Profile</h3>
             </div>
 
             <div className="space-y-6">
@@ -80,7 +80,7 @@ export default function SettingsPage() {
                 <input 
                   value={settings.businessName || ''}
                   onChange={e => setSettings(s => ({ ...s, businessName: e.target.value }))}
-                  className="w-full h-12 px-4 bg-gold-950/50 border border-gold-400/10 rounded-xl text-[13px] font-semibold text-gold-100 focus:bg-gold-950 focus:border-primary/40 outline-none transition-all placeholder:text-gold-200/20"
+                  className="w-full h-12 px-4 bg-gold-950/50 border border-gold-400/10 rounded-xl text-[13px] font-semibold text-gold-900 focus:bg-gold-950 focus:border-primary/40 outline-none transition-all placeholder:text-gold-200/20"
                 />
               </div>
               <div className="space-y-2">
@@ -90,7 +90,7 @@ export default function SettingsPage() {
                    <input 
                     value={settings.contactPhone || ''}
                     onChange={e => setSettings(s => ({ ...s, contactPhone: e.target.value }))}
-                    className="w-full h-12 pl-11 pr-4 bg-gold-950/50 border border-gold-400/10 rounded-xl text-[13px] font-semibold text-gold-100 focus:bg-gold-950 focus:border-primary/40 outline-none transition-all placeholder:text-gold-200/20"
+                    className="w-full h-12 pl-11 pr-4 bg-gold-950/50 border border-gold-400/10 rounded-xl text-[13px] font-semibold text-gold-900 focus:bg-gold-950 focus:border-primary/40 outline-none transition-all placeholder:text-gold-200/20"
                   />
                 </div>
               </div>
@@ -101,7 +101,7 @@ export default function SettingsPage() {
                    <input 
                     value={settings.contactEmail || ''}
                     onChange={e => setSettings(s => ({ ...s, contactEmail: e.target.value }))}
-                    className="w-full h-12 pl-11 pr-4 bg-gold-950/50 border border-gold-400/10 rounded-xl text-[13px] font-semibold text-gold-100 focus:bg-gold-950 focus:border-primary/40 outline-none transition-all placeholder:text-gold-200/20"
+                    className="w-full h-12 pl-11 pr-4 bg-gold-950/50 border border-gold-400/10 rounded-xl text-[13px] font-semibold text-gold-900 focus:bg-gold-950 focus:border-primary/40 outline-none transition-all placeholder:text-gold-200/20"
                   />
                 </div>
               </div>
@@ -119,7 +119,7 @@ export default function SettingsPage() {
               <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-500">
                 <Truck size={20} />
               </div>
-              <h3 className="text-lg font-bold text-gold-100 tracking-tight">Delivery Fees</h3>
+              <h3 className="text-lg font-bold text-gold-900 tracking-tight">Delivery Fees</h3>
             </div>
 
             <div className="space-y-6">
@@ -129,7 +129,7 @@ export default function SettingsPage() {
                   type="number"
                   value={settings.insideChittagong ?? ''}
                   onChange={e => setSettings(s => ({ ...s, insideChittagong: Number(e.target.value) }))}
-                  className="w-full h-12 px-4 bg-gold-950/50 border border-gold-400/10 rounded-xl text-[13px] font-semibold text-gold-100 focus:bg-gold-950 focus:border-primary/40 outline-none transition-all"
+                  className="w-full h-12 px-4 bg-gold-950/50 border border-gold-400/10 rounded-xl text-[13px] font-semibold text-gold-900 focus:bg-gold-950 focus:border-primary/40 outline-none transition-all"
                 />
               </div>
               <div className="space-y-2">
@@ -138,7 +138,7 @@ export default function SettingsPage() {
                   type="number"
                   value={settings.outsideChittagong ?? ''}
                   onChange={e => setSettings(s => ({ ...s, outsideChittagong: Number(e.target.value) }))}
-                  className="w-full h-12 px-4 bg-gold-950/50 border border-gold-400/10 rounded-xl text-[13px] font-semibold text-gold-100 focus:bg-gold-950 focus:border-primary/40 outline-none transition-all"
+                  className="w-full h-12 px-4 bg-gold-950/50 border border-gold-400/10 rounded-xl text-[13px] font-semibold text-gold-900 focus:bg-gold-950 focus:border-primary/40 outline-none transition-all"
                 />
               </div>
               

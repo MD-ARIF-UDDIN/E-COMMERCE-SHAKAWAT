@@ -5,7 +5,7 @@ import { Search, Package, CheckCircle, Truck, Clock, XCircle, Box, Smartphone } 
 
 const STATUS_CONFIG: Record<string, { icon: any; color: string; bg: string; label: string }> = {
   Pending:    { icon: Clock,        color: 'text-amber-500',  bg: 'bg-amber-500/10',   label: 'পেন্ডিং'    },
-  Processing: { icon: Package,      color: 'text-blue-500',   bg: 'bg-blue-500/10',    label: 'প্রসেসিং' },
+  Processing: { icon: Package,      color: 'text-primary',   bg: 'bg-primary/10',    label: 'প্রসেসিং' },
   Packed:     { icon: Box,          color: 'text-purple-500', bg: 'bg-purple-500/10',  label: 'প্যাক করা হয়েছে'     },
   Shipped:    { icon: Truck,        color: 'text-primary',    bg: 'bg-primary/10',     label: 'শিপ করা হয়েছে'    },
   Delivered:  { icon: CheckCircle,  color: 'text-emerald-500',bg: 'bg-emerald-500/10', label: 'ডেলিভারড'  },

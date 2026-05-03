@@ -62,7 +62,7 @@ export default function AdminLoginPage() {
                 onChange={e => setEmail(e.target.value)}
                 placeholder="admin@bronzemart.com"
                 required
-                className="w-full h-16 bg-gold-950/50 border border-gold-400/10 rounded-2xl px-6 text-sm font-bold text-gold-100 focus:outline-none focus:ring-8 focus:ring-primary/5 focus:bg-gold-950 focus:border-primary/40 transition-all placeholder:text-gold-200/20"
+                className="w-full h-16 bg-gold-950/50 border border-gold-400/10 rounded-2xl px-6 text-sm font-bold text-gold-900 focus:outline-none focus:ring-8 focus:ring-primary/5 focus:bg-gold-950 focus:border-primary/40 transition-all placeholder:text-gold-200/20"
               />
             </div>
 
@@ -75,7 +75,7 @@ export default function AdminLoginPage() {
                   onChange={e => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="w-full h-16 bg-gold-950/50 border border-gold-400/10 rounded-2xl px-6 text-sm font-bold text-gold-100 focus:outline-none focus:ring-8 focus:ring-primary/5 focus:bg-gold-950 focus:border-primary/40 transition-all placeholder:text-gold-200/20"
+                  className="w-full h-16 bg-gold-950/50 border border-gold-400/10 rounded-2xl px-6 text-sm font-bold text-gold-900 focus:outline-none focus:ring-8 focus:ring-primary/5 focus:bg-gold-950 focus:border-primary/40 transition-all placeholder:text-gold-200/20"
                 />
                 <button
                   type="button"

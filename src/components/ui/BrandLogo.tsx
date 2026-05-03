@@ -1,5 +1,5 @@
 'use client';
-import { ShoppingCart } from 'lucide-react';
+import Image from 'next/image';
 
 interface BrandLogoProps {
   className?: string;
@@ -8,22 +8,16 @@ interface BrandLogoProps {
 }
 
 export default function BrandLogo({ className = "", size = 'md', hideText = false }: BrandLogoProps) {
-  const iconSizes = {
-    sm: 18,
-    md: 28,
-    lg: 40
-  };
-
   const textSizes = {
-    sm: 'text-lg',
-    md: 'text-2xl',
-    lg: 'text-4xl'
+    sm: 'text-base',
+    md: 'text-xl md:text-2xl',
+    lg: 'text-3xl md:text-4xl'
   };
 
   const gapSizes = {
     sm: 'gap-1.5',
-    md: 'gap-2',
-    lg: 'gap-3'
+    md: 'gap-1.5 md:gap-2',
+    lg: 'gap-2 md:gap-3'
   };
 
   return (
@@ -32,13 +26,15 @@ export default function BrandLogo({ className = "", size = 'md', hideText = fals
       <div className="relative group">
         <div className={`
           flex items-center justify-center rounded-xl bg-gold-50 border border-gold-200 
-          shadow-premium-subtle group-hover:scale-110 transition-transform duration-500
-          ${size === 'sm' ? 'w-8 h-8' : size === 'md' ? 'w-12 h-12' : 'w-16 h-16'}
+          shadow-premium-subtle group-hover:scale-110 transition-transform duration-500 overflow-hidden
+          ${size === 'sm' ? 'w-8 h-8' : size === 'md' ? 'w-10 h-10 md:w-12 md:h-12' : 'w-14 h-14 md:w-16 md:h-16'}
         `}>
-          <ShoppingCart 
-            size={iconSizes[size]} 
-            className="text-primary" 
-            strokeWidth={2.5}
+          <Image 
+            src="/icon.png" 
+            alt="Bronze Mart Icon" 
+            width={200} 
+            height={200} 
+            className="w-full h-full object-contain scale-[1.7]"
           />
         </div>
         {/* Animated accent dot */}
@@ -52,12 +48,12 @@ export default function BrandLogo({ className = "", size = 'md', hideText = fals
               BRONZE
             </span>
             <span className="text-black uppercase">
-              MARKET
+              MART
             </span>
           </div>
           <p className={`
             text-gold-600/40 font-bold uppercase tracking-[0.3em] mt-0.5
-            ${size === 'sm' ? 'text-[6px]' : size === 'md' ? 'text-[8px]' : 'text-[10px]'}
+            ${size === 'sm' ? 'text-[6px]' : size === 'md' ? 'text-[6px] md:text-[8px]' : 'text-[8px] md:text-[10px]'}
           `}>
             Quality • Trust • Value
           </p>
