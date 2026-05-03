@@ -53,7 +53,7 @@ export default function FloatingCart() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[1000]"
+              className="fixed inset-0 bg-gold-900/20 backdrop-blur-sm z-[1000]"
             />
             <motion.div
               initial={{ x: '100%' }}

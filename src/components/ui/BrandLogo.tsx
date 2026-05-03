@@ -8,54 +8,79 @@ interface BrandLogoProps {
 }
 
 export default function BrandLogo({ className = "", size = 'md', hideText = false }: BrandLogoProps) {
-  const textSizes = {
-    sm: 'text-base',
-    md: 'text-xl md:text-2xl',
-    lg: 'text-3xl md:text-4xl'
+  const iconBox = {
+    sm: 'w-6 h-6',
+    md: 'w-7 h-7 md:w-10 md:h-10',
+    lg: 'w-12 h-12 md:w-14 md:h-14',
+  };
+
+  const bronzeSize = {
+    sm: 'text-[17px]',
+    md: 'text-[18px] md:text-[22px]',
+    lg: 'text-[28px] md:text-[36px]',
+  };
+
+  const martSize = {
+    sm: 'text-[13px]',
+    md: 'text-[14px] md:text-[17px]',
+    lg: 'text-[21px] md:text-[27px]',
+  };
+
+  const taglineSize = {
+    sm: 'text-[4px]',
+    md: 'text-[4px] md:text-[5.5px]',
+    lg: 'text-[6px] md:text-[7.5px]',
   };
 
   const gapSizes = {
     sm: 'gap-1.5',
     md: 'gap-1.5 md:gap-2',
-    lg: 'gap-2 md:gap-3'
+    lg: 'gap-2 md:gap-3',
   };
 
   return (
-    <div className={`flex items-center ${gapSizes[size]} ${className} font-jakarta`}>
-      {/* Icon - E-commerce Cart Style */}
-      <div className="relative group">
+    <div className={`flex items-center ${gapSizes[size]} ${className}`}>
+      {/* Icon */}
+      <div className="relative group flex-shrink-0">
         <div className={`
-          flex items-center justify-center rounded-xl bg-gold-50 border border-gold-200 
+          flex items-center justify-center rounded-xl bg-gold-50 border border-gold-200
           shadow-premium-subtle group-hover:scale-110 transition-transform duration-500 overflow-hidden
-          ${size === 'sm' ? 'w-8 h-8' : size === 'md' ? 'w-10 h-10 md:w-12 md:h-12' : 'w-14 h-14 md:w-16 md:h-16'}
+          ${iconBox[size]}
         `}>
-          <Image 
-            src="/icon.png" 
-            alt="Bronze Mart Icon" 
-            width={200} 
-            height={200} 
+          <Image
+            src="/icon.png"
+            alt="Bronze Mart Icon"
+            width={200}
+            height={200}
             className="w-full h-full object-contain scale-[1.7]"
           />
         </div>
-        {/* Animated accent dot */}
-        <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-primary rounded-full border-2 border-white animate-pulse" />
+        <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-primary rounded-full border-2 border-white animate-pulse" />
       </div>
 
       {!hideText && (
         <div className="flex flex-col leading-none">
-          <div className={`font-[900] tracking-tight flex items-baseline gap-1.5 ${textSizes[size]}`}>
-            <span className="text-primary uppercase">
-              BRONZE
+          {/* Playfair Display — high-contrast serif, Vogue/Bazaar aesthetic */}
+          <div className="flex items-baseline gap-[2px]" style={{ fontFamily: 'var(--font-playfair), serif' }}>
+            {/* BRONZE — bold italic in gold, dominant element */}
+            <span
+              className={`text-primary font-black italic leading-none tracking-tight ${bronzeSize[size]}`}
+            >
+              Bronze
             </span>
-            <span className="text-black uppercase">
-              MART
+            {/* MART — lighter weight, dark, slightly smaller for hierarchy */}
+            <span
+              className={`text-secondary font-normal leading-none tracking-wide ${martSize[size]}`}
+            >
+              Mart
             </span>
           </div>
-          <p className={`
-            text-gold-600/40 font-bold uppercase tracking-[0.3em] mt-0.5
-            ${size === 'sm' ? 'text-[6px]' : size === 'md' ? 'text-[6px] md:text-[8px]' : 'text-[8px] md:text-[10px]'}
-          `}>
-            Quality • Trust • Value
+          {/* Tagline */}
+          <p
+            className={`text-primary/40 uppercase mt-[3px] tracking-[0.3em] font-medium ${taglineSize[size]}`}
+            style={{ fontFamily: 'var(--font-jakarta), sans-serif' }}
+          >
+            Quality · Trust · Value
           </p>
         </div>
       )}

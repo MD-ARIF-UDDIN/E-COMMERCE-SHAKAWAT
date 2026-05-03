@@ -31,7 +31,7 @@ export default function Modal({ isOpen, onClose, title, children, maxWidth = 'ma
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-xl z-[100] flex items-center justify-center p-4 sm:p-6"
+            className="fixed inset-0 bg-gold-900/60 backdrop-blur-xl z-[100] flex items-center justify-center p-4 sm:p-6"
           >
             {/* Modal Container */}
             <motion.div

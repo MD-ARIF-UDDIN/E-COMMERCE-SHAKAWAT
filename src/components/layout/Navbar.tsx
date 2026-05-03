@@ -168,34 +168,67 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* Mobile Search Bar — visible only on small screens */}
+      <div className={`md:hidden relative transition-all duration-500 ${isScrolled ? 'opacity-0 h-0 overflow-hidden' : 'opacity-100'}`}>
+        {/* Gold gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-r from-gold-800 via-primary to-gold-700" />
+        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold-300/40 to-transparent" />
+        <div className="relative z-10 px-4 py-2">
+          <form onSubmit={handleSearch} className="relative group">
+            <input
+              type="text"
+              placeholder="পণ্য খুঁজুন..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-white/15 border border-white/25 rounded-xl py-2 pl-9 pr-4 text-[13px] font-semibold text-white placeholder:text-white/50 focus:outline-none focus:bg-white/25 focus:border-white/50 transition-all"
+            />
+            <Search
+              className="absolute left-2.5 top-1/2 -translate-y-1/2 text-white/70 group-focus-within:text-white transition-colors"
+              size={16}
+            />
+          </form>
+        </div>
+      </div>
+
       {/* Categories Bar - Desktop Only */}
-      <nav className={`bg-white/80 backdrop-blur-xl text-black transition-all duration-700 overflow-hidden hidden lg:block border-b border-gold-400/10 ${isScrolled ? 'h-0 opacity-0' : 'h-14 opacity-100'}`}>
-        <div className="container mx-auto px-6 h-full flex items-center justify-center gap-8 md:gap-10">
+      <nav className={`relative transition-all duration-700 overflow-hidden hidden lg:block ${isScrolled ? 'h-0 opacity-0' : 'h-14 opacity-100'}`}>
+        {/* Gold gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-r from-gold-800 via-primary to-gold-700" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-transparent" />
+        {/* Shimmer line on top */}
+        <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold-300/60 to-transparent" />
+        {/* Shimmer line on bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold-900/40 to-transparent" />
+
+        <div className="container mx-auto px-6 h-full flex items-center justify-center gap-7 md:gap-9 relative z-10">
           {categories.map((cat) => {
             const catName = cat.name.trim();
-            const Icon = categoryIcons[catName] || 
-                         categoryIcons[catName.charAt(0).toUpperCase() + catName.slice(1).toLowerCase()] || 
-                         categoryIcons[catName.split(' ')[0]] || 
+            const Icon = categoryIcons[catName] ||
+                         categoryIcons[catName.charAt(0).toUpperCase() + catName.slice(1).toLowerCase()] ||
+                         categoryIcons[catName.split(' ')[0]] ||
                          MoreHorizontal;
             return (
-              <Link 
-                key={cat._id} 
+              <Link
+                key={cat._id}
                 href={`/products?category=${cat.slug}`}
-                className="text-[10px] font-black uppercase tracking-[0.2em] text-gold-900 hover:text-primary transition-all duration-300 relative group flex items-center gap-2.5 py-1"
+                className="relative group flex items-center gap-2 py-1 text-white/90 hover:text-white transition-all duration-300"
               >
-                <div className="p-1.5 rounded-lg bg-gold-50 group-hover:bg-primary transition-all duration-500 border border-gold-200">
-                  <Icon size={14} className="text-gold-600 group-hover:text-white transition-colors" />
+                {/* Icon pill */}
+                <div className="p-1 rounded-md bg-white/10 group-hover:bg-white/20 border border-white/20 group-hover:border-white/40 transition-all duration-300">
+                  <Icon size={12} className="text-gold-200 group-hover:text-white transition-colors" />
                 </div>
-                {cat.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-primary transition-all duration-500 group-hover:w-full rounded-full opacity-0 group-hover:opacity-100" />
+                <span className="text-[10px] font-black uppercase tracking-[0.18em]">{cat.name}</span>
+                {/* Glowing underline */}
+                <span className="absolute -bottom-[1px] left-0 w-0 h-[2px] bg-gradient-to-r from-gold-200 to-white transition-all duration-500 group-hover:w-full rounded-full shadow-[0_0_6px_rgba(255,255,255,0.6)]" />
               </Link>
             );
           })}
-          <Link href="/products" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary hover:text-gold-900 transition-all duration-300 group">
-            <div className="p-1.5 rounded-lg bg-gold-50 group-hover:bg-primary transition-all duration-500 border border-primary/20">
-              <MoreHorizontal size={14} className="text-primary group-hover:text-white transition-all duration-500 group-hover:rotate-90" />
+          <Link href="/products" className="relative group flex items-center gap-2 py-1 text-gold-200 hover:text-white transition-all duration-300">
+            <div className="p-1 rounded-md bg-white/10 group-hover:bg-white/20 border border-white/20 group-hover:border-white/40 transition-all duration-300">
+              <MoreHorizontal size={12} className="text-gold-200 group-hover:text-white transition-all duration-300 group-hover:rotate-90" />
             </div>
-            সব দেখুন
+            <span className="text-[10px] font-black uppercase tracking-[0.18em]">সব দেখুন</span>
+            <span className="absolute -bottom-[1px] left-0 w-0 h-[2px] bg-gradient-to-r from-gold-200 to-white transition-all duration-500 group-hover:w-full rounded-full shadow-[0_0_6px_rgba(255,255,255,0.6)]" />
           </Link>
         </div>
       </nav>

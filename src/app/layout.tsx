@@ -1,4 +1,4 @@
-import { Hind_Siliguri, Plus_Jakarta_Sans } from "next/font/google";
+import { Hind_Siliguri, Plus_Jakarta_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import MainWrapper from "@/components/layout/MainWrapper";
@@ -17,6 +17,14 @@ const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-jakarta',
+});
+
+const playfair = Playfair_Display({
+  weight: ['400', '700', '900'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-playfair',
+  style: ['normal', 'italic'],
 });
 
 export async function generateMetadata() {
@@ -43,8 +51,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="bn" className="h-full dark" style={{ colorScheme: 'dark' }} suppressHydrationWarning>
-      <body className={`${hindSiliguri.variable} ${jakarta.variable} font-sans min-h-screen bg-mesh-gradient text-[#E6D5B8] antialiased selection:bg-[#C5A021] selection:text-black relative`}>
+    <html lang="bn" className="h-full" suppressHydrationWarning>
+      <body className={`${hindSiliguri.variable} ${jakarta.variable} ${playfair.variable} font-sans min-h-screen bg-mesh-gradient text-secondary antialiased selection:bg-primary/20 selection:text-primary relative`}>
         <div className="fixed inset-0 bg-dot-pattern opacity-[0.05] pointer-events-none z-0" />
         <Providers>
           <MainWrapper>
@@ -57,11 +65,11 @@ export default function RootLayout({
           position="bottom-right"
           toastOptions={{
             style: {
-              background: '#121212',
-              color: '#E6D5B8',
+              background: '#ffffff',
+              color: '#1A1712',
               borderRadius: '1rem',
-              border: '1px solid rgba(197, 160, 33, 0.2)',
-              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.5)',
+              border: '1px solid rgba(184, 134, 11, 0.2)',
+              boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.08)',
             },
           }}
         />

@@ -77,7 +77,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsSidebarOpen(false)}
-            className="fixed inset-0 bg-black/60 backdrop-blur-[2px] z-40 lg:hidden"
+            className="fixed inset-0 bg-gold-900/60 backdrop-blur-[2px] z-40 lg:hidden"
           />
         )}
       </AnimatePresence>
