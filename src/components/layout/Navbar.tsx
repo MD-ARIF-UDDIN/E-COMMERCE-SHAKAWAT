@@ -162,7 +162,7 @@ export default function Navbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
       {/* Top Main Header */}
-      <div className={`transition-all duration-500 ${isScrolled ? 'bg-white/90 backdrop-blur-xl py-1.5 shadow-premium border-b border-gold-400/20' : 'bg-white py-2.5 border-b border-gold-400/10'}`}>
+      <div className={`transition-all duration-700 ${isScrolled ? 'bg-white/95 backdrop-blur-2xl py-1.5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-b border-gold-400/20' : 'bg-white py-3 border-b border-gold-400/10'}`}>
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between gap-4 md:gap-8">
             {/* Logo & Company Name */}
@@ -175,11 +175,11 @@ export default function Navbar() {
               <form onSubmit={handleSearch} className="relative group">
                 <input 
                   type="text" 
-                  placeholder="পণ্য খুঁজুন..."
+                  placeholder="আপনার পছন্দের পণ্য খুঁজুন..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => searchQuery.length > 1 && setShowSuggestions(true)}
-                  className="w-full bg-gold-50 border border-gold-200 rounded-2xl py-2.5 pl-12 pr-12 text-sm font-bold text-black placeholder:text-gold-400/40 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/40 focus:bg-white transition-all shadow-sm"
+                  className="w-full bg-gold-50/50 border border-gold-200/50 rounded-2xl py-3 pl-12 pr-12 text-sm font-bold text-black placeholder:text-gold-400/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/40 focus:bg-white transition-all duration-500 shadow-sm"
                 />
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gold-400/60 group-focus-within:text-primary transition-colors" size={20} />
                 
@@ -364,16 +364,19 @@ export default function Navbar() {
         </div>
       </div>
 
-      <nav className={`relative transition-all duration-700 overflow-hidden hidden lg:block ${isScrolled ? 'h-0 opacity-0' : 'h-14 opacity-100'}`}>
-        {/* Gold gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-r from-gold-800 via-primary to-gold-700" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-transparent" />
-        {/* Shimmer line on top */}
-        <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold-300/60 to-transparent" />
-        {/* Shimmer line on bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold-900/40 to-transparent" />
+      <nav className={`relative transition-all duration-700 overflow-hidden hidden lg:block ${isScrolled ? 'h-0 opacity-0 -translate-y-full' : 'h-16 opacity-100 translate-y-0'}`}>
+        {/* Modern Gradient Background */}
+        <div className="absolute inset-0 bg-gradient-to-r from-secondary via-gold-950 to-secondary" />
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 pointer-events-none" />
+        
+        {/* Floating Glass Container Effect */}
+        <div className="absolute inset-x-6 top-2 bottom-2 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl" />
 
-        <div className="container mx-auto px-6 h-full flex items-center justify-center gap-7 md:gap-9 relative z-10">
+        {/* Shimmer lines */}
+        <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+
+        <div className="container mx-auto px-10 h-full flex items-center justify-center gap-10 relative z-10">
           {categories.map((cat) => {
             const catName = cat.name.trim();
             const Icon = categoryIcons[catName] ||
