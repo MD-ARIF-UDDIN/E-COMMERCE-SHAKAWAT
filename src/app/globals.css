@@ -1,27 +1,27 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-primary: #2563eb; /* Modern Royal Blue */
-  --color-primary-hover: #1d4ed8;
-  --color-secondary: #0f172a; /* Slate 900 */
-  --color-accent: #3b82f6; /* Blue 500 */
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-danger: #ef4444;
+  --color-primary: #D4AF37; /* Authentic Metallic Gold */
+  --color-primary-hover: #C5A059;
+  --color-secondary: #1A1A1A; /* Rich Deep Black */
+  --color-accent: #FBF7E9; /* Elegant Silk Cream */
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
   --color-info: #334155;
   
-  /* Neutral/Gray Scale Overrides - Professional & Clean */
-  --color-gold-50: #f8fafc; /* slate-50 */
-  --color-gold-100: #f1f5f9; /* slate-100 */
-  --color-gold-200: #e2e8f0; /* slate-200 */
-  --color-gold-300: #cbd5e1; /* slate-300 */
-  --color-gold-400: #94a3b8; /* slate-400 */
-  --color-gold-500: #64748b; /* slate-500 */
-  --color-gold-600: #475569; /* slate-600 */
-  --color-gold-700: #334155; /* slate-700 */
-  --color-gold-800: #1e293b; /* slate-800 */
-  --color-gold-900: #0f172a; /* slate-900 */
-  --color-gold-950: #ffffff;
+  /* Genuine Golden Scale - Premium & Warm */
+  --color-gold-50: #FBF7E9; 
+  --color-gold-100: #F5E9CC;
+  --color-gold-200: #EAD199;
+  --color-gold-300: #DEB866;
+  --color-gold-400: #D3A033;
+  --color-gold-500: #D4AF37;
+  --color-gold-600: #B38E2C;
+  --color-gold-700: #917022;
+  --color-gold-800: #6F5419;
+  --color-gold-900: #4D3911;
+  --color-gold-950: #2A1F09;
 
   /* Black Scale Overrides */
   --color-black-950: #ffffff;
@@ -47,7 +47,7 @@
   --foreground: #0f172a;
   --muted: #64748b;
   --border: #e2e8f0;
-  --selection: #2563eb;
+  --selection: #D4AF37;
 }
 
 .font-jakarta {
@@ -100,8 +100,8 @@ body {
 .bg-mesh-gradient {
   background-color: #f8fafc;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.03) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(37, 99, 235, 0.03) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(212, 175, 55, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(212, 175, 55, 0.05) 0px, transparent 50%);
 }
 
 /* Custom Scrollbar */
@@ -147,7 +147,7 @@ body {
 }
 
 .text-gradient {
-  background: linear-gradient(to right, #2563eb, #1d4ed8);
+  background: linear-gradient(to right, #D4AF37, #B38E2C);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
