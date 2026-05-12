@@ -144,7 +144,7 @@ export default function ProductDetailPage() {
           <ChevronRight size={10} className="text-gold-200 shrink-0" />
           <Link href="/products" className="text-[10px] font-black text-gold-400 hover:text-primary transition-colors uppercase tracking-[0.2em]">পণ্যসমূহ</Link>
           <ChevronRight size={10} className="text-gold-200 shrink-0" />
-          <Link href={`/products?category=${product.category.slug}`} className="text-[10px] font-black text-gold-400 hover:text-primary transition-colors uppercase tracking-[0.2em]">{product.category.name}</Link>
+          <Link href={`/products?category=${product.category?.slug || ''}`} className="text-[10px] font-black text-gold-400 hover:text-primary transition-colors uppercase tracking-[0.2em]">{product.category?.name || 'Category'}</Link>
           <ChevronRight size={10} className="text-gold-200 shrink-0" />
           <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em] truncate max-w-[200px]">{product.name}</span>
         </nav>
@@ -192,7 +192,7 @@ export default function ProductDetailPage() {
           <div className="lg:col-span-7 space-y-8">
             <div className="space-y-4">
               <div className="flex flex-wrap items-center gap-3">
-                 <span className="text-[10px] font-black text-primary uppercase tracking-[0.3em] bg-primary/10 px-3 py-1.5 rounded-lg">{product.category.name}</span>
+                 <span className="text-[10px] font-black text-primary uppercase tracking-[0.3em] bg-primary/10 px-3 py-1.5 rounded-lg">{product.category?.name || 'Premium Series'}</span>
                  {product.isFeatured && (
                    <span className="inline-flex items-center gap-1.5 text-[9px] font-black text-primary bg-primary/10 px-3 py-1.5 rounded-lg uppercase tracking-widest">
                      <Sparkles size={12} fill="currentColor" /> সেরা পণ্য
