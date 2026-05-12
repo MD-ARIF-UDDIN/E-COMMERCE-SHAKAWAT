@@ -91,7 +91,7 @@ export default function FloatingCart() {
                   </div>
                 ) : (
                   items.map((item) => (
-                    <div key={item.product} className="flex gap-4 group bg-gold-50/50 p-4 rounded-3xl border border-gold-100 hover:border-primary/30 transition-all">
+                    <div key={item.cartItemId} className="flex gap-4 group bg-gold-50/50 p-4 rounded-3xl border border-gold-100 hover:border-primary/30 transition-all">
                       <div className="w-20 h-20 bg-white rounded-2xl overflow-hidden shrink-0 border border-gold-100 group-hover:scale-105 transition-transform shadow-sm">
                         <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                       </div>
@@ -101,21 +101,21 @@ export default function FloatingCart() {
                          <div className="flex items-center justify-between mt-3">
                             <div className="flex items-center bg-white rounded-xl p-1 border border-gold-100">
                                <button 
-                                 onClick={() => updateQuantity(item.product, item.quantity - 1)}
+                                 onClick={() => updateQuantity(item.cartItemId, Math.max(1, item.quantity - 1))}
                                  className="w-8 h-8 flex items-center justify-center text-gold-400 hover:text-primary transition-colors"
                                >
                                  <Minus size={14} />
                                </button>
                                <span className="w-10 text-center text-sm font-black text-gold-900">{item.quantity}</span>
                                <button 
-                                 onClick={() => updateQuantity(item.product, item.quantity + 1)}
+                                 onClick={() => updateQuantity(item.cartItemId, item.quantity + 1)}
                                  className="w-8 h-8 flex items-center justify-center text-gold-400 hover:text-primary transition-colors"
                                >
                                  <Plus size={14} />
                                </button>
                             </div>
                             <button 
-                              onClick={() => removeItem(item.product)}
+                              onClick={() => removeItem(item.cartItemId)}
                               className="w-10 h-10 flex items-center justify-center text-gold-200 hover:text-rose-500 hover:bg-rose-500/10 rounded-xl transition-all"
                             >
                               <Trash2 size={16} />
