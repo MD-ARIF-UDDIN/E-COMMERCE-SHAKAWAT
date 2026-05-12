@@ -48,6 +48,5 @@ export default function FloatingWhatsApp() {
         <span className="text-[8px] font-bold opacity-80 uppercase tracking-widest">লাইভ চ্যাট</span>
       </div>
     </motion.a>
-    </motion.a>
   );
 }
