@@ -12,7 +12,7 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const setAuth = useAuthStore(s => s.setAuth);
+  const login = useAuthStore(s => s.login);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,7 +23,7 @@ export default function AdminLoginPage() {
         toast.error('Unauthorized access');
         return;
       }
-      setAuth(res.data.user, res.data.token);
+      login(res.data.user, res.data.token);
       toast.success('Welcome back!');
       router.push('/admin/dashboard');
     } catch (err: any) {

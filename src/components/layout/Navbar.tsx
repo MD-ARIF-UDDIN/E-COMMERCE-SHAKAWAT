@@ -56,12 +56,31 @@ const categoryIcons: Record<string, any> = {
   'Clothing': Shirt,
 };
 
+import { useDebounce } from '@/hooks/useDebounce';
+import { useRef } from 'react';
+
+interface Product {
+  id: string;
+  name: string;
+  slug: string;
+  price: number;
+  discountPrice?: number;
+  images: string[];
+  category: { name: string; slug: string };
+}
+
 export default function Navbar() {
   const { settings } = useSettingsStore();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+  const debouncedSearch = useDebounce(searchQuery, 400);
+
   const [isCartBouncing, setIsCartBouncing] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -96,12 +115,46 @@ export default function Navbar() {
     };
     fetchCategories();
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
+
+  // Real-time search logic
+  useEffect(() => {
+    const performSearch = async () => {
+      if (debouncedSearch.trim().length > 1) {
+        setIsSearching(true);
+        try {
+          const res = await api.get(`/products?search=${encodeURIComponent(debouncedSearch)}&limit=6`);
+          setSearchResults(res.data);
+          setShowSuggestions(true);
+        } catch (err) {
+          console.error('Search failed', err);
+        } finally {
+          setIsSearching(false);
+        }
+      } else {
+        setSearchResults([]);
+        setShowSuggestions(false);
+      }
+    };
+
+    performSearch();
+  }, [debouncedSearch]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
+      setShowSuggestions(false);
       router.push(`/products?search=${encodeURIComponent(searchQuery)}`);
     }
   };
@@ -118,16 +171,90 @@ export default function Navbar() {
             </Link>
 
             {/* Search Bar - Desktop Only */}
-            <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-xl relative group">
-              <input 
-                type="text" 
-                placeholder="পণ্য খুঁজুন..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-gold-50 border border-gold-200 rounded-2xl py-2.5 pl-12 pr-4 text-sm font-bold text-black placeholder:text-gold-400/40 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/40 focus:bg-white transition-all shadow-sm"
-              />
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gold-400/60 group-focus-within:text-primary transition-colors" size={20} />
-            </form>
+            <div className="hidden md:block flex-1 max-w-xl relative" ref={searchRef}>
+              <form onSubmit={handleSearch} className="relative group">
+                <input 
+                  type="text" 
+                  placeholder="পণ্য খুঁজুন..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => searchQuery.length > 1 && setShowSuggestions(true)}
+                  className="w-full bg-gold-50 border border-gold-200 rounded-2xl py-2.5 pl-12 pr-12 text-sm font-bold text-black placeholder:text-gold-400/40 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/40 focus:bg-white transition-all shadow-sm"
+                />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gold-400/60 group-focus-within:text-primary transition-colors" size={20} />
+                
+                {isSearching && (
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                    <div className="w-4 h-4 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
+                  </div>
+                )}
+              </form>
+
+              {/* Suggestions Dropdown */}
+              <AnimatePresence>
+                {showSuggestions && (searchResults.length > 0 || isSearching) && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-premium border border-gold-100 overflow-hidden z-[60]"
+                  >
+                    <div className="max-h-[400px] overflow-y-auto p-2 space-y-1">
+                      {searchResults.map((product) => (
+                        <Link 
+                          key={product.id}
+                          href={`/products/${product.slug}`}
+                          onClick={() => setShowSuggestions(false)}
+                          className="flex items-center gap-3 p-2 hover:bg-gold-50 rounded-xl transition-colors group"
+                        >
+                          <div className="w-12 h-12 rounded-lg overflow-hidden bg-gold-100 flex-shrink-0 border border-gold-100">
+                            {product.images[0] ? (
+                              <Image 
+                                src={product.images[0]} 
+                                alt={product.name} 
+                                width={48} 
+                                height={48} 
+                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-gold-300">
+                                <ShoppingBag size={20} />
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-xs font-bold text-black truncate group-hover:text-primary transition-colors">{product.name}</h4>
+                            <p className="text-[10px] text-gold-400 font-medium">{product.category?.name}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-xs font-black text-primary">৳{product.price}</p>
+                            {product.discountPrice && (
+                              <p className="text-[9px] text-gold-400 line-through">৳{product.discountPrice}</p>
+                            )}
+                          </div>
+                        </Link>
+                      ))}
+
+                      {searchResults.length === 0 && !isSearching && (
+                        <div className="p-8 text-center">
+                          <Search size={32} className="mx-auto text-gold-200 mb-2" />
+                          <p className="text-xs text-gold-400 font-medium">কোনো পণ্য পাওয়া যায়নি</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {searchResults.length > 0 && (
+                      <button 
+                        onClick={handleSearch}
+                        className="w-full p-3 bg-gold-50 border-t border-gold-100 text-[10px] font-black uppercase tracking-widest text-primary hover:bg-primary hover:text-white transition-all flex items-center justify-center gap-2"
+                      >
+                        সব ফলাফল দেখুন <ChevronRight size={14} />
+                      </button>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
             {/* Action Icons */}
             <div className="flex items-center gap-2 md:gap-5">
@@ -173,24 +300,70 @@ export default function Navbar() {
         {/* Gold gradient background */}
         <div className="absolute inset-0 bg-gradient-to-r from-gold-800 via-primary to-gold-700" />
         <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold-300/40 to-transparent" />
-        <div className="relative z-10 px-4 py-2">
+        <div className="relative z-10 px-4 py-2" ref={searchRef}>
           <form onSubmit={handleSearch} className="relative group">
             <input
               type="text"
               placeholder="পণ্য খুঁজুন..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white/15 border border-white/25 rounded-xl py-2 pl-9 pr-4 text-[13px] font-semibold text-white placeholder:text-white/50 focus:outline-none focus:bg-white/25 focus:border-white/50 transition-all"
+              onFocus={() => searchQuery.length > 1 && setShowSuggestions(true)}
+              className="w-full bg-white/15 border border-white/25 rounded-xl py-2 pl-9 pr-9 text-[13px] font-semibold text-white placeholder:text-white/50 focus:outline-none focus:bg-white/25 focus:border-white/50 transition-all"
             />
             <Search
               className="absolute left-2.5 top-1/2 -translate-y-1/2 text-white/70 group-focus-within:text-white transition-colors"
               size={16}
             />
+            {isSearching && (
+              <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+              </div>
+            )}
           </form>
+
+          {/* Mobile Suggestions Dropdown */}
+          <AnimatePresence>
+            {showSuggestions && (searchResults.length > 0 || isSearching) && (
+              <motion.div 
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 5 }}
+                className="absolute top-full left-4 right-4 mt-1 bg-white rounded-xl shadow-2xl border border-gold-100 overflow-hidden z-[60]"
+              >
+                <div className="max-h-[300px] overflow-y-auto p-1.5 space-y-1">
+                  {searchResults.map((product) => (
+                    <Link 
+                      key={product.id}
+                      href={`/products/${product.slug}`}
+                      onClick={() => setShowSuggestions(false)}
+                      className="flex items-center gap-3 p-2 hover:bg-gold-50 rounded-lg transition-colors"
+                    >
+                      <div className="w-10 h-10 rounded bg-gold-50 flex-shrink-0 overflow-hidden border border-gold-100">
+                        {product.images[0] && (
+                          <Image src={product.images[0]} alt={product.name} width={40} height={40} className="w-full h-full object-cover" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-[11px] font-bold text-black truncate">{product.name}</h4>
+                        <p className="text-[10px] text-primary font-black">৳{product.price}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+                {searchResults.length > 0 && (
+                  <button 
+                    onClick={handleSearch}
+                    className="w-full p-2.5 bg-gold-50 border-t border-gold-100 text-[9px] font-black uppercase tracking-widest text-primary text-center"
+                  >
+                    সব ফলাফল দেখুন
+                  </button>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
-      {/* Categories Bar - Desktop Only */}
       <nav className={`relative transition-all duration-700 overflow-hidden hidden lg:block ${isScrolled ? 'h-0 opacity-0' : 'h-14 opacity-100'}`}>
         {/* Gold gradient background */}
         <div className="absolute inset-0 bg-gradient-to-r from-gold-800 via-primary to-gold-700" />
@@ -254,16 +427,57 @@ export default function Navbar() {
             
             <div className="flex-1 overflow-y-auto p-6 space-y-10">
               {/* Search in Mobile Menu */}
-              <form onSubmit={handleSearch} className="relative group">
-                <input 
-                  type="text" 
-                  placeholder="পণ্য খুঁজুন..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-gold-50 border border-gold-200 rounded-[2.5rem] py-5 pl-14 text-sm font-black text-black placeholder:text-gold-400/40 focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all"
-                />
-                <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gold-400" size={20} />
-              </form>
+              <div className="relative" ref={searchRef}>
+                <form onSubmit={handleSearch} className="relative group">
+                  <input 
+                    type="text" 
+                    placeholder="পণ্য খুঁজুন..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onFocus={() => searchQuery.length > 1 && setShowSuggestions(true)}
+                    className="w-full bg-gold-50 border border-gold-200 rounded-[2.5rem] py-5 pl-14 text-sm font-black text-black placeholder:text-gold-400/40 focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all"
+                  />
+                  <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gold-400" size={20} />
+                  {isSearching && (
+                    <div className="absolute right-6 top-1/2 -translate-y-1/2">
+                      <div className="w-5 h-5 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
+                    </div>
+                  )}
+                </form>
+
+                {/* Mobile Menu Suggestions Dropdown */}
+                <AnimatePresence>
+                  {showSuggestions && (searchResults.length > 0 || isSearching) && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      className="absolute top-full left-0 right-0 mt-2 bg-white rounded-3xl shadow-premium border border-gold-100 overflow-hidden z-[60]"
+                    >
+                      <div className="max-h-[350px] overflow-y-auto p-4 space-y-3">
+                        {searchResults.map((product) => (
+                          <Link 
+                            key={product.id}
+                            href={`/products/${product.slug}`}
+                            onClick={() => { setIsMobileMenuOpen(false); setShowSuggestions(false); }}
+                            className="flex items-center gap-4 p-2 hover:bg-gold-50 rounded-2xl transition-colors"
+                          >
+                            <div className="w-16 h-16 rounded-xl bg-gold-50 flex-shrink-0 overflow-hidden border border-gold-100">
+                              {product.images[0] && (
+                                <Image src={product.images[0]} alt={product.name} width={64} height={64} className="w-full h-full object-cover" />
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="text-sm font-bold text-black truncate">{product.name}</h4>
+                              <p className="text-xs text-primary font-black mt-1">৳{product.price}</p>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
 
               <div className="space-y-6">
                 <div className="flex items-center justify-between px-2">
