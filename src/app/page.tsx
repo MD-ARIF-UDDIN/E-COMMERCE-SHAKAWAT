@@ -17,17 +17,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-interface Product {
-  _id: string;
-  name: string;
-  slug: string;
-  price: number;
-  discountPrice?: number;
-  images: string[];
-  isFeatured: boolean;
-  isDiscounted: boolean;
-  category?: { name: string };
-}
+import { Product } from '@/types/product';
 
 interface Category {
   _id: string;

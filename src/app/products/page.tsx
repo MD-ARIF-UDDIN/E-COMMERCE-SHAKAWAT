@@ -18,22 +18,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-interface Product {
-  _id: string;
-  name: string;
-  slug: string;
-  price: number;
-  discountPrice?: number;
-  images: string[];
-  isFeatured: boolean;
-  isDiscounted: boolean;
-  isMultipleSize?: boolean;
-  isMultipleColor?: boolean;
-  sizeVariants?: { id: string; name: string; stock: number }[];
-  colorVariants?: { id: string; name: string; hexCode: string; stock: number }[];
-  category: { _id: string; name: string };
-  brand?: { _id: string; name: string };
-}
+import { Product } from '@/types/product';
 
 interface Category { _id: string; name: string; slug: string; image?: string; }
 interface Brand { _id: string; name: string; slug: string; }

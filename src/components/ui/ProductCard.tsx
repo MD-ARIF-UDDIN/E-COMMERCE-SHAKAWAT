@@ -8,21 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore } from '@/store/cartStore';
 import toast from 'react-hot-toast';
 
-interface Product {
-  _id: string;
-  name: string;
-  slug: string;
-  price: number;
-  discountPrice?: number;
-  images: string[];
-  isFeatured: boolean;
-  isDiscounted: boolean;
-  isMultipleSize?: boolean;
-  isMultipleColor?: boolean;
-  sizeVariants?: { id: string; name: string; stock: number }[];
-  colorVariants?: { id: string; name: string; hexCode: string; stock: number }[];
-  category?: { name: string };
-}
+import { Product } from '@/types/product';
 
 export default function ProductCard({ product }: { product: Product }) {
   const [isAdding, setIsAdding] = useState(false);
@@ -183,7 +169,7 @@ export default function ProductCard({ product }: { product: Product }) {
             {product.isMultipleSize && product.sizeVariants && product.sizeVariants.length > 0 && (
               <div className="flex flex-wrap gap-1">
                 {product.sizeVariants.map(s => (
-                  <span key={s.id} className="text-[8px] font-black border border-gold-100 bg-gold-50 text-gold-600 px-1.5 py-0.5 rounded uppercase tracking-tighter">
+                  <span key={s.id || s._id} className="text-[8px] font-black border border-gold-100 bg-gold-50 text-gold-600 px-1.5 py-0.5 rounded uppercase tracking-tighter">
                     {s.name}
                   </span>
                 ))}
@@ -192,7 +178,7 @@ export default function ProductCard({ product }: { product: Product }) {
             {product.isMultipleColor && product.colorVariants && product.colorVariants.length > 0 && (
               <div className="flex items-center gap-1">
                 {product.colorVariants.slice(0, 5).map(c => (
-                  <div key={c.id} className="w-2.5 h-2.5 rounded-full border border-gold-100" style={{ backgroundColor: c.hexCode }} title={c.name} />
+                  <div key={c.id || c._id} className="w-2.5 h-2.5 rounded-full border border-gold-100" style={{ backgroundColor: c.hexCode }} title={c.name} />
                 ))}
                 {product.colorVariants.length > 5 && <span className="text-[8px] font-black text-gold-400">+{product.colorVariants.length - 5}</span>}
               </div>

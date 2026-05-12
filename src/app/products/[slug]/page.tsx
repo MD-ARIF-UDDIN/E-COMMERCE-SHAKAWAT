@@ -29,23 +29,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import ProductCard from '@/components/ui/ProductCard';
 
-interface Product {
-  _id: string;
-  id?: string;
-  name: string;
-  slug: string;
-  price: number;
-  discountPrice?: number;
-  description: string;
-  stock: number;
-  images: string[];
-  isFeatured: boolean;
-  isDiscounted: boolean;
-  category: { _id: string; id?: string; name: string; slug: string };
-  brand?: { _id: string; name: string };
-  hasColors?: boolean;
-  colorVariants?: { id?: string; _id?: string; name: string; hexCode: string; stock: number }[];
-}
+import { Product } from '@/types/product';
 
 export default function ProductDetailPage() {
   const params = useParams();
