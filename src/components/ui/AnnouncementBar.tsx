@@ -11,37 +11,65 @@ export default function AnnouncementBar() {
 
       <div className="flex whitespace-nowrap py-3 md:py-4">
         <motion.div
-          animate={{ x: ["5%", "-100%"] }}
+          animate={{ x: ["0%", "-50%"] }}
           transition={{
             repeat: Infinity,
-            duration: 30,
+            duration: 25,
             ease: "linear",
           }}
-          className="flex items-center gap-16 text-white font-bold"
+          className="flex items-center gap-12 text-white"
         >
+          {/* Item 1 */}
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-primary">
-              <Megaphone size={18} className="animate-bounce" />
-              <span className="text-[10px] font-black uppercase tracking-widest border border-primary/30 px-2 py-0.5 rounded">Wholesale</span>
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 bg-primary/20 rounded-lg border border-primary/30">
+                <Megaphone size={14} className="text-primary animate-bounce" />
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/90">Wholesale</span>
             </div>
-            <p className="text-sm md:text-lg font-playfair tracking-wide italic">পাইকারি অর্ডারও নেওয়া হয়। দেশের যেকোনো প্রান্তে হোম ডেলিভারি!</p>
+            <p className="text-sm md:text-xl font-black font-hind tracking-wide drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+              পাইকারি অর্ডারও নেওয়া হয়। দেশের যেকোনো প্রান্তে হোম ডেলিভারি!
+            </p>
           </div>
 
+          {/* Item 2 */}
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-primary">
-              <Phone size={18} className="animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-widest border border-primary/30 px-2 py-0.5 rounded">Contact</span>
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 bg-primary/20 rounded-lg border border-primary/30">
+                <Phone size={14} className="text-primary animate-pulse" />
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/90">Contact</span>
             </div>
-            <p className="text-sm md:text-lg font-playfair tracking-wide italic">যেকোনো তথ্যের জন্য কল করুন: <span className="text-primary font-jakarta not-italic">০১৮৮৩৩৬০৪৪০</span></p>
+            <p className="text-sm md:text-xl font-black font-hind tracking-wide drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+              যেকোনো তথ্যের জন্য কল করুন: <span className="text-primary font-jakarta drop-shadow-none">০১৮৮৩৩৬০৪৪০</span>
+            </p>
           </div>
 
           {/* Duplicate for seamless loop */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-primary">
-              <Megaphone size={18} />
-              <span className="text-[10px] font-black uppercase tracking-widest border border-primary/30 px-2 py-0.5 rounded">Update</span>
+          <div className="flex items-center gap-12 ml-4">
+             <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 bg-primary/20 rounded-lg border border-primary/30">
+                  <Megaphone size={14} className="text-primary" />
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/90">Wholesale</span>
+              </div>
+              <p className="text-sm md:text-xl font-black font-hind tracking-wide drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+                পাইকারি অর্ডারও নেওয়া হয়। দেশের যেকোনো প্রান্তে হোম ডেলিভারি!
+              </p>
             </div>
-            <p className="text-sm md:text-lg font-playfair tracking-wide italic">আমাদের নতুন কালেকশন এখন লাইভ! স্টক ফুরিয়ে যাওয়ার আগেই অর্ডার করুন।</p>
+
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 bg-primary/20 rounded-lg border border-primary/30">
+                  <Phone size={14} className="text-primary" />
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/90">Contact</span>
+              </div>
+              <p className="text-sm md:text-xl font-black font-hind tracking-wide drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+                যেকোনো তথ্যের জন্য কল করুন: <span className="text-primary font-jakarta drop-shadow-none">০১৮৮৩৩৬০৪৪০</span>
+              </p>
+            </div>
           </div>
         </motion.div>
       </div>
