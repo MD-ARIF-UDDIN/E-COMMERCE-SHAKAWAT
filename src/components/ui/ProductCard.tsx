@@ -58,9 +58,10 @@ export default function ProductCard({ product }: { product: Product }) {
       ref={cardRef}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -10, transition: { duration: 0.3 } }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      className="group bg-white rounded-[2.5rem] p-3 sm:p-4 border border-gold-100 hover:border-primary/40 hover:shadow-premium transition-all duration-700 relative overflow-hidden"
+      className="group bg-white rounded-[2.5rem] p-3 sm:p-4 border border-gold-100 hover:border-primary/40 hover:shadow-[0_20px_50px_rgba(212,175,55,0.15)] transition-all duration-500 relative overflow-hidden"
     >
       {/* Thrown to Bucket Animation */}
       <AnimatePresence>

@@ -117,22 +117,40 @@ export default function Home() {
   return (
     <div className="bg-white min-h-screen pt-14 lg:pt-28 pb-20">
       {/* ── HERO SECTION ─────────────────────────────────────────── */}
-      <section className="w-full px-[4px] mb-4">
+      <motion.section 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="w-full px-[4px] mb-4"
+      >
         <HeroSlider banners={banners} />
-      </section>
+      </motion.section>
 
       {/* ── FEATURED CATEGORIES ───────────────────────────────────── */}
-      <section className="w-full px-[4px] mb-12 md:mb-20">
+      <motion.section 
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+        className="w-full px-[4px] mb-12 md:mb-20"
+      >
         <div className="text-center mb-4">
           <p className="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-3">আমাদের বিশেষত্ব</p>
           <h2 className="text-2xl md:text-4xl font-black text-gold-900 tracking-tighter uppercase">সেরা ক্যাটাগরি সমূহ।</h2>
         </div>
 
         <CategorySlider categories={categories} />
-      </section>
+      </motion.section>
 
       {/* ── TOP SELLING PRODUCTS ─────────────────────────────────── */}
-      <section className="container mx-auto px-4 md:px-6 mb-12 md:mb-20">
+      <motion.section 
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="container mx-auto px-4 md:px-6 mb-12 md:mb-20"
+      >
         <div className="flex items-end justify-between mb-12">
           <div>
             <div className="flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-lg w-fit mb-3 border border-primary/20">
@@ -147,24 +165,42 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-          {topSelling.map(product => (
-            <ProductCard key={product._id} product={product} />
+          {topSelling.map((product, idx) => (
+            <motion.div
+              key={product._id}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+            >
+              <ProductCard product={product} />
+            </motion.div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* ── FLASH SALE BANNER ───────────────────────────────────── */}
       {saleProducts.length > 0 && (
-        <section className="container mx-auto px-4 md:px-6 mb-12 md:mb-20">
+        <motion.section 
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1 }}
+          className="container mx-auto px-4 md:px-6 mb-12 md:mb-20"
+        >
           <div className="bg-gold-50 rounded-[3rem] p-10 md:p-20 relative overflow-hidden flex flex-col items-center text-center border border-gold-100 shadow-sm">
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px]" />
             <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gold-600/5 rounded-full blur-[100px]" />
 
             <div className="relative z-10 space-y-6">
-              <div className="flex items-center justify-center gap-2 px-4 py-2 bg-primary/20 text-primary rounded-full border border-primary/30 w-fit mx-auto">
+              <motion.div 
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ repeat: Infinity, duration: 2 }}
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-primary/20 text-primary rounded-full border border-primary/30 w-fit mx-auto"
+              >
                 <Flame size={14} className="animate-pulse" />
                 <span className="text-[10px] font-black uppercase tracking-[0.2em]">চলমান মেগা সেল</span>
-              </div>
+              </motion.div>
               <h2 className="text-4xl md:text-7xl font-black text-gold-900 tracking-tighter leading-none">
                 সীমিত সময়ের জন্য<br />
                 <span className="text-primary">স্পেশাল ডিসকাউন্ট।</span>
@@ -179,11 +215,17 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
+        </motion.section>
       )}
 
       {/* ── NEWSLETTER ───────────────────────────────────────────── */}
-      <section className="container mx-auto px-4 md:px-6">
+      <motion.section 
+        initial={{ opacity: 0, y: 60 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1 }}
+        className="container mx-auto px-4 md:px-6"
+      >
         <div className="bg-primary rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden shadow-2xl shadow-primary/10">
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 pointer-events-none" />
           <div className="relative z-10">
@@ -203,7 +245,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 }
