@@ -6,216 +6,165 @@ import {
   Plus, 
   Pencil, 
   Trash2, 
-  Tag, 
-  Image as ImageIcon,
-  UploadCloud,
-  Layers
+  Image as ImageIcon, 
+  Search, 
+  ChevronRight,
+  LayoutGrid,
+  Loader2
 } from 'lucide-react';
-import { motion } from 'framer-motion';
 import Modal from '@/components/ui/Modal';
+import Image from 'next/image';
 
-export default function AdminCategoriesPage() {
+export default function CategoriesPage() {
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [editing, setEditing] = useState<any | null>(null);
-  const [form, setForm] = useState({ name: '', slug: '', image: '' });
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [submitting, setSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<any>(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  const [form, setForm] = useState({ name: '', slug: '', description: '' });
+  const [image, setImage] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string>('');
 
   const fetchCategories = async () => {
     setLoading(true);
-    const res = await api.get('/categories');
-    setCategories(res.data);
-    setLoading(false);
+    try {
+      const res = await api.get('/categories');
+      setCategories(res.data);
+    } catch { toast.error('Failed to load categories'); }
+    finally { setLoading(false); }
   };
 
   useEffect(() => { fetchCategories(); }, []);
 
-  const openCreate = () => { 
-    setEditing(null); 
-    setForm({ name: '', slug: '', image: '' }); 
-    setImageFile(null);
-    setIsModalOpen(true); 
-  };
-  const openEdit = (cat: any) => { 
-    setEditing(cat); 
-    setForm({ name: cat.name, slug: cat.slug, image: cat.image || '' }); 
-    setImageFile(null);
-    setIsModalOpen(true); 
+  const openModal = (cat: any = null) => {
+    if (cat) {
+      setEditingCategory(cat);
+      setForm({ name: cat.name, slug: cat.slug, description: cat.description || '' });
+      setPreview(cat.image || '');
+    } else {
+      setEditingCategory(null);
+      setForm({ name: '', slug: '', description: '' });
+      setPreview('');
+    }
+    setImage(null);
+    setIsModalOpen(true);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.slug) return toast.error('Required fields missing');
     setSubmitting(true);
-    try {
-      const formData = new FormData();
-      formData.append('name', form.name);
-      formData.append('slug', form.slug);
-      if (imageFile) formData.append('image', imageFile);
+    const formData = new FormData();
+    formData.append('name', form.name);
+    formData.append('slug', form.slug);
+    formData.append('description', form.description);
+    if (image) formData.append('image', image);
 
-      if (editing) {
-        await api.put(`/categories/${editing._id}`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
-        toast.success('Updated');
+    try {
+      if (editingCategory) {
+        await api.put(`/categories/${editingCategory._id}`, formData);
+        toast.success('Category updated');
       } else {
-        await api.post('/categories', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
-        toast.success('Created');
+        await api.post('/categories', formData);
+        toast.success('Category created');
       }
       setIsModalOpen(false);
       fetchCategories();
-    } catch (err: any) {
-      toast.error(err?.response?.data?.error || 'Failed to save');
-    } finally {
-      setSubmitting(false);
-    }
+    } catch { toast.error('Failed to save category'); }
+    finally { setSubmitting(false); }
   };
 
-  const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Delete category "${name}"?`)) return;
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure? This will delete the category.')) return;
     try {
       await api.delete(`/categories/${id}`);
-      toast.success('Deleted');
+      toast.success('Category deleted');
       fetchCategories();
     } catch { toast.error('Failed to delete'); }
   };
 
+  const labelClass = "text-[11px] font-bold text-black uppercase tracking-wider ml-1";
+
   return (
-    <div className="space-y-10">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+    <div className="space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-           <h1 className="text-2xl font-bold text-gold-900 tracking-tight">Categories</h1>
-           <p className="text-gold-400 text-[13px] font-medium mt-1">
-             Organize your products into logical collections.
-           </p>
+           <h1 className="text-xl font-bold text-slate-900 tracking-tight">Categories</h1>
+           <p className="text-slate-500 text-[13px] font-medium mt-0.5">Manage your store product departments.</p>
         </div>
         
-        <button onClick={openCreate} className="h-12 px-6 flex items-center gap-2 bg-gold-900 text-white font-bold text-[13px] rounded-xl hover:bg-primary transition-all">
+        <button onClick={() => openModal()} className="h-11 px-6 flex items-center gap-2 bg-slate-900 text-white font-bold text-[13px] rounded-xl hover:bg-primary transition-all active:scale-[0.98] shadow-sm">
           <Plus size={16} /> New Category
         </button>
       </div>
 
-      <div className="bg-white border border-gold-100 rounded-2xl overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {loading ? (
-          <div className="p-20 text-center">
-             <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+          Array(4).fill(0).map((_, i) => (
+            <div key={i} className="h-48 bg-slate-100 rounded-2xl animate-pulse" />
+          ))
+        ) : categories.map((cat) => (
+          <div key={cat._id} className="group bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm hover:border-primary transition-all">
+             <div className="relative h-32 bg-slate-50">
+                {cat.image ? (
+                  <Image src={cat.image} alt={cat.name} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-slate-200">
+                    <LayoutGrid size={32} />
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+             </div>
+             
+             <div className="p-5">
+                <div className="flex items-center justify-between mb-1">
+                   <h3 className="text-[13px] font-bold text-slate-900">{cat.name}</h3>
+                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button onClick={() => openModal(cat)} className="p-1.5 text-slate-400 hover:text-primary transition-colors"><Pencil size={14} /></button>
+                      <button onClick={() => handleDelete(cat._id)} className="p-1.5 text-slate-400 hover:text-rose-500 transition-colors"><Trash2 size={14} /></button>
+                   </div>
+                </div>
+                <p className="text-[10px] font-medium text-slate-400 uppercase tracking-widest">{cat.slug}</p>
+             </div>
           </div>
-        ) : categories.length === 0 ? (
-          <div className="p-20 text-center text-gold-400 font-bold uppercase text-[11px] tracking-widest">
-            No categories found
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-gold-50/50 border-b border-gold-100">
-                  <th className="px-8 py-5 text-[11px] font-bold text-gold-400 uppercase tracking-widest">Category Info</th>
-                  <th className="px-8 py-5 text-[11px] font-bold text-gold-400 uppercase tracking-widest">URL Slug</th>
-                  <th className="px-8 py-5 text-[11px] font-bold text-gold-400 uppercase tracking-widest text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gold-50">
-                {categories.map((cat) => (
-                  <tr key={cat._id} className="hover:bg-gold-50/30 transition-all">
-                    <td className="px-8 py-4">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-gold-50 rounded-lg border border-gold-100 overflow-hidden flex items-center justify-center">
-                          {cat.image ? (
-                            <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
-                          ) : (
-                            <ImageIcon size={14} className="text-gold-200" />
-                          )}
-                        </div>
-                        <span className="text-[13px] font-bold text-gold-900">{cat.name}</span>
-                      </div>
-                    </td>
-                    <td className="px-8 py-4">
-                       <span className="text-[11px] font-bold text-gold-400 font-mono tracking-tight">{cat.slug}</span>
-                    </td>
-                    <td className="px-8 py-4 text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        <button onClick={() => openEdit(cat)} className="w-9 h-9 rounded-lg flex items-center justify-center text-gold-400 hover:text-gold-900 transition-colors"><Pencil size={14} /></button>
-                        <button onClick={() => handleDelete(cat._id, cat.name)} className="w-9 h-9 rounded-lg flex items-center justify-center text-gold-400 hover:text-rose-600 transition-colors"><Trash2 size={14} /></button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        ))}
       </div>
 
-      <Modal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        title={editing ? 'Edit Category' : 'New Category'}
-      >
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-2">
-            <label className="text-[11px] font-bold text-gold-900 uppercase tracking-widest">Name</label>
-            <input 
-              value={form.name} 
-              onChange={e => setForm(f => ({ ...f, name: e.target.value, slug: editing ? f.slug : slugify(e.target.value) }))}
-              required 
-              placeholder="e.g. Smartphones"
-              className="w-full h-12 px-4 bg-gold-50 border border-gold-100 rounded-xl text-[13px] font-semibold text-gold-900 focus:bg-white focus:border-gold-200 outline-none transition-all" 
-            />
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={editingCategory ? 'Edit Category' : 'New Category'} maxWidth="max-w-md">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-1">
+             <label className={labelClass}>Category Name</label>
+             <input 
+               value={form.name} 
+               onChange={e => setForm({ ...form, name: e.target.value, slug: editingCategory ? form.slug : e.target.value.toLowerCase().replace(/ /g, '-') })}
+               required 
+               className="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:bg-white focus:border-primary outline-none transition-all" 
+             />
           </div>
-          <div className="space-y-2">
-            <label className="text-[11px] font-bold text-gold-900 uppercase tracking-widest">Slug</label>
-            <input 
-              value={form.slug} 
-              onChange={e => setForm(f => ({ ...f, slug: e.target.value }))}
-              required 
-              placeholder="slug"
-              className="w-full h-12 px-4 bg-gold-50 border border-gold-100 rounded-xl text-[13px] font-semibold text-gold-400 focus:bg-white focus:border-gold-200 outline-none transition-all" 
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-[11px] font-bold text-gold-900 uppercase tracking-widest">Cover Image</label>
-            <div className="relative group/upload">
-               <div className={`w-full aspect-video rounded-xl border-2 border-dashed transition-all flex flex-col items-center justify-center p-2 overflow-hidden ${imageFile || form.image ? 'border-emerald-100 bg-emerald-50/20' : 'border-gold-100 bg-gold-50 hover:border-gold-200'}`}>
-                  {imageFile || form.image ? (
-                    <img 
-                      src={imageFile ? URL.createObjectURL(imageFile) : form.image} 
-                      alt="Preview" 
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                  ) : (
-                    <>
-                      <UploadCloud size={20} className="text-gold-300 mb-1" />
-                      <p className="text-[10px] font-bold text-gold-400 uppercase tracking-widest">Click to upload</p>
-                    </>
-                  )}
-                  <input 
-                    type="file" 
-                    accept="image/*"
-                    onChange={e => setImageFile(e.target.files?.[0] || null)}
-                    className="absolute inset-0 opacity-0 cursor-pointer" 
-                  />
-               </div>
-            </div>
+          <div className="space-y-1">
+             <label className={labelClass}>URL Slug</label>
+             <input value={form.slug} onChange={e => setForm({ ...form, slug: e.target.value })} required className="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:bg-white focus:border-primary outline-none transition-all" />
           </div>
           
-          <div className="flex gap-3 pt-2">
-            <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 h-12 rounded-xl border border-gold-100 text-gold-400 font-bold text-[13px] hover:bg-gold-50 transition-all">Cancel</button>
-            <button 
-              type="submit" 
-              disabled={submitting} 
-              className="flex-[2] h-12 bg-gold-900 text-white rounded-xl font-bold text-[13px] hover:bg-primary transition-all flex items-center justify-center gap-2"
-            >
-              {submitting ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Plus size={14} />}
-              {editing ? 'Save Changes' : 'Create Category'}
-            </button>
+          <div className="space-y-1">
+             <label className={labelClass}>Thumbnail Image</label>
+             <div className="flex items-center gap-4 p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                <div className="relative w-12 h-12 rounded-lg bg-white border border-slate-100 overflow-hidden flex items-center justify-center shrink-0">
+                   {preview ? <Image src={preview} alt="Preview" fill className="object-cover" /> : <ImageIcon size={20} className="text-slate-300" />}
+                </div>
+                <input type="file" onChange={e => {
+                  const f = e.target.files?.[0];
+                  if (f) { setImage(f); setPreview(URL.createObjectURL(f)); }
+                }} className="text-xs text-slate-500 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-[10px] file:font-bold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer" />
+             </div>
+          </div>
+
+          <div className="pt-4 flex gap-3 border-t border-slate-100">
+             <button type="button" onClick={() => setIsModalOpen(false)} className="px-6 h-11 rounded-xl border border-slate-200 text-slate-500 font-bold text-xs uppercase tracking-wider hover:bg-slate-50 transition-all">Cancel</button>
+             <button type="submit" disabled={submitting} className="flex-1 h-11 bg-slate-900 text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-primary transition-all flex items-center justify-center gap-2 shadow-sm">
+                {submitting ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
+                {editingCategory ? 'Update Category' : 'Create Category'}
+             </button>
           </div>
         </form>
       </Modal>

@@ -3,189 +3,193 @@ import { useEffect, useState } from 'react';
 import { api } from '@/lib/axios';
 import toast from 'react-hot-toast';
 import { 
-  ArrowUpCircle, 
-  ArrowDownCircle, 
-  Archive, 
-  Activity, 
-  History, 
+  TrendingUp, 
   Package, 
-  Database,
-  TrendingUp,
-  FileText
+  History, 
+  Search, 
+  ArrowRight,
+  ChevronDown,
+  Warehouse,
+  Loader2
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
-export default function AdminInventoryPage() {
-  const [logs, setLogs] = useState<any[]>([]);
+export default function InventoryPage() {
   const [products, setProducts] = useState<any[]>([]);
+  const [logs, setLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [adjustForm, setAdjustForm] = useState({ product: '', type: 'IN', quantity: '', reason: '' });
   const [submitting, setSubmitting] = useState(false);
+  const [form, setForm] = useState({
+    product: '',
+    type: 'ADD' as 'ADD' | 'REMOVE',
+    amount: '',
+    note: ''
+  });
 
   const fetchData = async () => {
     setLoading(true);
-    const [logsRes, prodsRes] = await Promise.all([
-      api.get('/admin/inventory/logs'),
+    const [pRes, lRes] = await Promise.all([
       api.get('/products'),
+      api.get('/inventory/logs')
     ]);
-    setLogs(logsRes.data);
-    setProducts(prodsRes.data);
+    setProducts(pRes.data);
+    setLogs(lRes.data);
     setLoading(false);
   };
 
   useEffect(() => { fetchData(); }, []);
 
-  const handleAdjust = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!adjustForm.product || !adjustForm.quantity) return toast.error('Required fields missing');
+    if (!form.product || !form.amount) return toast.error('Fill required fields');
     setSubmitting(true);
     try {
-      await api.post('/admin/inventory/adjust', {
-        ...adjustForm,
-        quantity: Number(adjustForm.quantity),
+      await api.post('/inventory/adjust', {
+        productId: form.product,
+        amount: Number(form.amount),
+        type: form.type,
+        note: form.note
       });
       toast.success('Stock adjusted');
-      setAdjustForm({ product: '', type: 'IN', quantity: '', reason: '' });
+      setForm({ product: '', type: 'ADD', amount: '', note: '' });
       fetchData();
-    } catch (err: any) {
-      toast.error(err?.response?.data?.error || 'Adjustment failed');
-    } finally {
-      setSubmitting(false);
-    }
+    } catch { toast.error('Adjustment failed'); }
+    finally { setSubmitting(false); }
   };
 
-  const TYPE_CONFIG: Record<string, { bg: string, text: string }> = {
-    IN: { bg: 'bg-emerald-50', text: 'text-emerald-600' },
-    OUT: { bg: 'bg-rose-50', text: 'text-rose-600' },
-    ADJUSTMENT: { bg: 'bg-primary/10', text: 'text-primary' },
-  };
+  const labelClass = "text-[11px] font-bold text-black uppercase tracking-wider ml-1";
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-10">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-           <h1 className="text-2xl font-bold text-gold-900 tracking-tight">Inventory</h1>
-           <p className="text-gold-400 text-[13px] font-medium mt-1">Manage stock levels and track activity.</p>
+           <h1 className="text-xl font-bold text-slate-900 tracking-tight">Stock Management</h1>
+           <p className="text-slate-500 text-[13px] font-medium mt-0.5">Track and adjust product inventory levels.</p>
         </div>
-        
-        <div className="flex items-center gap-2 bg-gold-50 px-4 py-2 rounded-xl border border-gold-100">
-           <Database size={14} className="text-gold-400" />
-           <span className="text-[11px] font-bold text-gold-900 uppercase tracking-widest">{products.length} Products</span>
+        <div className="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
+           <Warehouse size={14} className="text-slate-400" />
+           <span className="text-[11px] font-bold text-slate-700 uppercase tracking-widest">{products.length} Products Tracked</span>
         </div>
       </div>
 
       <div className="grid lg:grid-cols-12 gap-10">
-        {/* Adjustment Interface */}
+        {/* Adjustment Form */}
         <div className="lg:col-span-4">
-           <div className="bg-gold-900 rounded-2xl p-8 shadow-xl shadow-gold-900/10">
-              <div className="flex items-center gap-3 mb-8">
-                 <Activity size={18} className="text-primary/80" />
-                 <h2 className="text-[11px] font-bold text-white uppercase tracking-widest">Adjust Stock</h2>
+           <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm sticky top-28">
+              <div className="flex items-center gap-3 mb-6">
+                 <div className="w-8 h-8 bg-primary/5 rounded-lg flex items-center justify-center text-primary">
+                    <TrendingUp size={18} />
+                 </div>
+                 <h2 className="text-base font-bold text-slate-900">Stock Adjustment</h2>
               </div>
               
-              <form onSubmit={handleAdjust} className="space-y-6">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-gold-500 uppercase tracking-widest px-1">Product</label>
+              <form onSubmit={handleSubmit} className="space-y-3">
+                <div className="space-y-1">
+                  <label className={labelClass}>Product</label>
                   <select 
-                    value={adjustForm.product} 
-                    onChange={e => setAdjustForm(f => ({...f, product: e.target.value}))}
-                    className="w-full h-11 px-4 bg-white/5 border border-white/10 rounded-xl text-[13px] font-bold text-white focus:bg-white/10 outline-none transition-all"
+                    value={form.product} 
+                    onChange={e => setForm({ ...form, product: e.target.value })}
+                    required
+                    className="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:bg-white focus:border-primary outline-none transition-all"
                   >
-                    <option value="" className="bg-gold-900">Choose a product</option>
-                    {products.map(p => <option key={p._id} value={p._id} className="bg-gold-900">{p.name} ({p.stock})</option>)}
+                    <option value="">Choose a product...</option>
+                    {products.map(p => <option key={p._id} value={p._id}>{p.name} ({p.stock} in stock)</option>)}
                   </select>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2">
-                  <button 
-                    type="button" 
-                    onClick={() => setAdjustForm(f => ({...f, type: 'IN'}))}
-                    className={`h-11 rounded-xl text-[10px] font-bold uppercase tracking-widest border transition-all flex items-center justify-center gap-2
-                      ${adjustForm.type === 'IN' ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400' : 'border-white/5 text-gold-500'}`}
-                  >
-                    <ArrowUpCircle size={14} /> IN
-                  </button>
-                  <button 
-                    type="button" 
-                    onClick={() => setAdjustForm(f => ({...f, type: 'OUT'}))}
-                    className={`h-11 rounded-xl text-[10px] font-bold uppercase tracking-widest border transition-all flex items-center justify-center gap-2
-                      ${adjustForm.type === 'OUT' ? 'border-rose-500 bg-rose-500/10 text-rose-400' : 'border-white/5 text-gold-500'}`}
-                  >
-                    <ArrowDownCircle size={14} /> OUT
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-gold-500 uppercase tracking-widest px-1">Quantity</label>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className={labelClass}>Action</label>
+                    <select 
+                      value={form.type} 
+                      onChange={e => setForm({ ...form, type: e.target.value as any })}
+                      className="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold"
+                    >
+                      <option value="ADD">Restock (+)</option>
+                      <option value="REMOVE">Remove (-)</option>
+                    </select>
+                  </div>
+                  <div className="space-y-1">
+                    <label className={labelClass}>Amount</label>
                     <input 
                       type="number" 
-                      min="1" 
-                      value={adjustForm.quantity} 
-                      onChange={e => setAdjustForm(f => ({...f, quantity: e.target.value}))}
-                      className="w-full h-11 px-4 bg-white/5 border border-white/10 rounded-xl text-[13px] font-bold text-white focus:bg-white/10 outline-none transition-all" 
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-gold-500 uppercase tracking-widest px-1">Reason</label>
-                    <input 
-                      type="text" 
-                      value={adjustForm.reason} 
-                      onChange={e => setAdjustForm(f => ({...f, reason: e.target.value}))}
-                      placeholder="e.g. Restock"
-                      className="w-full h-11 px-4 bg-white/5 border border-white/10 rounded-xl text-[13px] font-bold text-white focus:bg-white/10 outline-none transition-all placeholder:text-gold-600" 
+                      value={form.amount} 
+                      onChange={e => setForm({ ...form, amount: e.target.value })}
+                      placeholder="0"
+                      required
+                      className="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-900" 
                     />
                   </div>
                 </div>
 
-                <button type="submit" disabled={submitting} className="w-full h-12 bg-white text-gold-900 rounded-xl font-bold text-[11px] uppercase tracking-widest hover:bg-primary hover:text-white transition-all flex items-center justify-center gap-2">
-                  {submitting ? <div className="w-4 h-4 border-2 border-gold-900/30 border-t-gold-900 rounded-full animate-spin" /> : <TrendingUp size={14} />}
-                  Apply
+                <div className="space-y-1">
+                  <label className={labelClass}>Notes / Reason</label>
+                  <textarea 
+                    value={form.note} 
+                    onChange={e => setForm({ ...form, note: e.target.value })}
+                    placeholder="e.g. Damage replacement"
+                    rows={2}
+                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:bg-white transition-all resize-none" 
+                  />
+                </div>
+
+                <button type="submit" disabled={submitting} className="w-full h-11 bg-slate-900 text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-primary transition-all flex items-center justify-center gap-2 mt-2 shadow-sm active:scale-[0.98]">
+                  {submitting ? <Loader2 size={16} className="animate-spin" /> : <TrendingUp size={16} />}
+                  Apply Adjustment
                 </button>
               </form>
            </div>
         </div>
 
-        {/* Inventory History */}
-        <div className="lg:col-span-8">
-           <div className="bg-white border border-gold-100 rounded-2xl overflow-hidden shadow-sm">
-              <div className="px-8 py-5 bg-gold-50/50 border-b border-gold-100 flex items-center justify-between">
-                 <div className="flex items-center gap-2">
-                    <History size={14} className="text-gold-400" />
-                    <h3 className="text-[11px] font-bold text-gold-900 uppercase tracking-widest">Recent Activity</h3>
-                 </div>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-gold-50">
-                      <th className="px-8 py-4 text-[10px] font-bold text-gold-400 uppercase tracking-widest">Product</th>
-                      <th className="px-8 py-4 text-[10px] font-bold text-gold-400 uppercase tracking-widest">Type</th>
-                      <th className="px-8 py-4 text-[10px] font-bold text-gold-400 uppercase tracking-widest">Change</th>
-                      <th className="px-8 py-4 text-[10px] font-bold text-gold-400 uppercase tracking-widest text-right">Date</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gold-50">
-                    {logs.slice(0, 8).map((log) => (
-                      <tr key={log._id} className="hover:bg-gold-50/30 transition-all">
-                        <td className="px-8 py-3.5 text-[12px] font-bold text-gold-900">{log.product?.name || 'Deleted'}</td>
-                        <td className="px-8 py-3.5">
-                          <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest ${TYPE_CONFIG[log.type].bg} ${TYPE_CONFIG[log.type].text}`}>
-                            {log.type}
-                          </span>
-                        </td>
-                        <td className="px-8 py-3.5 text-[12px] font-bold">
-                           <span className={log.type === 'OUT' ? 'text-rose-600' : 'text-emerald-600'}>
-                             {log.type === 'OUT' ? '−' : '+'} {log.quantity}
-                           </span>
-                        </td>
-                        <td className="px-8 py-3.5 text-right text-[10px] font-medium text-gold-400 uppercase">{new Date(log.createdAt).toLocaleDateString()}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+        {/* History Table */}
+        <div className="lg:col-span-8 space-y-4">
+           <div className="flex items-center gap-2 px-1">
+              <History size={16} className="text-slate-400" />
+              <h3 className="text-base font-bold text-slate-900 tracking-tight">Adjustment Log</h3>
+           </div>
+           
+           <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+              {loading ? (
+                <div className="p-20 text-center">
+                   <Loader2 size={24} className="text-primary animate-spin mx-auto" />
+                </div>
+              ) : logs.length === 0 ? (
+                <div className="p-20 text-center text-slate-400 font-bold text-[13px]">No logs recorded yet.</div>
+              ) : (
+                <div className="overflow-x-auto">
+                   <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="bg-slate-50/50 border-b border-slate-100">
+                          <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Product Info</th>
+                          <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Type</th>
+                          <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Amount</th>
+                          <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Date</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-50">
+                        {logs.map((log) => (
+                          <tr key={log._id} className="group hover:bg-slate-50/30 transition-all">
+                            <td className="px-6 py-4 text-[13px] font-bold text-slate-900">
+                               {log.product?.name || 'Deleted Product'}
+                            </td>
+                            <td className="px-6 py-4">
+                               <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-md ${log.type === 'ADD' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}`}>
+                                 {log.type === 'ADD' ? 'Restock' : 'Removal'}
+                               </span>
+                            </td>
+                            <td className="px-6 py-4 font-mono text-[13px] font-bold">
+                               {log.type === 'ADD' ? '+' : '-'}{log.amount}
+                            </td>
+                            <td className="px-6 py-4">
+                               <p className="text-[11px] font-medium text-slate-400">{new Date(log.createdAt).toLocaleString()}</p>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                   </table>
+                </div>
+              )}
            </div>
         </div>
       </div>

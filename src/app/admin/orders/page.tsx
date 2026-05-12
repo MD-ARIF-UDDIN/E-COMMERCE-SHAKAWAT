@@ -3,37 +3,36 @@ import { useEffect, useState } from 'react';
 import { api } from '@/lib/axios';
 import toast from 'react-hot-toast';
 import { 
-  Clock, 
   Package, 
-  Box, 
-  Truck, 
-  CheckCircle, 
-  XCircle, 
-  ChevronDown, 
-  ShoppingBag, 
   MapPin, 
-  Activity,
-  ArrowUpRight
+  Phone, 
+  User, 
+  Clock, 
+  CheckCircle2, 
+  Truck, 
+  XCircle,
+  Eye,
+  Search,
+  Filter,
+  ArrowRight,
+  ChevronDown,
+  ChevronUp,
+  Loader2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const STATUSES = ['Pending','Processing','Packed','Shipped','Delivered','Cancelled'];
-
-const STATUS_CONFIG: Record<string, { bg: string, text: string, icon: any }> = {
-  Pending:    { bg: 'bg-amber-50',   text: 'text-amber-600',  icon: Clock },
-  Processing: { bg: 'bg-primary/10',    text: 'text-primary',   icon: Activity },
-  Packed:     { bg: 'bg-violet-50',  text: 'text-violet-600', icon: Box },
-  Shipped:    { bg: 'bg-primary/10',  text: 'text-primary', icon: Truck },
-  Delivered:  { bg: 'bg-emerald-50', text: 'text-emerald-600',icon: CheckCircle },
-  Cancelled:  { bg: 'bg-rose-50',    text: 'text-rose-600',   icon: XCircle },
+const STATUS_CONFIG: any = {
+  Pending: { icon: Clock, color: 'text-amber-500', bg: 'bg-amber-50' },
+  Processing: { icon: Truck, color: 'text-primary', bg: 'bg-primary/5' },
+  Delivered: { icon: CheckCircle2, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+  Cancelled: { icon: XCircle, color: 'text-rose-500', bg: 'bg-rose-50' },
 };
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('');
-  const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -44,196 +43,161 @@ export default function AdminOrdersPage() {
 
   useEffect(() => { fetchOrders(); }, []);
 
-  const updateStatus = async (id: string, status: string, deliveryCompany?: string) => {
-    setUpdatingId(id);
+  const updateStatus = async (id: string, status: string) => {
     try {
-      await api.put(`/orders/admin/${id}/status`, { status, deliveryCompany });
-      toast.success(`Updated to ${status}`);
+      await api.put(`/orders/${id}/status`, { status });
+      toast.success('Status updated');
       fetchOrders();
-    } catch {
-      toast.error('Update failed');
-    } finally {
-      setUpdatingId(null);
-    }
+    } catch { toast.error('Update failed'); }
   };
 
-  const filtered = filter ? orders.filter(o => o.status === filter) : orders;
+  const filteredOrders = filter 
+    ? orders.filter(o => o.status === filter)
+    : orders;
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         <div>
-           <h1 className="text-2xl font-bold text-gold-900 tracking-tight">Orders</h1>
-           <p className="text-gold-400 text-[13px] font-medium mt-1">
-             Track and manage customer orders.
-           </p>
+           <h1 className="text-xl font-bold text-slate-900 tracking-tight">Order Management</h1>
+           <p className="text-slate-500 text-[13px] font-medium mt-0.5">Track and fulfill customer purchases.</p>
         </div>
         
-        <div className="flex flex-wrap gap-2">
-          <button 
-            onClick={() => setFilter('')} 
-            className={`h-10 px-4 rounded-xl text-[11px] font-bold uppercase tracking-widest transition-all ${filter === '' ? 'bg-gold-900 text-white shadow-sm' : 'bg-gold-50 text-gold-400 hover:bg-gold-100'}`}
-          >
-            All
-          </button>
-          {STATUSES.map(s => (
-            <button 
-              key={s} 
-              onClick={() => setFilter(s)} 
-              className={`h-10 px-4 rounded-xl text-[11px] font-bold uppercase tracking-widest transition-all 
-                ${filter === s ? `${STATUS_CONFIG[s].bg} ${STATUS_CONFIG[s].text}` : 'bg-gold-50 text-gold-400 hover:bg-gold-100'}`}
-            >
-              {s}
-            </button>
-          ))}
+        <div className="flex items-center gap-2 p-1 bg-slate-100 rounded-xl border border-slate-200">
+           {['', 'Pending', 'Processing', 'Delivered', 'Cancelled'].map((s) => (
+             <button
+               key={s}
+               onClick={() => setFilter(s)}
+               className={`h-9 px-4 rounded-lg text-[11px] font-bold uppercase tracking-wider transition-all ${filter === s ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'}`}
+             >
+               {s || 'All'}
+             </button>
+           ))}
         </div>
       </div>
 
-      {loading ? (
-        <div className="p-20 text-center">
-           <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
-        </div>
-      ) : filtered.length === 0 ? (
-        <div className="p-20 text-center bg-gold-50/50 rounded-2xl border border-dashed border-gold-200">
-           <Box size={32} className="text-gold-200 mx-auto mb-4" />
-           <p className="text-gold-900 font-bold text-lg mb-1">No Orders Found</p>
-           <p className="text-gold-400 text-[13px]">No orders match your filter criteria.</p>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          <AnimatePresence mode="popLayout">
-            {filtered.map((order, index) => (
-              <motion.div 
-                layout
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.02 }}
-                key={order._id} 
-                className={`group bg-white rounded-2xl border transition-all ${expandedId === order._id ? 'border-primary ring-4 ring-primary/10 shadow-lg' : 'border-gold-100 hover:border-gold-200'}`}
-              >
-                {/* Order Row */}
-                <div
-                  className="flex flex-col lg:flex-row lg:items-center gap-4 p-6 cursor-pointer"
-                  onClick={() => setExpandedId(expandedId === order._id ? null : order._id)}
-                >
-                  <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-6">
-                    <div className="space-y-1">
-                      <p className="text-[10px] font-bold text-gold-400 uppercase tracking-widest">Order ID</p>
-                      <p className="text-[13px] font-bold text-gold-900 tracking-tight">{order.orderNumber}</p>
-                    </div>
-                    <div className="space-y-1 min-w-0">
-                      <p className="text-[10px] font-bold text-gold-400 uppercase tracking-widest">Customer</p>
-                      <p className="text-[13px] font-bold text-gold-900 truncate">{order.customerName || 'Guest'}</p>
-                    </div>
-                    <div className="space-y-1">
-                      <p className="text-[10px] font-bold text-gold-400 uppercase tracking-widest">Amount</p>
-                      <p className="text-[13px] font-bold text-gold-900">৳{order.totalAmount?.toLocaleString()}</p>
-                    </div>
-                    <div className="space-y-1">
-                      <p className="text-[10px] font-bold text-gold-400 uppercase tracking-widest">Status</p>
-                      <span className={`inline-flex px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest ${STATUS_CONFIG[order.status].bg} ${STATUS_CONFIG[order.status].text}`}>
-                        {order.status}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex-shrink-0 flex items-center justify-end">
-                      <div className={`w-8 h-8 rounded-lg bg-gold-50 flex items-center justify-center text-gold-400 transition-all ${expandedId === order._id ? 'rotate-180 bg-primary/10 text-primary' : ''}`}>
-                        <ChevronDown size={14} />
-                      </div>
-                  </div>
-                </div>
-
-                {/* Expanded Panel */}
-                <AnimatePresence>
-                  {expandedId === order._id && (
-                    <motion.div 
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden border-t border-gold-50"
-                    >
-                      <div className="p-8 lg:p-10 grid lg:grid-cols-12 gap-10">
-                        {/* Order Details */}
-                        <div className="lg:col-span-7 space-y-8">
-                           <div>
-                              <h4 className="text-[11px] font-bold text-gold-900 uppercase tracking-widest mb-4">Items Summary</h4>
-                              <div className="space-y-2">
-                                {order.items?.map((item: any, i: number) => (
-                                  <div key={i} className="flex justify-between items-center p-4 bg-gold-50 rounded-xl">
-                                    <div className="min-w-0">
-                                      <p className="text-[13px] font-bold text-gold-900 truncate">{item.product?.name || 'Item'}</p>
-                                      <p className="text-[10px] font-medium text-gold-400 uppercase">Qty: {item.quantity}</p>
-                                    </div>
-                                    <span className="text-[13px] font-bold text-gold-900 ml-4">৳{(item.price * item.quantity).toLocaleString()}</span>
+      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+        {loading ? (
+          <div className="p-20 text-center">
+             <Loader2 size={24} className="text-primary animate-spin mx-auto" />
+          </div>
+        ) : filteredOrders.length === 0 ? (
+          <div className="p-20 text-center">
+            <p className="text-slate-400 font-bold text-[13px]">No orders found for this status.</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50/50 border-b border-slate-100">
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Order Details</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Customer</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Status</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">View</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-50">
+                {filteredOrders.map((order) => (
+                  <React.Fragment key={order._id}>
+                    <tr className={`group transition-all ${expandedOrder === order._id ? 'bg-slate-50/50' : 'hover:bg-slate-50/30'}`}>
+                      <td className="px-6 py-4">
+                         <p className="text-[13px] font-bold text-slate-900 mb-0.5">{order.orderNumber}</p>
+                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">{new Date(order.createdAt).toLocaleDateString()}</p>
+                      </td>
+                      <td className="px-6 py-4">
+                         <p className="text-[13px] font-bold text-slate-900 truncate max-w-[120px]">{order.customerName || 'Guest'}</p>
+                         <p className="text-[10px] font-medium text-slate-400">{order.customerPhone}</p>
+                      </td>
+                      <td className="px-6 py-4 text-[13px] font-bold text-slate-900">৳{order.totalAmount?.toLocaleString()}</td>
+                      <td className="px-6 py-4">
+                         <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[9px] font-bold uppercase tracking-widest ${STATUS_CONFIG[order.status]?.bg} ${STATUS_CONFIG[order.status]?.color}`}>
+                            {order.status}
+                         </div>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                         <button onClick={() => setExpandedOrder(expandedOrder === order._id ? null : order._id)} className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${expandedOrder === order._id ? 'bg-primary text-white' : 'text-slate-400 hover:text-primary hover:bg-primary/5'}`}>
+                           {expandedOrder === order._id ? <ChevronUp size={16} /> : <Eye size={16} />}
+                         </button>
+                      </td>
+                    </tr>
+                    
+                    {/* Expanded Content */}
+                    <AnimatePresence>
+                      {expandedOrder === order._id && (
+                        <tr>
+                          <td colSpan={5} className="px-6 py-0 border-none">
+                            <motion.div 
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              className="overflow-hidden"
+                            >
+                               <div className="py-8 grid lg:grid-cols-12 gap-10 border-t border-slate-100">
+                                  {/* Items Summary */}
+                                  <div className="lg:col-span-5 space-y-4">
+                                     <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Items Summary</h4>
+                                     <div className="space-y-3">
+                                       {order.items?.map((item: any, i: number) => (
+                                         <div key={i} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
+                                            <div className="flex-1">
+                                              <p className="text-[13px] font-bold text-slate-900 truncate">{item.product?.name || 'Deleted Product'}</p>
+                                              <p className="text-[10px] font-medium text-slate-400">{item.quantity} x ৳{item.price.toLocaleString()}</p>
+                                            </div>
+                                            <span className="text-[13px] font-bold text-slate-900">৳{(item.price * item.quantity).toLocaleString()}</span>
+                                         </div>
+                                       ))}
+                                     </div>
                                   </div>
-                                ))}
-                              </div>
-                           </div>
 
-                           <div className="flex items-start gap-3 p-4 border border-gold-100 rounded-xl">
-                              <MapPin size={14} className="text-gold-400 mt-0.5" />
-                              <div>
-                                 <p className="text-[10px] font-bold text-gold-400 uppercase tracking-widest mb-1">Delivery Address</p>
-                                 <p className="text-[13px] font-bold text-gold-900 leading-relaxed">{order.address}</p>
-                              </div>
-                           </div>
-                        </div>
+                                  {/* Delivery Details */}
+                                  <div className="lg:col-span-4 space-y-4">
+                                     <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Delivery Details</h4>
+                                     <div className="p-4 bg-slate-50 rounded-xl space-y-3">
+                                        <div className="flex items-start gap-3">
+                                           <MapPin size={14} className="text-slate-400 shrink-0 mt-0.5" />
+                                           <p className="text-[13px] font-medium text-slate-900 leading-relaxed">{order.address}</p>
+                                        </div>
+                                        {order.note && (
+                                           <div className="pt-3 border-t border-slate-200/50">
+                                              <p className="text-[11px] text-slate-500 italic">"{order.note}"</p>
+                                           </div>
+                                        )}
+                                     </div>
+                                  </div>
 
-                        {/* Controls */}
-                        <div className="lg:col-span-5 space-y-8">
-                           <div>
-                              <h4 className="text-[11px] font-bold text-gold-900 uppercase tracking-widest mb-4">Update Status</h4>
-                              <div className="grid grid-cols-2 gap-2">
-                                {STATUSES.map(s => (
-                                  <button
-                                    key={s}
-                                    disabled={order.status === s || updatingId === order._id}
-                                    onClick={() => updateStatus(order._id, s)}
-                                    className={`h-11 rounded-xl text-[10px] font-bold uppercase tracking-widest border transition-all disabled:opacity-50
-                                      ${order.status === s ? `${STATUS_CONFIG[s].bg} ${STATUS_CONFIG[s].text} border-current` : 'border-gold-100 text-gold-400 hover:border-gold-300 hover:text-gold-900'}`}
-                                  >
-                                    {s}
-                                  </button>
-                                ))}
-                              </div>
-                           </div>
-
-                           <div className="bg-gold-900 rounded-2xl p-6">
-                              <div className="flex items-center gap-2 mb-4">
-                                 <Truck size={14} className="text-primary/80" />
-                                 <p className="text-[10px] font-bold text-primary/80 uppercase tracking-widest">Delivery Carrier</p>
-                              </div>
-                              <div className="flex gap-2">
-                                <input
-                                  id={`dc-${order._id}`}
-                                  type="text"
-                                  defaultValue={order.deliveryCompany || ''}
-                                  placeholder="e.g. STEADFAST"
-                                  className="flex-1 min-w-0 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-[11px] font-bold text-white focus:bg-white/10 outline-none transition-all placeholder:text-gold-600"
-                                />
-                                <button
-                                  onClick={() => {
-                                    const dc = (document.getElementById(`dc-${order._id}`) as HTMLInputElement)?.value;
-                                    updateStatus(order._id, order.status, dc);
-                                  }}
-                                  className="px-5 bg-primary text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-primary transition-all shadow-lg shadow-primary/20"
-                                >
-                                  Update
-                                </button>
-                              </div>
-                           </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
-      )}
+                                  {/* Actions */}
+                                  <div className="lg:col-span-3 space-y-4">
+                                     <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Update Status</h4>
+                                     <div className="grid grid-cols-1 gap-2">
+                                       {['Pending', 'Processing', 'Delivered', 'Cancelled'].map((s) => (
+                                         <button
+                                           key={s}
+                                           onClick={() => updateStatus(order._id, s)}
+                                           className={`h-10 rounded-lg text-[10px] font-bold uppercase tracking-wider border transition-all
+                                             ${order.status === s ? `${STATUS_CONFIG[s].bg} ${STATUS_CONFIG[s].color} border-current` : 'border-slate-100 text-slate-400 hover:border-slate-300 hover:text-slate-900'}`}
+                                         >
+                                           {s}
+                                         </button>
+                                       ))}
+                                     </div>
+                                  </div>
+                               </div>
+                            </motion.div>
+                          </td>
+                        </tr>
+                      )}
+                    </AnimatePresence>
+                  </React.Fragment>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
+
+import React from 'react'; // Fix missing React import if needed (NextJS handles it mostly but good for Fragment)

@@ -3,36 +3,38 @@ import { useEffect, useState } from 'react';
 import { api } from '@/lib/axios';
 import toast from 'react-hot-toast';
 import { 
-  ShoppingBag, 
-  CreditCard, 
   Plus, 
+  Trash2, 
   History, 
-  Truck, 
-  DollarSign, 
-  Package, 
-  FileText,
-  TrendingUp,
-  ExternalLink,
-  ChevronRight,
-  Database
+  ShoppingBag,
+  DollarSign,
+  Package,
+  Calendar,
+  User,
+  Loader2
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 export default function AdminPurchasesPage() {
-  const [purchases, setPurchases] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
+  const [purchases, setPurchases] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState({ product: '', quantity: '', costPrice: '', supplier: '' });
   const [submitting, setSubmitting] = useState(false);
+  const [form, setForm] = useState({
+    product: '',
+    quantity: '',
+    costPrice: '',
+    supplier: ''
+  });
 
   const fetchData = async () => {
     setLoading(true);
-    const [pRes, prRes] = await Promise.all([
-      api.get('/admin/inventory/purchases'),
+    const [pRes, purRes] = await Promise.all([
       api.get('/products'),
+      api.get('/purchases')
     ]);
-    setPurchases(pRes.data);
-    setProducts(prRes.data);
+    setProducts(pRes.data);
+    setPurchases(purRes.data);
     setLoading(false);
   };
 
@@ -40,163 +42,173 @@ export default function AdminPurchasesPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.product || !form.quantity || !form.costPrice) return toast.error('Please fill in all required fields');
+    if (!form.product || !form.quantity || !form.costPrice) return toast.error('Fill required fields');
     setSubmitting(true);
     try {
-      await api.post('/admin/inventory/purchases', {
-        product: form.product,
+      await api.post('/purchases', {
+        productId: form.product,
         quantity: Number(form.quantity),
         costPrice: Number(form.costPrice),
-        supplier: form.supplier,
+        supplier: form.supplier
       });
-      toast.success('Purchase recorded successfully');
+      toast.success('Purchase recorded');
       setForm({ product: '', quantity: '', costPrice: '', supplier: '' });
       fetchData();
-    } catch (err: any) {
-      toast.error(err?.response?.data?.error || 'Failed to record purchase');
-    } finally {
-      setSubmitting(false);
-    }
+    } catch { toast.error('Failed to record'); }
+    finally { setSubmitting(false); }
   };
 
+  const handleDelete = async (id: string) => {
+    if (!confirm('Delete this record?')) return;
+    try {
+      await api.delete(`/purchases/${id}`);
+      toast.success('Deleted');
+      fetchData();
+    } catch { toast.error('Failed'); }
+  };
+
+  const totalSpent = purchases.reduce((acc, p) => acc + (p.quantity * p.costPrice), 0);
+  const totalUnits = purchases.reduce((acc, p) => acc + p.quantity, 0);
+
+  const labelClass = "text-[11px] font-bold text-black uppercase tracking-wider ml-1";
+
   return (
-    <div className="space-y-16 pb-32">
+    <div className="space-y-10">
       {/* Header */}
-      <div className="px-4">
-         <div className="flex items-center gap-2 mb-2">
-            <CreditCard size={14} className="text-primary" />
-            <p className="text-[10px] font-black text-gold-400 uppercase tracking-[0.3em]">Purchase Management</p>
-         </div>
-         <h1 className="text-4xl lg:text-5xl font-black text-gold-900 tracking-tighter">Purchases</h1>
-         <p className="text-gold-400 text-xs font-bold uppercase tracking-widest mt-2">
-           Total Spent: <span className="text-gold-900">৳{purchases.reduce((acc, p) => acc + (p.quantity * p.costPrice), 0).toLocaleString()}</span> — Units Purchased: <span className="text-gold-900">{purchases.reduce((acc, p) => acc + p.quantity, 0)}</span>
-         </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+           <h1 className="text-xl font-bold text-slate-900 tracking-tight">Purchases</h1>
+           <p className="text-slate-500 text-[13px] font-medium mt-0.5">
+             Total Investment: <span className="text-slate-900 font-bold">৳{totalSpent.toLocaleString()}</span> — Units: <span className="text-slate-900 font-bold">{totalUnits}</span>
+           </p>
+        </div>
       </div>
 
-      <div className="grid lg:grid-cols-12 gap-12">
-        {/* New Purchase Form */}
-        <div className="lg:col-span-4 space-y-8">
-           <div className="bg-gold-50 rounded-[3rem] border border-gold-100 p-10 space-y-10 shadow-inner shadow-gold-200/20">
-              <div>
-                 <h2 className="text-sm font-black text-gold-900 uppercase tracking-widest">Record New Purchase</h2>
-                 <p className="text-[9px] font-bold text-gold-400 uppercase tracking-tighter mt-1">Stock levels will update automatically</p>
+      <div className="grid lg:grid-cols-12 gap-10">
+        {/* Record Form */}
+        <div className="lg:col-span-4">
+           <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm sticky top-28">
+              <div className="flex items-center gap-3 mb-6">
+                 <div className="w-8 h-8 bg-primary/5 rounded-lg flex items-center justify-center text-primary">
+                    <ShoppingBag size={18} />
+                 </div>
+                 <h2 className="text-base font-bold text-slate-900">Record Purchase</h2>
               </div>
-
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-3">
-                  <label className="text-[9px] font-black text-gold-900 uppercase tracking-widest px-1 text-gold-400">Select Product</label>
+              
+              <form onSubmit={handleSubmit} className="space-y-3">
+                <div className="space-y-1">
+                  <label className={labelClass}>Select Product</label>
                   <select 
                     value={form.product} 
-                    onChange={e => setForm(f => ({...f, product: e.target.value}))}
-                    required 
-                    className="w-full h-14 px-6 bg-white border border-gold-200 rounded-2xl text-sm font-black text-gold-900 focus:border-primary focus:shadow-premium focus:outline-none transition-all"
+                    onChange={e => setForm({ ...form, product: e.target.value })}
+                    className="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:bg-white focus:border-primary outline-none transition-all"
                   >
-                    <option value="">Choose a product</option>
-                    {products.map(p => <option key={p._id} value={p._id}>{p.name}</option>)}
+                    <option value="">Choose product...</option>
+                    {products.map(p => <option key={p._id} value={p._id}>{p.name} (Stock: {p.stock})</option>)}
                   </select>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-3">
-                    <label className="text-[9px] font-black text-gold-400 uppercase tracking-widest px-1">Quantity</label>
+                  <div className="space-y-1">
+                    <label className={labelClass}>Quantity</label>
                     <input 
                       type="number" 
-                      min="1" 
                       value={form.quantity} 
-                      onChange={e => setForm(f => ({...f, quantity: e.target.value}))}
-                      required 
-                      placeholder="Qty"
-                      className="w-full h-14 px-6 bg-white border border-gold-200 rounded-2xl text-sm font-black text-gold-900 focus:border-primary focus:shadow-premium focus:outline-none transition-all" 
+                      onChange={e => setForm({ ...form, quantity: e.target.value })}
+                      placeholder="0"
+                      className="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-900" 
                     />
                   </div>
-                  <div className="space-y-3">
-                    <label className="text-[9px] font-black text-gold-400 uppercase tracking-widest px-1">Cost Price (Unit)</label>
+                  <div className="space-y-1">
+                    <label className={labelClass}>Cost / Unit</label>
                     <input 
                       type="number" 
-                      min="0" 
                       value={form.costPrice} 
-                      onChange={e => setForm(f => ({...f, costPrice: e.target.value}))}
-                      required 
+                      onChange={e => setForm({ ...form, costPrice: e.target.value })}
                       placeholder="৳"
-                      className="w-full h-14 px-6 bg-white border border-gold-200 rounded-2xl text-sm font-black text-gold-900 focus:border-primary focus:shadow-premium focus:outline-none transition-all" 
+                      className="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-900" 
                     />
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  <label className="text-[9px] font-black text-gold-400 uppercase tracking-widest px-1">Supplier Name</label>
+                <div className="space-y-1">
+                  <label className={labelClass}>Supplier Name</label>
                   <input 
-                    type="text" 
                     value={form.supplier} 
-                    onChange={e => setForm(f => ({...f, supplier: e.target.value}))}
-                    placeholder="e.g. Global Supplies"
-                    className="w-full h-14 px-6 bg-white border border-gold-200 rounded-2xl text-sm font-bold text-gold-900 focus:border-primary focus:shadow-premium focus:outline-none transition-all placeholder:text-gold-300" 
+                    onChange={e => setForm({ ...form, supplier: e.target.value })}
+                    placeholder="Enter supplier info"
+                    className="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:bg-white transition-all" 
                   />
                 </div>
 
-                <button type="submit" disabled={submitting} className="w-full h-16 bg-gold-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-primary transition-all shadow-premium flex items-center justify-center gap-3 pt-1">
-                  {submitting ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <ShoppingBag size={16} />}
-                  Add Purchase
+                <button type="submit" disabled={submitting} className="w-full h-11 bg-slate-900 text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-primary transition-all flex items-center justify-center gap-2 mt-2 shadow-sm active:scale-[0.98]">
+                  {submitting ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
+                  Record Transaction
                 </button>
               </form>
            </div>
         </div>
 
-        {/* Purchase History */}
-        <div className="lg:col-span-8 space-y-8">
-           <div className="bg-white rounded-[3rem] border border-gold-100 shadow-premium overflow-hidden">
-              <div className="px-10 py-8 border-b border-gold-50 flex items-center justify-between bg-gold-50/50">
-                 <div className="flex items-center gap-3">
-                    <History size={16} className="text-gold-900" />
-                    <h3 className="text-[10px] font-black text-gold-900 uppercase tracking-widest">Recent Purchases</h3>
-                 </div>
-                 <Database size={16} className="text-gold-300" />
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-gold-100">
-                      <th className="px-10 py-6 text-[10px] font-black text-gold-400 uppercase tracking-widest">Product</th>
-                      <th className="px-10 py-6 text-[10px] font-black text-gold-400 uppercase tracking-widest">Quantity</th>
-                      <th className="px-10 py-6 text-[10px] font-black text-gold-400 uppercase tracking-widest">Total Cost</th>
-                      <th className="px-10 py-6 text-[10px] font-black text-gold-400 uppercase tracking-widest text-right">Supplier & Date</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gold-50">
-                    {purchases.map((p, i) => (
-                      <motion.tr 
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.05 }}
-                        key={p._id} 
-                        className="group hover:bg-gold-50/80 transition-all duration-300"
-                      >
-                        <td className="px-10 py-6">
-                           <div className="flex flex-col">
-                             <span className="text-sm font-black text-gold-900 tracking-tight">{p.product?.name || 'Deleted Product'}</span>
-                             <span className="text-[9px] font-black text-gold-400 uppercase">৳{p.costPrice?.toLocaleString()} per unit</span>
-                           </div>
-                        </td>
-                        <td className="px-10 py-6">
-                           <span className="text-sm font-black text-gold-900 tracking-tight">{p.quantity} Units</span>
-                        </td>
-                        <td className="px-10 py-6">
-                           <span className="text-sm font-black text-primary tracking-tight">৳{(p.quantity * p.costPrice)?.toLocaleString()}</span>
-                        </td>
-                        <td className="px-10 py-6 text-right">
-                           <div className="flex flex-col items-end">
-                              <span className="text-[10px] font-black text-gold-900 uppercase tracking-tighter mb-1">{p.supplier || 'Private Supplier'}</span>
-                              <span className="text-[9px] font-bold text-gold-300 uppercase tracking-widest">{new Date(p.date || p.createdAt).toLocaleDateString()}</span>
-                           </div>
-                        </td>
-                      </motion.tr>
-                    ))}
-                    {purchases.length === 0 && !loading && (
-                       <tr><td colSpan={4} className="px-10 py-24 text-center text-gold-400 text-[10px] font-black uppercase tracking-[0.4em]">No purchases found</td></tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
+        {/* History Table */}
+        <div className="lg:col-span-8 space-y-4">
+           <div className="flex items-center gap-2 px-1">
+              <History size={16} className="text-slate-400" />
+              <h3 className="text-base font-bold text-slate-900 tracking-tight">Recent Purchases</h3>
+           </div>
+           
+           <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+              {loading ? (
+                <div className="p-20 text-center">
+                   <Loader2 size={24} className="text-primary animate-spin mx-auto" />
+                </div>
+              ) : purchases.length === 0 ? (
+                <div className="p-20 text-center text-slate-400 font-bold text-[13px]">No purchase history found.</div>
+              ) : (
+                <div className="overflow-x-auto">
+                   <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="bg-slate-50/50 border-b border-slate-100">
+                          <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Product Info</th>
+                          <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Quantity</th>
+                          <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Unit Cost</th>
+                          <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-50">
+                        {purchases.map((p) => (
+                          <tr key={p._id} className="group hover:bg-slate-50/30 transition-all">
+                            <td className="px-6 py-4">
+                               <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center text-slate-300 border border-slate-100">
+                                     <Package size={14} />
+                                  </div>
+                                  <div>
+                                     <p className="text-[13px] font-bold text-slate-900 truncate max-w-[150px]">{p.product?.name || 'Deleted'}</p>
+                                     <div className="flex items-center gap-2 mt-0.5">
+                                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-tight flex items-center gap-1"><Calendar size={10} /> {new Date(p.createdAt).toLocaleDateString()}</p>
+                                        <span className="w-1 h-1 bg-slate-200 rounded-full" />
+                                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-tight flex items-center gap-1"><User size={10} /> {p.supplier || 'Private'}</p>
+                                     </div>
+                                  </div>
+                               </div>
+                            </td>
+                            <td className="px-6 py-4">
+                               <span className="text-[13px] font-bold text-slate-900">{p.quantity} Units</span>
+                            </td>
+                            <td className="px-6 py-4">
+                               <span className="text-[13px] font-bold text-primary">৳{p.costPrice?.toLocaleString()}</span>
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                               <button onClick={() => handleDelete(p._id)} className="opacity-0 group-hover:opacity-100 w-8 h-8 rounded-lg flex items-center justify-center text-slate-300 hover:text-rose-500 hover:bg-rose-50 transition-all">
+                                 <Trash2 size={14} />
+                               </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                   </table>
+                </div>
+              )}
            </div>
         </div>
       </div>

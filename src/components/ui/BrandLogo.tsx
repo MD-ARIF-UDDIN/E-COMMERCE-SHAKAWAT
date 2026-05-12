@@ -1,5 +1,6 @@
 'use client';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 interface BrandLogoProps {
   className?: string;
@@ -42,20 +43,53 @@ export default function BrandLogo({ className = "", size = 'md', hideText = fals
     <div className={`flex items-center ${gapSizes[size]} ${className}`}>
       {/* Icon */}
       <div className="relative group flex-shrink-0">
-        <div className={`
-          flex items-center justify-center rounded-xl bg-gold-50 border border-gold-200
-          shadow-premium-subtle group-hover:scale-110 transition-transform duration-500 overflow-hidden
-          ${iconBox[size]}
-        `}>
-          <Image
-            src="/icon.png"
-            alt="Bronze Mart Icon"
-            width={200}
-            height={200}
-            className="w-full h-full object-contain scale-[1.7]"
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className={`
+            relative flex items-center justify-center rounded-full bg-white border border-gold-200/50
+            shadow-premium-subtle group-hover:shadow-premium group-hover:scale-110 transition-all duration-500 overflow-hidden
+            ${iconBox[size]}
+          `}
+        >
+          {/* Inner Glow/Background */}
+          <div className="absolute inset-0 bg-white" />
+          
+          <motion.div
+            animate={{ 
+              y: [0, -1, 0],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            className="relative w-full h-full flex items-center justify-center z-10"
+          >
+            <Image
+              src="/icon.png"
+              alt="Bronze Mart Icon"
+              width={120}
+              height={120}
+              unoptimized
+              className="w-full h-full object-contain scale-[1.7] brightness-[1.05] contrast-[1.25] saturate-[1.1] transition-all duration-500 group-hover:scale-[1.8] [image-rendering:-webkit-optimize-contrast]"
+              priority
+            />
+          </motion.div>
+
+          {/* Premium Shimmer Effect */}
+          <motion.div 
+            className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/60 to-transparent -translate-x-full z-20"
+            animate={{ translateX: ['-100%', '200%'] }}
+            transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 2, ease: "easeInOut" }}
           />
-        </div>
-        <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-primary rounded-full border-2 border-white animate-pulse" />
+
+          {/* Pulse Ring on Hover */}
+          <div className="absolute inset-0 rounded-full border-2 border-primary/0 group-hover:border-primary/10 group-hover:scale-125 transition-all duration-700 pointer-events-none" />
+        </motion.div>
+        
+        {/* Status indicator with pulse */}
+        <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-primary rounded-full border-2 border-white shadow-sm z-30 animate-pulse" />
       </div>
 
       {!hideText && (

@@ -3,206 +3,175 @@ import { useEffect, useState } from 'react';
 import { api } from '@/lib/axios';
 import toast from 'react-hot-toast';
 import { 
-  Shield, 
-  Plus, 
+  ShieldAlert, 
   Trash2, 
-  Phone, 
-  AlertOctagon, 
-  UserX, 
-  Lock, 
-  ShieldAlert,
-  ArrowRight,
+  UserPlus, 
+  Search, 
   Database,
-  Search,
-  Activity,
-  Zap
+  Phone,
+  Clock,
+  Ban
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
+import Modal from '@/components/ui/Modal';
 
-export default function AdminSpamPage() {
-  const [spamList, setSpamList] = useState<any[]>([]);
+export default function SpamPage() {
+  const [entries, setEntries] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState({ phoneNumber: '', reason: '' });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [phone, setPhone] = useState('');
+  const [reason, setReason] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   const fetchSpam = async () => {
     setLoading(true);
-    const res = await api.get('/admin/spam');
-    setSpamList(res.data);
+    const res = await api.get('/spam');
+    setEntries(res.data);
     setLoading(false);
   };
+
   useEffect(() => { fetchSpam(); }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.phoneNumber) return toast.error('Phone number is required');
+    if (!phone) return toast.error('Phone number required');
     setSubmitting(true);
     try {
-      await api.post('/admin/spam', form);
-      toast.success('User blocked successfully');
-      setForm({ phoneNumber: '', reason: '' });
+      await api.post('/spam', { phoneNumber: phone, reason });
+      toast.success('Added to blacklist');
+      setPhone('');
+      setReason('');
+      setIsModalOpen(false);
       fetchSpam();
-    } catch (err: any) {
-      toast.error(err?.response?.data?.error || 'Failed to block user');
-    } finally {
-      setSubmitting(false);
-    }
+    } catch { toast.error('Failed to add'); }
+    finally { setSubmitting(false); }
   };
 
-  const handleDelete = async (id: string, phone: string) => {
-    if (!confirm(`Are you sure you want to unblock ${phone}?`)) return;
+  const handleDelete = async (id: string) => {
+    if (!confirm('Remove from blacklist?')) return;
     try {
-      await api.delete(`/admin/spam/${id}`);
-      toast.success('User unblocked successfully');
+      await api.delete(`/spam/${id}`);
+      toast.success('Removed');
       fetchSpam();
-    } catch { toast.error('Failed to unblock user'); }
+    } catch { toast.error('Failed'); }
   };
+
+  const labelClass = "text-[11px] font-bold text-black uppercase tracking-wider ml-1";
 
   return (
-    <div className="space-y-16 pb-32 max-w-5xl">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="px-4">
-         <div className="flex items-center gap-2 mb-2">
-            <ShieldAlert size={14} className="text-rose-600" />
-            <p className="text-[10px] font-black text-gold-400 uppercase tracking-[0.3em]">Security Management</p>
-         </div>
-         <h1 className="text-4xl lg:text-6xl font-black text-gold-900 tracking-tighter">Blacklist</h1>
-         <p className="text-gold-400 text-xs font-bold uppercase tracking-widest mt-2 max-w-lg">
-           Manage blocked phone numbers and users. Blacklisted numbers are prohibited from placing orders.
-         </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+           <h1 className="text-xl font-bold text-slate-900 tracking-tight">Blacklist</h1>
+           <p className="text-slate-500 text-[13px] font-medium mt-0.5">Protect your store from suspicious activity.</p>
+        </div>
+        
+        <button onClick={() => setIsModalOpen(true)} className="h-11 px-6 flex items-center gap-2 bg-slate-900 text-white font-bold text-[13px] rounded-xl hover:bg-rose-600 transition-all active:scale-[0.98] shadow-sm">
+          <UserPlus size={16} /> Block Number
+        </button>
       </div>
 
-      <div className="grid lg:grid-cols-12 gap-12">
-        {/* Block User Form */}
-        <div className="lg:col-span-5 space-y-8">
-           <div className="bg-gold-900 rounded-[3rem] p-12 text-white relative overflow-hidden shadow-premium group">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-rose-600/10 blur-[100px] rounded-full group-hover:bg-rose-600/20 transition-all duration-700" />
-              <div className="relative z-10 space-y-10">
-                 <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-rose-400">
-                       <UserX size={22} />
-                    </div>
-                    <h2 className="text-sm font-black uppercase tracking-widest">Block New User</h2>
-                 </div>
-
-                 <form onSubmit={handleSubmit} className="space-y-8">
-                    <div className="space-y-3">
-                      <label className="text-[9px] font-black text-gold-400 uppercase tracking-widest px-1">Phone Number</label>
-                      <div className="relative">
-                         <Phone size={16} className="absolute left-6 top-1/2 -translate-y-1/2 text-gold-600" />
-                         <input 
-                            type="tel" 
-                            value={form.phoneNumber} 
-                            onChange={e => setForm(f => ({ ...f, phoneNumber: e.target.value }))}
-                            required 
-                            placeholder="01XXXXXXXXX"
-                            className="w-full h-16 pl-14 pr-6 bg-white/5 border border-white/10 rounded-2xl text-sm font-black text-white focus:bg-white/10 focus:border-rose-500 focus:outline-none transition-all" 
-                         />
-                      </div>
-                    </div>
-
-                    <div className="space-y-3">
-                      <label className="text-[9px] font-black text-gold-400 uppercase tracking-widest px-1">Reason for Blocking</label>
-                      <input 
-                         type="text" 
-                         value={form.reason} 
-                         onChange={e => setForm(f => ({ ...f, reason: e.target.value }))}
-                         placeholder="e.g. Fake Orders"
-                         className="w-full h-16 px-6 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:bg-white/10 focus:border-rose-500 focus:outline-none transition-all placeholder:text-gold-700" 
-                      />
-                    </div>
-
-                    <button type="submit" disabled={submitting} className="w-full h-20 bg-rose-600 text-white rounded-[2rem] font-black text-[11px] uppercase tracking-[0.3em] hover:bg-white hover:text-rose-600 transition-all shadow-lg flex items-center justify-center gap-4 pt-1">
-                      {submitting ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Lock size={18} />}
-                      {submitting ? 'Blocking...' : 'Add to Blacklist'}
-                    </button>
-                 </form>
+      <div className="grid lg:grid-cols-12 gap-8">
+        {/* Notice Card */}
+        <div className="lg:col-span-4 space-y-4">
+           <div className="bg-slate-900 rounded-xl p-6 text-white shadow-lg relative overflow-hidden group">
+              <div className="relative z-10">
+                <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-rose-400 mb-6">
+                  <ShieldAlert size={20} />
+                </div>
+                <h3 className="text-lg font-bold mb-2">Registry Control</h3>
+                <p className="text-slate-400 text-xs leading-relaxed mb-6">
+                  Restricted numbers will be blocked from placing orders. Use this to prevent spam or fraudulent activities.
+                </p>
+                <div className="flex items-center gap-4 py-4 border-t border-white/5">
+                   <div>
+                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Total Blocked</p>
+                      <p className="text-2xl font-bold">{entries.length}</p>
+                   </div>
+                </div>
               </div>
-           </div>
-
-           <div className="bg-gold-50 border border-gold-100 rounded-[3rem] p-10 space-y-6">
-              <div className="flex items-center gap-3">
-                 <Activity size={16} className="text-gold-400" />
-                 <h4 className="text-[10px] font-black text-gold-900 uppercase tracking-widest">System Stats</h4>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                 <div className="p-6 bg-white rounded-2xl border border-gold-100">
-                    <p className="text-[10px] font-black text-gold-400 uppercase tracking-widest mb-2">Total Blocked</p>
-                    <p className="text-3xl font-black text-rose-600 tracking-tighter">{spamList.length}</p>
-                 </div>
-                 <div className="p-6 bg-white rounded-2xl border border-gold-100">
-                    <p className="text-[10px] font-black text-gold-400 uppercase tracking-widest mb-2">Safety Rating</p>
-                    <p className="text-3xl font-black text-emerald-500 tracking-tighter">99%</p>
-                 </div>
-              </div>
+              <Ban size={120} className="absolute -bottom-10 -right-10 text-white/5 rotate-12 group-hover:rotate-0 transition-transform duration-700" />
            </div>
         </div>
 
-        {/* Blacklist List */}
-        <div className="lg:col-span-7 space-y-8">
-           <div className="bg-white rounded-[3rem] border border-gold-100 shadow-premium overflow-hidden">
-              <div className="px-10 py-8 border-b border-gold-50 flex items-center justify-between bg-gold-50/50">
-                 <div className="flex items-center gap-3">
-                    <Database size={16} className="text-gold-900" />
-                    <h3 className="text-[10px] font-black text-gold-900 uppercase tracking-widest">Restricted Identifier Registry</h3>
-                 </div>
-                 <Search size={16} className="text-gold-300" />
-              </div>
-
+        {/* List Table */}
+        <div className="lg:col-span-8 space-y-4">
+           <div className="flex items-center gap-2 px-1">
+              <Database size={16} className="text-slate-400" />
+              <h3 className="text-base font-bold text-slate-900 tracking-tight">Blocked Registry</h3>
+           </div>
+           
+           <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
               {loading ? (
-                <div className="px-10 py-24 text-center">
-                   <div className="w-8 h-8 border-2 border-gold-200 border-t-rose-500 rounded-full animate-spin mx-auto mb-4" />
-                   <p className="text-[10px] font-black text-gold-400 uppercase tracking-widest">Synchronizing Registry...</p>
+                <div className="p-20 text-center">
+                   <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
                 </div>
-              ) : spamList.length === 0 ? (
-                <div className="px-10 py-32 text-center space-y-4">
-                   <Shield size={48} className="mx-auto text-gold-100" strokeWidth={1} />
-                   <p className="text-[10px] font-black text-gold-400 uppercase tracking-[0.4em]">Zero anomalies detected</p>
+              ) : entries.length === 0 ? (
+                <div className="p-20 text-center text-slate-400 font-bold text-[13px]">
+                   No restricted numbers found.
                 </div>
               ) : (
-                <div className="divide-y divide-gold-50">
-                   {spamList.map((entry, i) => (
-                     <motion.div 
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.05 }}
-                        key={entry._id} 
-                        className="flex items-center gap-6 px-10 py-8 group hover:bg-gold-50/50 transition-all duration-300"
-                     >
-                        <div className="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center text-rose-500 group-hover:scale-110 transition-transform">
-                           <AlertOctagon size={24} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                           <p className="text-lg font-black text-gold-900 tracking-tighter mb-1 font-mono">{entry.phoneNumber}</p>
-                           <div className="flex items-center gap-3">
-                              <span className="text-[10px] font-black text-gold-400 uppercase tracking-widest">{entry.reason || 'Anomalous Activity'}</span>
-                              <div className="w-1 h-1 bg-gold-200 rounded-full" />
-                              <span className="text-[9px] font-bold text-gold-300 uppercase tracking-tighter">{new Date(entry.createdAt).toLocaleDateString()}</span>
+                <div className="divide-y divide-slate-50">
+                   {entries.map(entry => (
+                     <div key={entry._id} className="flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition-all group">
+                        <div className="flex items-center gap-4">
+                           <div className="w-9 h-9 bg-slate-50 rounded-lg flex items-center justify-center text-slate-400 border border-slate-100">
+                             <Phone size={14} />
+                           </div>
+                           <div>
+                              <p className="text-[13px] font-bold text-slate-900 font-mono tracking-tight">{entry.phoneNumber}</p>
+                              <div className="flex items-center gap-2 mt-0.5">
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">{entry.reason || 'No reason provided'}</p>
+                                <span className="w-1 h-1 bg-slate-200 rounded-full" />
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight flex items-center gap-1">
+                                  <Clock size={10} /> {new Date(entry.createdAt).toLocaleDateString()}
+                                </p>
+                              </div>
                            </div>
                         </div>
-                        <button 
-                           onClick={() => handleDelete(entry._id, entry.phoneNumber)}
-                           className="w-12 h-12 bg-gold-50 text-gold-300 rounded-xl flex items-center justify-center hover:bg-rose-50 hover:text-rose-600 transition-all group/btn"
-                        >
-                           <Trash2 size={18} className="group-hover/btn:scale-110 transition-transform" />
+                        <button onClick={() => handleDelete(entry._id)} className="opacity-0 group-hover:opacity-100 w-8 h-8 rounded-lg flex items-center justify-center text-slate-300 hover:text-rose-500 hover:bg-rose-50 transition-all">
+                          <Trash2 size={14} />
                         </button>
-                     </motion.div>
+                     </div>
                    ))}
                 </div>
               )}
-              
-              <div className="px-10 py-6 border-t border-gold-50 bg-gold-50/20">
-                 <div className="flex items-center justify-between">
-                    <p className="text-[9px] font-black text-gold-400 uppercase tracking-widest">Total Registry Entropy: {spamList.length}</p>
-                    <div className="flex items-center gap-1.5">
-                       <Zap size={10} className="text-emerald-500" />
-                       <span className="text-[9px] font-black text-emerald-600 uppercase">System Integrity Nominal</span>
-                    </div>
-                 </div>
-              </div>
            </div>
         </div>
       </div>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Block Phone Number" maxWidth="max-w-md">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-1">
+            <label className={labelClass}>Phone Number</label>
+            <input 
+              value={phone} 
+              onChange={e => setPhone(e.target.value)}
+              required 
+              placeholder="01XXXXXXXXX"
+              className="w-full h-11 px-4 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-900 focus:bg-white focus:border-rose-500 outline-none transition-all" 
+            />
+          </div>
+          <div className="space-y-1">
+            <label className={labelClass}>Reason (Optional)</label>
+            <textarea 
+              value={reason} 
+              onChange={e => setReason(e.target.value)}
+              placeholder="e.g. Repeated fake orders"
+              rows={3}
+              className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium focus:bg-white focus:border-rose-500 outline-none transition-all resize-none" 
+            />
+          </div>
+          <div className="pt-4 flex gap-3 border-t border-slate-100">
+             <button type="button" onClick={() => setIsModalOpen(false)} className="px-6 h-11 rounded-xl border border-slate-200 text-slate-500 font-bold text-xs uppercase tracking-wider hover:bg-slate-50 transition-all">Cancel</button>
+             <button type="submit" disabled={submitting} className="flex-1 h-11 bg-slate-900 text-white rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-rose-600 transition-all flex items-center justify-center gap-2 shadow-sm">
+                {submitting ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <ShieldAlert size={14} />}
+                Add to Blacklist
+             </button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }

@@ -53,31 +53,31 @@ export default function AdminProductsPage() {
   };
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-           <h1 className="text-2xl font-bold text-gold-900 tracking-tight">Products</h1>
-           <p className="text-gold-400 text-[13px] font-medium mt-1">
+           <h1 className="text-xl font-bold text-slate-900 tracking-tight">Products</h1>
+           <p className="text-slate-500 text-[13px] font-medium mt-0.5">
              Manage your inventory and product listings.
            </p>
         </div>
         
         <div className="flex items-center gap-3">
            <div className="relative flex-1 sm:w-64">
-              <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-gold-400" />
+              <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
                 placeholder="Search products..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 h-12 bg-gold-50 border border-gold-100 rounded-xl text-[13px] font-medium focus:bg-white focus:border-gold-200 transition-all outline-none"
+                className="w-full pl-10 pr-4 h-11 bg-white border border-slate-200 rounded-xl text-[13px] font-medium focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all outline-none"
               />
            </div>
            
            <button 
              onClick={handleCreate}
-             className="h-12 flex items-center justify-center gap-2 bg-gold-900 text-white font-bold text-[13px] px-6 rounded-xl hover:bg-primary transition-all"
+             className="h-11 flex items-center justify-center gap-2 bg-slate-900 text-white font-bold text-[13px] px-5 rounded-xl hover:bg-primary transition-all active:scale-[0.98] shadow-sm"
            >
              <Plus size={16} /> New Product
            </button>
@@ -85,71 +85,85 @@ export default function AdminProductsPage() {
       </div>
 
       {/* Catalog Table */}
-      <div className="bg-white border border-gold-100 rounded-2xl overflow-hidden">
+      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
         {loading ? (
           <div className="p-20 text-center">
-             <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
+             <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
           </div>
         ) : products.length === 0 ? (
           <div className="p-20 text-center">
-            <PackageOpen size={40} className="text-gold-100 mx-auto mb-4" />
-            <p className="text-gold-900 font-bold text-lg mb-1">No products found</p>
-            <p className="text-gold-400 text-[13px] mb-6">Start by adding your first product.</p>
-            <button onClick={handleCreate} className="h-11 px-6 bg-gold-50 border border-gold-200 rounded-xl text-[13px] font-bold hover:bg-gold-900 hover:text-white transition-all">Add Product</button>
+            <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100">
+               <PackageOpen size={24} className="text-slate-300" />
+            </div>
+            <p className="text-slate-900 font-bold text-base mb-1">No products found</p>
+            <p className="text-slate-500 text-xs mb-6">Start by adding your first product.</p>
+            <button onClick={handleCreate} className="h-10 px-6 bg-white border border-slate-200 rounded-lg text-xs font-bold hover:bg-slate-50 transition-all">Add Product</button>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-gold-50/50 border-b border-gold-100">
-                  <th className="px-8 py-5 text-[11px] font-bold text-gold-400 uppercase tracking-widest">Product</th>
-                  <th className="px-8 py-5 text-[11px] font-bold text-gold-400 uppercase tracking-widest hidden md:table-cell">Category</th>
-                  <th className="px-8 py-5 text-[11px] font-bold text-gold-400 uppercase tracking-widest">Price</th>
-                  <th className="px-8 py-5 text-[11px] font-bold text-gold-400 uppercase tracking-widest hidden sm:table-cell">Stock</th>
-                  <th className="px-8 py-5 text-[11px] font-bold text-gold-400 uppercase tracking-widest text-right">Actions</th>
+                <tr className="bg-slate-50/50 border-b border-slate-100">
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Product</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest hidden md:table-cell">Category</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Price</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest hidden sm:table-cell">Inventory</th>
+                  <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gold-50">
+              <tbody className="divide-y divide-slate-50">
                 {products.map((p) => (
-                  <tr key={p._id} className="group hover:bg-gold-50/30 transition-all">
-                    <td className="px-8 py-4">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-gold-50 rounded-lg overflow-hidden border border-gold-100 flex-shrink-0">
+                  <tr key={p._id} className="group hover:bg-slate-50/30 transition-all">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-slate-50 rounded-lg overflow-hidden border border-slate-100 flex-shrink-0">
                           {p.images?.[0] ? (
                             <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover" />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-gold-200">
+                            <div className="w-full h-full flex items-center justify-center text-slate-200">
                                <PackageOpen size={14} />
                             </div>
                           )}
                         </div>
                         <div className="min-w-0">
-                          <p className="text-[13px] font-bold text-gold-900 truncate">{p.name}</p>
-                          <div className="flex gap-1.5 mt-0.5">
+                          <p className="text-[13px] font-bold text-slate-900 truncate">{p.name}</p>
+                          <div className="flex gap-1 mt-0.5">
                             {p.isFeatured && <Zap size={10} className="text-amber-500" fill="currentColor" />}
                             {p.isDiscounted && <Tag size={10} className="text-rose-500" fill="currentColor" />}
                           </div>
                         </div>
                       </div>
                     </td>
-                    <td className="px-8 py-4 hidden md:table-cell">
-                      <span className="text-[11px] font-bold text-gold-400 uppercase tracking-widest">{p.category?.name || '---'}</span>
+                    <td className="px-6 py-4 hidden md:table-cell">
+                      <span className="text-[11px] font-bold text-slate-400 uppercase">{p.category?.name || '---'}</span>
                     </td>
-                    <td className="px-8 py-4 text-[13px] font-bold text-gold-900">৳{p.price?.toLocaleString()}</td>
-                    <td className="px-8 py-4 hidden sm:table-cell">
-                      <span className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-widest
-                        ${p.stock === 0 ? 'text-rose-500' : p.stock <= 5 ? 'text-amber-500' : 'text-emerald-500'}`}>
-                        {p.stock === 0 ? 'Out' : `${p.stock} Stock`}
-                      </span>
+                    <td className="px-6 py-4 text-[13px] font-bold text-slate-900">৳{p.price?.toLocaleString()}</td>
+                    <td className="px-6 py-4 hidden sm:table-cell">
+                      <div className="flex flex-col gap-1.5">
+                        <span className={`inline-flex px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider w-fit
+                          ${p.stock === 0 ? 'bg-rose-50 text-rose-600' : p.stock <= 5 ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'}`}>
+                          {p.stock === 0 ? 'Out of Stock' : `${p.stock} In Stock`}
+                        </span>
+                        <div className="flex flex-wrap gap-1">
+                          {(p.isMultipleSize && p.sizeVariants?.length > 0) && p.sizeVariants.map((sv: any) => (
+                            <span key={sv.id} className="text-[9px] font-bold bg-slate-50 text-slate-400 px-1 py-0.5 rounded border border-slate-100">
+                              {sv.name}
+                            </span>
+                          ))}
+                          {(p.isMultipleColor && p.colorVariants?.length > 0) && p.colorVariants.map((cv: any) => (
+                            <div key={cv.id} className="w-2.5 h-2.5 rounded-full border border-slate-200" style={{ backgroundColor: cv.hexCode }} title={cv.name} />
+                          ))}
+                        </div>
+                      </div>
                     </td>
-                    <td className="px-8 py-4 text-right">
-                      <div className="flex items-center justify-end gap-1">
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button onClick={() => handleEdit(p._id)} 
-                          className="w-9 h-9 rounded-lg flex items-center justify-center text-gold-400 hover:text-gold-900 transition-colors">
+                          className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-primary hover:bg-primary/5 transition-all">
                           <Pencil size={14} />
                         </button>
                         <button onClick={() => handleDelete(p._id, p.name)} 
-                          className="w-9 h-9 rounded-lg flex items-center justify-center text-gold-400 hover:text-rose-600 transition-colors">
+                          className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-all">
                           <Trash2 size={14} />
                         </button>
                       </div>
@@ -165,7 +179,7 @@ export default function AdminProductsPage() {
       <Modal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
-        title={editingId ? 'Edit Product' : 'New Product'}
+        title={editingId ? 'Edit Product' : 'Add New Product'}
         maxWidth="max-w-4xl"
       >
         <ProductForm 
