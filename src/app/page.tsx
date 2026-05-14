@@ -116,7 +116,7 @@ export default function Home() {
   );
 
   return (
-    <div className="bg-white min-h-screen pt-14 lg:pt-28 pb-20">
+    <div className="bg-white min-h-screen pt-24 lg:pt-28 pb-20">
       {/* ── ANNOUNCEMENT MARQUEE ─────────────────────────────────── */}
       <motion.div
         initial={{ opacity: 0, scaleY: 0 }}
